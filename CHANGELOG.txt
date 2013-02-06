@@ -1,0 +1,3 @@
+2013-02-07  InDiary  <indiary.app@gmail.com>
+
+    * Prototype with basic functionality (viewing, adding and editing entries).

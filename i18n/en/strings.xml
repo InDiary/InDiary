@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<string name="entries">Entries</string>	
+	<string name="references">References</string>	
+	<string name="settings">Settings</string>
+	<string name="searchEntries">Search Entries</string>
+	<string name="newEntry">New Entry</string>
+	<string name="editEntry">Edit Entry</string>
+	<string name="emptyEntryText">Enter text here.</string>
+	<string name="openWindow">Open New Window</string>
+	<string name="newWindow">New Window</string>
+	<string name="set">Set</string>
+	<string name="cancel">Cancel</string>
+	<string name="loading">Loading...</string>
+	<string name="datetime">Date &amp; Time</string>
+	<string name="datetimeDefault">Enter date &amp; time</string>
+	<string name="caseId">Case</string>
+	<string name="caseIdDefault">Enter case identifier</string>
+	<string name="location">Location</string>
+	<string name="locationDefault">Enter location</string>
+    <string name="locationDisabled">Location services not enabled.</string>
+    <string name="locationError">Location(s) not available</string>
+    <string name="recent">Recent</string>
+    <string name="nearby">Nearby</string>
+    <string name="suggested">Suggested</string>
+</resources>
