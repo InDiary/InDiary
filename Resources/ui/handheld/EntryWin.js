@@ -86,7 +86,12 @@ function EntryWin(entryId) {
         schema.fields.forEach(function(field) {
             if (field.name != 'datetime') {
                 var recentPropName = schema.makeRecentPropName(field.name);
-                var recentList = Ti.App.Properties.getList(recentPropName, ['']);
+                var recentList = Ti.App.Properties.getList(recentPropName, []);
+                if (recentList.indexOf(entryData[field.name]) != - 1){
+                    recentList = recentList.filter(function(element, index, array) {
+                        return (element != entryData[field.name]);
+                    });
+                }
                 recentList.push(entryData[field.name]);
                 if (recentList.length > schema.maxRecentFieldEntries){
                     recentList = recentList.slice(-schema.maxRecentFieldEntries);
