@@ -83,6 +83,17 @@ function EntryWin(entryId) {
             db.editEntry(entryData);
         }
         Ti.App.fireEvent('db:update');
+        schema.fields.forEach(function(field) {
+            if (field.name != 'datetime') {
+                var recentPropName = schema.makeRecentPropName(field.name);
+                var recentList = Ti.App.Properties.getList(recentPropName, ['']);
+                recentList.push(entryData[field.name]);
+                if (recentList.length > schema.maxRecentFieldEntries){
+                    recentList = recentList.slice(-schema.maxRecentFieldEntries);
+                }
+                Ti.App.Properties.setList(recentPropName, recentList);
+            }
+        }); 
         self.close();
     });
 

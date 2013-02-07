@@ -29,3 +29,5 @@ exports.fields.push(caseIdField);
 exports.makeRecentPropName = function(name){
     return 'recent' + util.capitalise(name) + 'List';
 };
+
+exports.maxRecentFieldEntries = 5;
