@@ -1,10 +1,14 @@
-function EntryWin(isNewEntry, entryId) {
+/**
+ * Window for adding a new entry or editing an existing one.
+ * @param {Number} entryId Id of entry to be edited. -1 corresponds to a new entry.
+ */
+function EntryWin(entryId) {
     var schema = require('schema');
     var db = require('db');
     var EntryInfoView = require('EntryInfoView');
 
     var entryData = {};
-    if (isNewEntry == true) {
+    if (entryId == -1) {
         entryData['text'] = '';
         schema.fields.forEach(function(field) {
             if (field.name == 'datetime'){
@@ -73,7 +77,7 @@ function EntryWin(isNewEntry, entryId) {
     });
     toolbarView.add(saveButton);
     saveButton.addEventListener('click', function(e) {
-        if (isNewEntry) {
+        if (entryId == -1) {
             db.addEntry(entryData);
         } else {
             db.editEntry(entryData);

@@ -77,7 +77,7 @@ function ListWin() {
 	});
 	toolbarView.add(newButton);
 	newButton.addEventListener('click', function() {
-		self.containingTab.open(new EntryWin(true));
+		self.containingTab.open(new EntryWin(-1));
 	});
 	
 	var searchBar = Ti.UI.createTextField({
@@ -115,7 +115,7 @@ function ListWin() {
 	});
 	
     table.addEventListener('click', function(e) {
-        self.containingTab.open(new EntryWin(false, e.rowData.entryId));
+        self.containingTab.open(new EntryWin(e.rowData.entryId));
     });
     
     Ti.App.fireEvent('db:update');
