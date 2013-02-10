@@ -25,7 +25,7 @@ exports.addEntry = function(entryData) {
         fieldNames.push(field.name);
         var value = entryData[field.name];
         if (field.type == 'datetime'){
-            value = value.toString();
+            value = value.toISOString();
         }
         value = "'" + value + "'";
         fieldValues.push(value);
@@ -40,7 +40,7 @@ exports.editEntry = function(entryData) {
     schema.fields.forEach(function(field) {
         var value = entryData[field.name];
         if (field.type == 'datetime'){
-            value = value.toString();
+            value = value.toISOString();
         }
         value = "'" + value + "'";
         fieldNamesAndValues.push(field.name + '=' + value);
