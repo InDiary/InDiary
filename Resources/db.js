@@ -1,3 +1,4 @@
+var util = require('util');
 var schema = require('schema');
 var DATABASE_NAME = 'InDiaryEntries';
 
@@ -20,15 +21,14 @@ exports.deleteDatabase = function(){
 exports.addEntry = function(entryData) {
 	var db = Ti.Database.open(DATABASE_NAME);
     var fieldNames = ['text'];
-    var fieldValues = ["'" + entryData.text + "'"];
+    var fieldValues = [util.quotify(entryData.text)];
     schema.fields.forEach(function(field) {
         fieldNames.push(field.name);
         var value = entryData[field.name];
         if (field.type == 'datetime'){
             value = value.toISOString();
         }
-        value = "'" + value + "'";
-        fieldValues.push(value);
+        fieldValues.push(util.quotify(value));
     });
 	db.execute('INSERT INTO entries (' + fieldNames.join(', ') + ') VALUES (' +  fieldValues.join(', ') + ')');
 	db.close();
@@ -36,14 +36,13 @@ exports.addEntry = function(entryData) {
 
 exports.editEntry = function(entryData) {
     var db = Ti.Database.open(DATABASE_NAME);
-    var fieldNamesAndValues = ['text=' + "'" + entryData.text + "'"];
+    var fieldNamesAndValues = ['text=' + util.quotify(entryData.text)];
     schema.fields.forEach(function(field) {
         var value = entryData[field.name];
         if (field.type == 'datetime'){
             value = value.toISOString();
         }
-        value = "'" + value + "'";
-        fieldNamesAndValues.push(field.name + '=' + value);
+        fieldNamesAndValues.push(field.name + '=' + util.quotify(value));
     });
     db.execute('UPDATE entries SET ' +  fieldNamesAndValues.join(', ') + ' WHERE id=?', entryData.id);
     db.close();
@@ -72,10 +71,35 @@ exports.selectEntry = function(id) {
     }
 };
 
-exports.selectEntries = function() {
+exports.selectEntries = function(orderBy, ascending, filterFields, filterValues) {
+    if (typeof (orderBy) === 'undefined')
+        orderBy = 'id';
+    if (typeof (ascending) === 'undefined' )
+        ascending = false;
+    if (typeof (filterFields) === 'undefined')
+        filterFields = [];
+    if (typeof (filterValues) === 'undefined')
+        filterValues = [];
+    if (filterFields.length != filterValues.length)
+        return false;
 	var entriesData = [];
+	if (ascending){
+	    var ascText = 'ASC'
+	} else {
+	    var ascText = 'DESC'
+	}
+	var escapeChar = '~';
+	var filterFieldsAndValues = [];
+	for (var i=0; i<filterFields.length; i++){
+	    var filterPattern = util.quotify(filterValues[i],'%');
+	    filterFieldsAndValues.push(filterFields[i] + ' LIKE ' + util.quotify(filterPattern));
+	}
+	var filterText = filterFieldsAndValues.join(' AND ');
+	if (filterText != ''){
+	    filterText = 'WHERE ' + filterText + ' ESCAPE ' + util.quotify(escapeChar) + ' ';
+	}
 	var db = Ti.Database.open(DATABASE_NAME);
-	var rows = db.execute('SELECT * FROM entries ORDER BY id DESC');
+	var rows = db.execute('SELECT * FROM entries ' + filterText + 'ORDER BY ' + orderBy + ' ' + ascText);
 	db.close();
 	while (rows.isValidRow()) {
 		var	entryData = {

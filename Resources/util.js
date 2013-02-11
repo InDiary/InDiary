@@ -7,6 +7,17 @@ exports.capitalise = function(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
+/**
+ * Encapsulates string in single quotes or any other string.
+ * @param {String} string String to be quoted.
+ * @param {String} [quoteChar="'"] Character or string used to quote.
+ */
+exports.quotify = function(string, quoteChar) {
+    if ( typeof (quoteChar) === 'undefined')
+        quoteChar = "'";
+    return quoteChar + string + quoteChar;
+};
+
 /** 
  * Convert Date object sto InDiary date and time format.
  * @param {Date} datetime
