@@ -21,7 +21,7 @@ exports.deleteDatabase = function(){
 exports.addEntry = function(entryData) {
 	var db = Ti.Database.open(DATABASE_NAME);
     var fieldNames = ['text'];
-    var fieldValues = [util.quotify(entryData.text)];
+    var fieldValues = [util.quotify(entryData.text.replace(/'/g,"''"))];
     schema.fields.forEach(function(field) {
         fieldNames.push(field.name);
         var value = entryData[field.name];
@@ -36,7 +36,7 @@ exports.addEntry = function(entryData) {
 
 exports.editEntry = function(entryData) {
     var db = Ti.Database.open(DATABASE_NAME);
-    var fieldNamesAndValues = ['text=' + util.quotify(entryData.text)];
+    var fieldNamesAndValues = ['text=' + util.quotify(entryData.text.replace(/'/g,"''"))];
     schema.fields.forEach(function(field) {
         var value = entryData[field.name];
         if (field.type == 'datetime'){
@@ -89,10 +89,11 @@ exports.selectEntries = function(orderBy, ascending, filterFields, filterValues)
 	    var ascText = 'DESC'
 	}
 	var escapeChar = '~';
+    var filterRe = new RegExp('[%_' + escapeChar + ']','g');
 	var filterFieldsAndValues = [];
 	for (var i=0; i<filterFields.length; i++){
-	    var filterPattern = util.quotify(filterValues[i],'%');
-	    filterFieldsAndValues.push(filterFields[i] + ' LIKE ' + util.quotify(filterPattern));
+	    var filterPattern = util.quotify(filterValues[i].replace(filterRe, escapeChar + '$&'),'%');
+	    filterFieldsAndValues.push(filterFields[i] + ' LIKE ' + util.quotify(filterPattern.replace(/'/g, "''")));
 	}
 	var filterText = filterFieldsAndValues.join(' AND ');
 	if (filterText != ''){
