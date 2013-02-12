@@ -2,6 +2,9 @@ function ListWin() {
 	var util = require('util');
 	var db = require('db');
 	var EntryWin = require('EntryWin');
+
+    var searchCriteria = {};
+    searchCriteria['text'] = '';
 	
 	function createEntryRow(entryData) {
 		
@@ -104,21 +107,39 @@ function ListWin() {
 	var table = Ti.UI.createTableView();
 	self.add(table);
 
-	Ti.App.addEventListener('db:update', function(e) {
+    var searchBarTimer = 0;
+    var searchBarTimeout = 300;
+    searchBar.addEventListener('change', function(e) {
+        clearTimeout(searchBarTimer);
+        searchBarTimer = setTimeout(function(){
+            searchCriteria.text = e.value;
+            table.fireEvent('update');
+        }, searchBarTimeout);
+    });
+
+    table.addEventListener('update', function(e) {
         var tableData = [];
-        table.setData([]); 
-        var entriesData = db.selectEntries();
+        var filterFields = ['text'];
+        var filterValues = [];
+        filterFields.forEach(function(field){
+            filterValues.push(searchCriteria[field]);
+        });
+        var entriesData = db.selectEntries('datetime', filterFields, filterValues);
         entriesData.forEach(function(entryData) {
             tableData.push(createEntryRow(entryData));
         });
         table.setData(tableData);
-	});
+    });
 	
     table.addEventListener('click', function(e) {
         self.containingTab.open(new EntryWin(e.rowData.entryId));
     });
     
-    Ti.App.fireEvent('db:update');
+    Ti.App.addEventListener('db:update', function(e) {
+        table.fireEvent('update');
+    });
+    
+    table.fireEvent('update');
 
 	return self;
 };

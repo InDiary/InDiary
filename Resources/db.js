@@ -71,15 +71,15 @@ exports.selectEntry = function(id) {
     }
 };
 
-exports.selectEntries = function(orderBy, ascending, filterFields, filterValues) {
+exports.selectEntries = function(orderBy, filterFields, filterValues, ascending) {
     if (typeof (orderBy) === 'undefined')
         orderBy = 'id';
-    if (typeof (ascending) === 'undefined' )
-        ascending = false;
     if (typeof (filterFields) === 'undefined')
         filterFields = [];
     if (typeof (filterValues) === 'undefined')
         filterValues = [];
+    if (typeof (ascending) === 'undefined' )
+        ascending = false;
     if (filterFields.length != filterValues.length)
         return false;
 	var entriesData = [];
