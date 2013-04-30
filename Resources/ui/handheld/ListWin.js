@@ -54,7 +54,8 @@ function ListWin() {
 	var self = Ti.UI.createWindow({
 		title:L('entries'),
 		backgroundColor:'black',
-		layout: 'vertical'
+		layout: 'vertical',
+		navBarHidden: true
 	});
 	
 	var toolbarView = Ti.UI.createView({
