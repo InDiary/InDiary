@@ -153,6 +153,7 @@ exports.createLocationDialogView = function(value, hintText, recentPropName){
     locationTable.addEventListener('click', function(e) { 
         if (e.rowData.selectable == true) {
             searchBar.value = e.rowData.title;
+            searchBar.fireEvent('change', {value: searchBar.value});
         }
     });
     
