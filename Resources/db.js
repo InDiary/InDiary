@@ -71,36 +71,46 @@ exports.selectEntry = function(id) {
     }
 };
 
-exports.selectEntries = function(orderBy, filterFields, filterValues, ascending) {
-    if (typeof (orderBy) === 'undefined')
-        orderBy = 'id';
-    if (typeof (filterFields) === 'undefined')
-        filterFields = [];
-    if (typeof (filterValues) === 'undefined')
-        filterValues = [];
-    if (typeof (ascending) === 'undefined' )
-        ascending = false;
-    if (filterFields.length != filterValues.length)
-        return false;
+exports.selectEntries = function(searchCriteria) {
+    var orderBy = (typeof(searchCriteria.orderBy) === 'undefined') ? 'id' : searchCriteria.orderBy;
+    var ascending = (typeof(searchCriteria.ascending) === 'undefined') ? false : searchCriteria.ascending;
+    var ascText = (ascending) ? 'ASC' : 'DESC';
+    
+    var escapeChar = '~';
+    var matchRe = new RegExp('[%_' + escapeChar + ']','g');
+    
+    var matchFieldsAndValues = [];
+    var rangeFieldsAndValues = [];
+    
+    var fieldNames = ['text'];
+    schema.fields.forEach(function(field) {
+        fieldNames.push(field.name);
+    });
+    fieldNames.forEach(function(field) {
+        var value = searchCriteria[field];
+        if (typeof(value) !== 'undefined') {
+            value = util.quotify(value.replace(matchRe, escapeChar + '$&'),'%');
+            matchFieldsAndValues.push(field + ' LIKE ' + util.quotify(value.replace(/'/g, "''")));
+        }
+        var range = searchCriteria[field + 'Range'];
+        if (typeof (range) !== 'undefined') {
+            rangeFieldsAndValues.push(field + ' BETWEEN ' + util.quotify(range[0]) + ' AND ' + util.quotify(range[1]));
+        }
+    });
+    var matchText = matchFieldsAndValues.join(' AND ');
+    var rangeText = rangeFieldsAndValues.join(' AND '); 
+	var whereText = '';
+	if (matchText != '' && rangeText != ''){
+	    whereText = 'WHERE ' + rangeText + ' AND ' + matchText + ' ESCAPE ' + util.quotify(escapeChar) + ' ';
+	} else if (matchText != '') {
+        whereText = 'WHERE ' + matchText + ' ESCAPE ' + util.quotify(escapeChar) + ' ';	    
+	} else if (rangeText != '') {
+        whereText = 'WHERE ' + rangeText + ' ';	    
+	}
+	
 	var entriesData = [];
-	if (ascending){
-	    var ascText = 'ASC'
-	} else {
-	    var ascText = 'DESC'
-	}
-	var escapeChar = '~';
-    var filterRe = new RegExp('[%_' + escapeChar + ']','g');
-	var filterFieldsAndValues = [];
-	for (var i=0; i<filterFields.length; i++){
-	    var filterPattern = util.quotify(filterValues[i].replace(filterRe, escapeChar + '$&'),'%');
-	    filterFieldsAndValues.push(filterFields[i] + ' LIKE ' + util.quotify(filterPattern.replace(/'/g, "''")));
-	}
-	var filterText = filterFieldsAndValues.join(' AND ');
-	if (filterText != ''){
-	    filterText = 'WHERE ' + filterText + ' ESCAPE ' + util.quotify(escapeChar) + ' ';
-	}
 	var db = Ti.Database.open(DATABASE_NAME);
-	var rows = db.execute('SELECT * FROM entries ' + filterText + 'ORDER BY ' + orderBy + ' ' + ascText);
+	var rows = db.execute('SELECT * FROM entries ' + whereText + 'ORDER BY ' + orderBy + ' ' + ascText);
 	db.close();
 	while (rows.isValidRow()) {
 		var	entryData = {

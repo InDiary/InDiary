@@ -3,8 +3,11 @@ function ListWin() {
 	var db = require('db');
 	var EntryWin = require('EntryWin');
 
-    var searchCriteria = {};
-    searchCriteria['text'] = '';
+    var searchCriteria = {
+        orderBy: 'datetime',
+        ascending: false,
+        text: ''
+    };
 	
 	function createEntryRow(entryData) {
 		
@@ -120,12 +123,7 @@ function ListWin() {
 
     table.addEventListener('update', function(e) {
         var tableData = [];
-        var filterFields = ['text'];
-        var filterValues = [];
-        filterFields.forEach(function(field){
-            filterValues.push(searchCriteria[field]);
-        });
-        var entriesData = db.selectEntries('datetime', filterFields, filterValues);
+        var entriesData = db.selectEntries(searchCriteria);
         entriesData.forEach(function(entryData) {
             tableData.push(createEntryRow(entryData));
         });
