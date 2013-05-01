@@ -54,7 +54,7 @@ function EntryWin(entryId) {
     });
     toolbarView.add(blurbField);
 
-    var cancelButton = Ti.UI.createLabel({
+    var cancelButton = Ti.UI.createButton({
         top : '3dp',
         right : '48dp',
         width : '42dp',
@@ -67,7 +67,7 @@ function EntryWin(entryId) {
         self.close();
     });
 
-    var saveButton = Ti.UI.createLabel({
+    var saveButton = Ti.UI.createButton({
         top : '3dp',
         right : '3dp',
         width : '42dp',
