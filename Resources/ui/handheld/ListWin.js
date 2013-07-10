@@ -2,6 +2,7 @@ function ListWin() {
 	var util = require('util');
 	var db = require('db');
 	var EntryWin = require('EntryWin');
+	var SearchWin = require('SearchWin');
 
     var searchCriteria = {
         orderBy: 'datetime',
@@ -107,6 +108,9 @@ function ListWin() {
 		backgroundSelectedColor: '#BBBBBB'
 	});
 	toolbarView.add(advSearchButton);
+	advSearchButton.addEventListener('click', function() {
+        self.containingTab.open(new SearchWin());
+    });
 
 	var table = Ti.UI.createTableView();
 	self.add(table);
