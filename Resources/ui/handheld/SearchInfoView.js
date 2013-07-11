@@ -33,7 +33,7 @@ function SearchInfoView(vars) {
     
     searchField.addEventListener('change', function(e) {
         self.value = e.value;
-        self.fireEvent('change');
+        self.fireEvent('change', {value: self.value});
     });
     
     var nameField = Ti.UI.createLabel({

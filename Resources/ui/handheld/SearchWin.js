@@ -66,6 +66,19 @@ function SearchWin() {
 		backgroundColor: '#444444'
 	});
 	self.add(borderView);
+
+   var textSearchInfoView = new SearchInfoView({
+        type : 'text',
+        name : 'Entry text',
+        value : '',
+        hintText : 'Entry text'
+    });
+    self.add(textSearchInfoView);
+    self.add(Ti.UI.createView({
+        width : Titanium.UI.FILL,
+        height : 1,
+        backgroundColor : '#444444'
+    }));
 	
     schema.fields.forEach(function(field) {
        var searchInfoView = new SearchInfoView({
