@@ -2,44 +2,54 @@ function SearchWin() {
 	var util = require('util');
     var schema = require('schema');
 	var SearchInfoView = require('SearchInfoView');
-
+    
     var searchCriteria = {
         orderBy: 'datetime',
         ascending: false,
         text: ''
     };
-	
-	var self = Ti.UI.createWindow({
-		title:L('entries'),
-		backgroundColor:'black',
+
+    var self = Ti.UI.createWindow({
+		opacity: 0,
 		layout: 'vertical',
+        modal : true,
 		navBarHidden: true
 	});
-	
+    
     var toolbarView = Ti.UI.createView({
-        width : Titanium.UI.FILL,
+		backgroundColor : 'black',
+        width : Ti.UI.FILL,
         height : '48dp'
     });
     self.add(toolbarView);
 
-    var winLabel = Ti.UI.createLabel({
-        top : '6dp',
-        left : '12dp',
-        right : '93dp',
-        height : '42dp',
-        backgroundColor : 'black',
+    var searchBar = Ti.UI.createTextField({
+		top: '4dp',
+		height: '42dp',
+		left: '3dp',
+		right: '93dp',
+		backgroundColor : 'black',
         color : 'white',
-        textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
-        font : {
-            fontSize : '18dp'
-        },
-        text : L('searchOptions')
+		hintText: L('searchEntries')
+	});
+	toolbarView.add(searchBar);
+    
+    var moreButton = Ti.UI.createButton({
+        top : '3dp',
+        right : '42dp',
+        width : '42dp',
+        height : '42dp',
+        backgroundImage : '/images/settings.png',
+        backgroundSelectedColor : '#BBBBBB'
     });
-    toolbarView.add(winLabel);
+    toolbarView.add(moreButton);
+    moreButton.addEventListener('click', function(e) {
+        self.close();
+    });
 
     var cancelButton = Ti.UI.createButton({
         top : '3dp',
-        right : '48dp',
+        right : '3dp',
         width : '42dp',
         height : '42dp',
         backgroundImage : '/images/cancel.png',
@@ -49,36 +59,21 @@ function SearchWin() {
     cancelButton.addEventListener('click', function(e) {
         self.close();
     });
-
-    var searchButton = Ti.UI.createButton({
-        top : '3dp',
-        right : '3dp',
-        width : '42dp',
-        height : '42dp',
-        backgroundImage : '/images/search.png',
-        backgroundSelectedColor : '#BBBBBB'
-    });
-    toolbarView.add(searchButton);
     
 	var borderView = Ti.UI.createView({
-		width: Titanium.UI.FILL,
+		width: Ti.UI.FILL,
 		height: 2,
 		backgroundColor: '#444444'
 	});
 	self.add(borderView);
 
-   var textSearchInfoView = new SearchInfoView({
-        type : 'text',
-        name : 'Entry text',
-        value : '',
-        hintText : 'Entry text'
+    var moreView = Ti.UI.createView({
+		layout: 'vertical',
+        backgroundColor : 'black',
+        height: Ti.UI.SIZE,
+        width : Ti.UI.FILL
     });
-    self.add(textSearchInfoView);
-    self.add(Ti.UI.createView({
-        width : Titanium.UI.FILL,
-        height : 1,
-        backgroundColor : '#444444'
-    }));
+    self.add(moreView);
 	
     schema.fields.forEach(function(field) {
        var searchInfoView = new SearchInfoView({
@@ -87,9 +82,9 @@ function SearchWin() {
             value : '',
             hintText : field.hintText
         });
-        self.add(searchInfoView);
-        self.add(Ti.UI.createView({
-            width : Titanium.UI.FILL,
+        moreView.add(searchInfoView);
+        moreView.add(Ti.UI.createView({
+            width : Ti.UI.FILL,
             height : 1,
             backgroundColor : '#444444'
         }));
