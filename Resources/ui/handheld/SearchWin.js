@@ -44,7 +44,7 @@ function SearchWin() {
     });
     toolbarView.add(moreButton);
     moreButton.addEventListener('click', function(e) {
-        self.close();
+        moreView.visible = !moreView.visible;
     });
 
     var cancelButton = Ti.UI.createButton({
@@ -71,7 +71,8 @@ function SearchWin() {
 		layout: 'vertical',
         backgroundColor : 'black',
         height: Ti.UI.SIZE,
-        width : Ti.UI.FILL
+        width : Ti.UI.FILL,
+        visible: false
     });
     self.add(moreView);
 	
