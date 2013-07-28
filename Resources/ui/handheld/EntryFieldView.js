@@ -1,6 +1,6 @@
 /**
  * @classdesc A view displaying editable entry information.
- * @param {Object} vars Object containing EntryInfoView properties.
+ * @param {Object} vars Object containing EntryFieldView properties.
  * @property {String} type Type of information, either 'datetime', 'location' or 'string'.
  * @property {String} name Name of the information field.
  * @property {Date|String|Number} value Value of information field.
@@ -8,7 +8,7 @@
  * @property {String} dialogTitle Title of dialog that pops up when pressed.
  * @property {String} recentPropName App property name of list of recently used entry information.
  */
-function EntryInfoView(vars) {
+function EntryFieldView(vars) {
     var util = require('util');
     var dv = require('DialogViews');
     var DialogWin = require('DialogWin');
@@ -112,4 +112,4 @@ function EntryInfoView(vars) {
     return self;
 };
 
-module.exports = EntryInfoView;
+module.exports = EntryFieldView;

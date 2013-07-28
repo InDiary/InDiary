@@ -5,7 +5,7 @@
 function EntryWin(entryId) {
     var schema = require('schema');
     var db = require('db');
-    var EntryInfoView = require('EntryInfoView');
+    var EntryFieldView = require('EntryFieldView');
 
     var entryData = {};
     if (entryId == -1) {
@@ -110,7 +110,7 @@ function EntryWin(entryId) {
     self.add(borderView);
 
     schema.fields.forEach(function(field) {
-       var infoView = new EntryInfoView({
+       var fieldView = new EntryFieldView({
             type : field.type,
             name : field.displayName,
             value : entryData[field.name],
@@ -118,8 +118,8 @@ function EntryWin(entryId) {
             dialogTitle : field.displayName,
             recentPropName : schema.makeRecentPropName(field.name)
         });
-        self.add(infoView);
-        infoView.addEventListener('change', function(e) {
+        self.add(fieldView);
+        fieldView.addEventListener('change', function(e) {
             entryData[field.name] = e.value;
         });
         self.add(Ti.UI.createView({

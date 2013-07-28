@@ -1,12 +1,12 @@
 /**
- * @classdesc A view displaying editable entry information.
- * @param {Object} vars Object containing EntryInfoView properties.
+ * @classdesc A view displaying a search field.
+ * @param {Object} vars Object containing SearchFieldView properties.
  * @property {String} type Type of information, either 'datetime', 'location' or 'string'.
  * @property {String} name Name of the information field.
  * @property {Date|String|Number} value Value of information field.
  * @property {String} hintText Hint text for information field.
  */
-function SearchInfoView(vars) {
+function SearchFieldView(vars) {
     var util = require('util');
     
     var self = Ti.UI.createView({
@@ -14,9 +14,10 @@ function SearchInfoView(vars) {
         height : Ti.UI.SIZE,
         layout: 'vertical',
         backgroundColor: 'black',
-        backgroundSelectedColor: '#BBBBBB',
+        backgroundSelectedColor: 'black',
         type : vars.type,
-        value : vars.value
+        value : vars.value,
+        touchEnabled: false
     });
     
     var searchField = Ti.UI.createTextField({
@@ -56,4 +57,4 @@ function SearchInfoView(vars) {
     return self;
 };
 
-module.exports = SearchInfoView;
+module.exports = SearchFieldView;

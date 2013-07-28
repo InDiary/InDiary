@@ -1,7 +1,7 @@
 function SearchWin() {
 	var util = require('util');
     var schema = require('schema');
-	var SearchInfoView = require('SearchInfoView');
+	var SearchFieldView = require('SearchFieldView');
     
     var searchCriteria = {
         orderBy: 'datetime',
@@ -77,13 +77,13 @@ function SearchWin() {
     self.add(moreView);
 	
     schema.fields.forEach(function(field) {
-       var searchInfoView = new SearchInfoView({
+       var searchFieldView = new SearchFieldView({
             type : field.type,
             name : field.displayName,
             value : '',
             hintText : field.hintText
         });
-        moreView.add(searchInfoView);
+        moreView.add(searchFieldView);
         moreView.add(Ti.UI.createView({
             width : Ti.UI.FILL,
             height : 1,
