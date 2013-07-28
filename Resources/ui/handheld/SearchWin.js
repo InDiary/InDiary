@@ -1,4 +1,4 @@
-function SearchWin() {
+function SearchWin(parent) {t
 	var util = require('util');
     var schema = require('schema');
 	var SearchFieldView = require('SearchFieldView');
@@ -32,8 +32,12 @@ function SearchWin() {
         color : 'white',
 		hintText: L('searchEntries')
 	});
+	searchBar.addEventListener('change', function(e) {
+		searchCriteria['text'] = e.value;
+		self.fireEvent('change');
+	});
 	toolbarView.add(searchBar);
-    
+	    
     var moreButton = Ti.UI.createButton({
         top : '3dp',
         right : '42dp',
@@ -83,6 +87,10 @@ function SearchWin() {
             value : '',
             hintText : field.hintText
         });
+        searchFieldView.addEventListener('change', function(e) {
+        	searchCriteria[field.name] = searchFieldView.value;
+        	self.fireEvent('change');
+        });
         moreView.add(searchFieldView);
         moreView.add(Ti.UI.createView({
             width : Ti.UI.FILL,
@@ -90,6 +98,10 @@ function SearchWin() {
             backgroundColor : '#444444'
         }));
     });
+
+	self.addEventListener('change', function(e) {
+		parent.fireEvent('search', {searchCriteria: searchCriteria});
+	});
 
 	return self;
 };

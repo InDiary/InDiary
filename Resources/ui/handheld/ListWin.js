@@ -109,20 +109,20 @@ function ListWin() {
 	});
 	toolbarView.add(advSearchButton);
 	advSearchButton.addEventListener('click', function() {
-        self.containingTab.open(new SearchWin());
+        self.containingTab.open(new SearchWin(self));
     });
 
 	var table = Ti.UI.createTableView();
 	self.add(table);
 
-    var searchBarTimer = 0;
-    var searchBarTimeout = 300;
-    searchBar.addEventListener('change', function(e) {
-        clearTimeout(searchBarTimer);
-        searchBarTimer = setTimeout(function(){
-            searchCriteria.text = e.value;
+    var searchTimer = 0;
+    var searchTimeout = 300;
+    self.addEventListener('search', function(e) {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(function(){
+        	searchCriteria = e.searchCriteria;
             table.fireEvent('update');
-        }, searchBarTimeout);
+        }, searchTimeout);
     });
 
     table.addEventListener('update', function(e) {
