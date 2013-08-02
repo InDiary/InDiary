@@ -1,4 +1,4 @@
-function SearchWin(parent) {t
+function SearchWin(parent) {
 	var util = require('util');
     var schema = require('schema');
 	var SearchFieldView = require('SearchFieldView');
