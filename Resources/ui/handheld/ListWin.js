@@ -3,12 +3,6 @@ function ListWin() {
 	var db = require('db');
 	var EntryWin = require('EntryWin');
 	var SearchWin = require('SearchWin');
-
-    var searchCriteria = {
-        orderBy: 'datetime',
-        ascending: false,
-        text: ''
-    };
 	
 	function createEntryRow(entryData) {
 		
@@ -99,7 +93,7 @@ function ListWin() {
 	});
 	toolbarView.add(searchBar);
 	
-	var advSearchButton = Ti.UI.createButton({
+	var searchButton = Ti.UI.createButton({
 		top: '3dp',
 		right: '3dp',
 		width: '42dp',
@@ -107,27 +101,33 @@ function ListWin() {
 		backgroundImage: '/images/settings.png',
 		backgroundSelectedColor: '#BBBBBB'
 	});
-	toolbarView.add(advSearchButton);
-	advSearchButton.addEventListener('click', function() {
-        self.containingTab.open(new SearchWin(self));
-    });
-
+	toolbarView.add(searchButton);
+    
 	var table = Ti.UI.createTableView();
+    var table.searchCriteria = {
+        orderBy: 'datetime',
+        ascending: false,
+        text: ''
+    };
 	self.add(table);
 
+	searchButton.addEventListener('click', function() {
+        self.containingTab.open(new SearchWin(table));
+    });    
+    
     var searchTimer = 0;
     var searchTimeout = 300;
     self.addEventListener('search', function(e) {
         clearTimeout(searchTimer);
         searchTimer = setTimeout(function(){
-        	searchCriteria = e.searchCriteria;
+        	table.searchCriteria = e.searchCriteria;
             table.fireEvent('update');
         }, searchTimeout);
     });
-
+    
     table.addEventListener('update', function(e) {
         var tableData = [];
-        var entriesData = db.selectEntries(searchCriteria);
+        var entriesData = db.selectEntries(table.searchCriteria);
         entriesData.forEach(function(entryData) {
             tableData.push(createEntryRow(entryData));
         });

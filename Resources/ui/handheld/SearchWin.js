@@ -1,4 +1,4 @@
-function SearchWin(parent) {
+function SearchWin(table) {
 	var util = require('util');
     var schema = require('schema');
 	var SearchFieldView = require('SearchFieldView');
@@ -100,7 +100,7 @@ function SearchWin(parent) {
     });
 
 	self.addEventListener('change', function(e) {
-		parent.fireEvent('search', {searchCriteria: searchCriteria});
+		table.fireEvent('search', {searchCriteria: searchCriteria});
 	});
 
 	return self;
