@@ -110,7 +110,7 @@ function EntryWin(entryId) {
     self.add(borderView);
 
     schema.fields.forEach(function(field) {
-       var fieldView = new EntryFieldView({
+        var fieldView = new EntryFieldView({
             type : field.type,
             name : field.displayName,
             value : entryData[field.name],
