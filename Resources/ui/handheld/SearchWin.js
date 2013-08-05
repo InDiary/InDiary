@@ -43,7 +43,7 @@ function SearchWin(table) {
         right : '42dp',
         width : '42dp',
         height : '42dp',
-        backgroundImage : '/images/settings.png',
+        backgroundImage : '/images/more.png',
         backgroundSelectedColor : '#BBBBBB'
     });
     toolbarView.add(moreButton);

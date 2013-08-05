@@ -98,13 +98,13 @@ function ListWin() {
 		right: '3dp',
 		width: '42dp',
 		height: '42dp',
-		backgroundImage: '/images/settings.png',
+		backgroundImage: '/images/search.png',
 		backgroundSelectedColor: '#BBBBBB'
 	});
 	toolbarView.add(searchButton);
     
 	var table = Ti.UI.createTableView();
-    var table.searchCriteria = {
+    table.searchCriteria = {
         orderBy: 'datetime',
         ascending: false,
         text: ''
