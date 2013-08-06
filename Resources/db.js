@@ -82,19 +82,23 @@ exports.selectEntries = function(searchCriteria) {
     var matchFieldsAndValues = [];
     var rangeFieldsAndValues = [];
     
-    var fieldNames = ['text'];
+    var fields = [{name : 'text',
+                   type : 'string'}];
     schema.fields.forEach(function(field) {
-        fieldNames.push(field.name);
+        fields.push(field);
     });
-    fieldNames.forEach(function(field) {
-        var value = searchCriteria[field];
+    fields.forEach(function(field) {
+        var value = searchCriteria[field.name];
         if (typeof(value) !== 'undefined') {
             value = util.quotify(value.replace(matchRe, escapeChar + '$&'),'%');
-            matchFieldsAndValues.push(field + ' LIKE ' + util.quotify(value.replace(/'/g, "''")));
+            matchFieldsAndValues.push(field.name + ' LIKE ' + util.quotify(value.replace(/'/g, "''")));
         }
-        var range = searchCriteria[field + 'Range'];
+        var range = searchCriteria[field.name + 'Range'];
         if (typeof (range) !== 'undefined') {
-            rangeFieldsAndValues.push(field + ' BETWEEN ' + util.quotify(range[0]) + ' AND ' + util.quotify(range[1]));
+            if (field.type == 'datetime') {
+                range = [range[0].toISOString(), range[1].toISOString()]
+            }
+            rangeFieldsAndValues.push(field.name + ' BETWEEN ' + util.quotify(range[0]) + ' AND ' + util.quotify(range[1]));
         }
     });
     var matchText = matchFieldsAndValues.join(' AND ');
@@ -107,7 +111,7 @@ exports.selectEntries = function(searchCriteria) {
 	} else if (rangeText != '') {
         whereText = 'WHERE ' + rangeText + ' ';	    
 	}
-	
+    
 	var entriesData = [];
 	var db = Ti.Database.open(DATABASE_NAME);
 	var rows = db.execute('SELECT * FROM entries ' + whereText + 'ORDER BY ' + orderBy + ' ' + ascText);

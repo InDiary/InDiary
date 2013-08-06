@@ -3,7 +3,7 @@
  * @param {Object} vars Object containing SearchFieldView properties.
  * @property {String} type Type of information, either 'datetime', 'location' or 'string'.
  * @property {String} name Name of the information field.
- * @property {Date|String|Number} value Value of information field.
+ * @property {String} value Value of information field.
  * @property {String} hintText Hint text for information field.
  */
 function SearchFieldView(vars) {
@@ -21,11 +21,14 @@ function SearchFieldView(vars) {
     });
     
     var searchField = Ti.UI.createTextField({
-        top : '3dp',
+        top : '0dp',
         left : '0dp',
         right: '0dp',
         backgroundColor: 'black',
         color : 'white',
+        font : {
+            fontSize : '22dp'
+        },
         textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
         value: vars.value,
         hintText: vars.hintText
@@ -38,7 +41,7 @@ function SearchFieldView(vars) {
     });
     
     var nameField = Ti.UI.createLabel({
-        top : '-5dp',
+        top : '-8dp',
         bottom: '5dp',
         left : '11dp',
         right: '11dp',

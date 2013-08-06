@@ -117,7 +117,7 @@ function ListWin() {
     
     var searchTimer = 0;
     var searchTimeout = 300;
-    self.addEventListener('search', function(e) {
+    table.addEventListener('search', function(e) {
         clearTimeout(searchTimer);
         searchTimer = setTimeout(function(){
         	table.searchCriteria = e.searchCriteria;

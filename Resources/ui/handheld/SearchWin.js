@@ -1,6 +1,7 @@
-function SearchWin(table) {
+function SearchWin(parent) {
 	var util = require('util');
     var schema = require('schema');
+    var DatetimeRangeView = require('DatetimeRangeView');
 	var SearchFieldView = require('SearchFieldView');
     
     var searchCriteria = {
@@ -81,15 +82,29 @@ function SearchWin(table) {
     self.add(moreView);
 	
     schema.fields.forEach(function(field) {
-       var searchFieldView = new SearchFieldView({
-            type : field.type,
-            name : field.displayName,
-            value : '',
-            hintText : field.hintText
-        });
+        if (field.type == 'datetime'){
+            var startDate = new Date();
+            var endDate = new Date();
+            startDate.setMonth(endDate.getMonth()-1);
+            var searchFieldView = new DatetimeRangeView({
+                name : field.displayName,
+                value : [startDate, endDate]
+            });
+        } else {
+            var searchFieldView = new SearchFieldView({
+                type : field.type,
+                name : field.displayName,
+                value : '',
+                hintText : field.hintText
+            });
+        }
         searchFieldView.addEventListener('change', function(e) {
-        	searchCriteria[field.name] = searchFieldView.value;
-        	self.fireEvent('change');
+            if (field.type == 'datetime'){
+                searchCriteria[field.name + 'Range'] = searchFieldView.value;
+            } else {
+                searchCriteria[field.name] = searchFieldView.value;
+            }
+            self.fireEvent('change');
         });
         moreView.add(searchFieldView);
         moreView.add(Ti.UI.createView({
@@ -100,7 +115,7 @@ function SearchWin(table) {
     });
 
 	self.addEventListener('change', function(e) {
-		table.fireEvent('search', {searchCriteria: searchCriteria});
+		parent.fireEvent('search', {searchCriteria: searchCriteria});
 	});
 
 	return self;

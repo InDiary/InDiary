@@ -24,4 +24,6 @@
     <string name="nearby">Nearby</string>
     <string name="suggested">Suggested</string>
     <string name="search">Search</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>    
 </resources>
