@@ -68,21 +68,19 @@ function EntryFieldView(vars) {
     });
     self.add(nameField);
 
-    switch (self.type) {
-        case 'datetime':
-            self.dialogView = dv.createDatetimeDialogView(self.value);
-            break;
-        case 'location':
-            self.dialogView = dv.createLocationDialogView(self.value, vars.hintText, vars.recentPropName);
-            break;
-        case 'string':
-            self.dialogView = dv.createStringDialogView(self.value, vars.hintText, vars.recentPropName);
-            break;
-    }
-
     self.addEventListener('click', function(e) {
+		switch (self.type) {
+			case 'datetime':
+				self.dialogView = dv.createDatetimeDialogView(self.value);
+				break;
+			case 'location':
+				self.dialogView = dv.createLocationDialogView(self.value, vars.hintText, vars.recentPropName);
+				break;
+			case 'string':
+				self.dialogView = dv.createStringDialogView(self.value, vars.hintText, vars.recentPropName);
+				break;
+		}
         var dialogWin = new DialogWin(self, vars.dialogTitle, self.dialogView);
-        self.dialogView.value = self.value;
         dialogWin.open();
         self.dialogView.fireEvent('open');
     });
