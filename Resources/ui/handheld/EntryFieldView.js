@@ -80,8 +80,7 @@ function EntryFieldView(vars) {
 				self.dialogView = dv.createStringDialogView(self.value, vars.hintText, vars.recentPropName);
 				break;
 		}
-        var dialogWin = new DialogWin(self, vars.dialogTitle, self.dialogView);
-        dialogWin.open();
+		new DialogWin(self, vars.dialogTitle, self.dialogView).open();
         self.dialogView.fireEvent('open');
     });
 

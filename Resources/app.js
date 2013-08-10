@@ -29,6 +29,6 @@ if (Ti.version < 1.8 ) {
 
     var db = require('db');
 	db.createDatabase();
-	var tabGroup = require('ui/common/TabGroup');
-	new tabGroup().open();
+	var ListWin = require('ui/handheld/ListWin');
+	new ListWin().open();
 })();

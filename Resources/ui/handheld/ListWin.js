@@ -69,9 +69,32 @@ function ListWin() {
 	});
 	self.add(borderView);
 	
+	var titleLabel = Ti.UI.createLabel({
+		top: '4dp',
+		height: '42dp',
+		left: '11dp',
+		right: '48dp',
+        color : 'white',
+        font : {
+            fontSize: '18dp'
+        },
+		text: L('InDiary')
+	});
+	toolbarView.add(titleLabel);
+	
+	var searchButton = Ti.UI.createButton({
+		top: '3dp',
+		right: '48dp',
+		width: '42dp',
+		height: '42dp',
+		backgroundImage: '/images/search.png',
+		backgroundSelectedColor: '#BBBBBB'
+	});
+	toolbarView.add(searchButton);
+	
 	var newButton = Ti.UI.createButton({
 		top: '3dp',
-		left: '3dp',
+		right: '3dp',
 		width: '42dp',
 		height: '42dp',
 		backgroundImage: '/images/newentry.png',
@@ -79,29 +102,8 @@ function ListWin() {
 	});
 	toolbarView.add(newButton);
 	newButton.addEventListener('click', function() {
-		self.containingTab.open(new EntryWin(-1));
+		new EntryWin(-1).open();
 	});
-	
-	var searchBar = Ti.UI.createTextField({
-		top: '4dp',
-		height: '42dp',
-		left: '48dp',
-		right: '48dp',
-		backgroundColor : 'black',
-        color : 'white',
-		hintText: L('searchEntries')
-	});
-	toolbarView.add(searchBar);
-	
-	var searchButton = Ti.UI.createButton({
-		top: '3dp',
-		right: '3dp',
-		width: '42dp',
-		height: '42dp',
-		backgroundImage: '/images/search.png',
-		backgroundSelectedColor: '#BBBBBB'
-	});
-	toolbarView.add(searchButton);
     
 	var table = Ti.UI.createTableView();
     table.searchCriteria = {
@@ -112,7 +114,7 @@ function ListWin() {
 	self.add(table);
 
 	searchButton.addEventListener('click', function() {
-        self.containingTab.open(new SearchWin(table));
+		new SearchWin(table).open();
     });    
     
     var searchTimer = 0;
@@ -135,7 +137,7 @@ function ListWin() {
     });
 	
     table.addEventListener('click', function(e) {
-        self.containingTab.open(new EntryWin(e.rowData.entryId));
+        new EntryWin(e.rowData.entryId).open();
     });
     
     Ti.App.addEventListener('db:update', function(e) {
