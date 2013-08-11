@@ -1,9 +1,6 @@
-function EntryListWin() {
+function CaseListWin() {
 	var util = require('util');
 	var db = require('db');
-	var CaseListWin = require('CaseListWin');
-	var EntryWin = require('EntryWin');
-	var EntrySearchView = require('EntrySearchView');
 	
 	function createEntryRow(entryData) {
 		
@@ -87,32 +84,9 @@ function EntryListWin() {
         font : {
             fontSize: '18dp'
         },
-		text: L('entries')
+		text: L('cases')
 	});
 	toolbarView.add(titleLabel);
-	
-	var searchButton = Ti.UI.createButton({
-		top: '3dp',
-		right: '93dp',
-		width: '42dp',
-		height: '42dp',
-		backgroundImage: '/images/search.png',
-		backgroundSelectedColor: '#BBBBBB'
-	});
-	toolbarView.add(searchButton);
-
-	var casesButton = Ti.UI.createButton({
-		top: '3dp',
-		right: '48dp',
-		width: '42dp',
-		height: '42dp',
-		backgroundImage: '/images/cases.png',
-		backgroundSelectedColor: '#BBBBBB'
-	});
-	toolbarView.add(casesButton);
-	casesButton.addEventListener('click', function() {
-		new CaseListWin().open();
-	});
 	
 	var newButton = Ti.UI.createButton({
 		top: '3dp',
@@ -124,7 +98,6 @@ function EntryListWin() {
 	});
 	toolbarView.add(newButton);
 	newButton.addEventListener('click', function() {
-		new EntryWin(-1).open();
 	});
     
 	var table = Ti.UI.createTableView();
@@ -134,13 +107,6 @@ function EntryListWin() {
         text: ''
     };
 	mainView.add(table);
-
-	var entrySearchView = new EntrySearchView(table);
-	self.add(entrySearchView);
-
-	searchButton.addEventListener('click', function() {
-		entrySearchView.fireEvent('open');
-    });
     
     var searchTimer = 0;
     var searchTimeout = 300;
@@ -154,15 +120,10 @@ function EntryListWin() {
     
     table.addEventListener('update', function(e) {
         var tableData = [];
-        var entriesData = db.selectEntries(table.searchCriteria);
-        entriesData.forEach(function(entryData) {
-            tableData.push(createEntryRow(entryData));
-        });
         table.setData(tableData);
     });
 	
     table.addEventListener('click', function(e) {
-        new EntryWin(e.rowData.entryId).open();
     });
     
     Ti.App.addEventListener('db:update', function(e) {
@@ -174,4 +135,4 @@ function EntryListWin() {
 	return self;
 };
 
-module.exports = EntryListWin;
+module.exports = CaseListWin;
