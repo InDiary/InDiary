@@ -1,8 +1,8 @@
-function ListWin() {
+function EntryListWin() {
 	var util = require('util');
 	var db = require('db');
 	var EntryWin = require('EntryWin');
-	var SearchWin = require('SearchWin');
+	var EntrySearchView = require('EntrySearchView');
 	
 	function createEntryRow(entryData) {
 		
@@ -52,25 +52,33 @@ function ListWin() {
 	var self = Ti.UI.createWindow({
 		title:L('entries'),
 		backgroundColor:'black',
-		layout: 'vertical',
 		navBarHidden: true
 	});
 	
+	var mainView = Ti.UI.createView({
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.FILL,
+		height: Ti.UI.FILL,
+		layout: 'vertical'
+	});
+	self.add(mainView);
+		
 	var toolbarView = Ti.UI.createView({
-		width: Titanium.UI.FILL,
+		width: Ti.UI.FILL,
 		height: '48dp'
 	});
-	self.add(toolbarView);
+	mainView.add(toolbarView);
 
 	var borderView = Ti.UI.createView({
-		width: Titanium.UI.FILL,
+		width: Ti.UI.FILL,
 		height: 2,
 		backgroundColor: '#444444'
 	});
-	self.add(borderView);
+	mainView.add(borderView);
 	
 	var titleLabel = Ti.UI.createLabel({
-		top: '4dp',
+		top: '2dp',
 		height: '42dp',
 		left: '11dp',
 		right: '48dp',
@@ -78,7 +86,7 @@ function ListWin() {
         font : {
             fontSize: '18dp'
         },
-		text: L('InDiary')
+		text: L('entries')
 	});
 	toolbarView.add(titleLabel);
 	
@@ -111,11 +119,14 @@ function ListWin() {
         ascending: false,
         text: ''
     };
-	self.add(table);
+	mainView.add(table);
+
+	var entrySearchView = new EntrySearchView(table);
+	self.add(entrySearchView);
 
 	searchButton.addEventListener('click', function() {
-		new SearchWin(table).open();
-    });    
+		entrySearchView.fireEvent('open');
+    });
     
     var searchTimer = 0;
     var searchTimeout = 300;
@@ -149,4 +160,4 @@ function ListWin() {
 	return self;
 };
 
-module.exports = ListWin;
+module.exports = EntryListWin;

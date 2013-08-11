@@ -54,22 +54,9 @@ function EntryWin(entryId) {
     });
     toolbarView.add(blurbField);
 
-    var cancelButton = Ti.UI.createButton({
-        top : '3dp',
-        right : '48dp',
-        width : '42dp',
-        height : '42dp',
-        backgroundImage : '/images/cancel.png',
-        backgroundSelectedColor : '#BBBBBB'
-    });
-    toolbarView.add(cancelButton);
-    cancelButton.addEventListener('click', function(e) {
-        self.close();
-    });
-
     var saveButton = Ti.UI.createButton({
         top : '3dp',
-        right : '3dp',
+        right : '48dp',
         width : '42dp',
         height : '42dp',
         backgroundImage : '/images/save.png',
@@ -99,6 +86,19 @@ function EntryWin(entryId) {
                 Ti.App.Properties.setList(recentPropName, recentList);
             }
         }); 
+        self.close();
+    });
+
+    var cancelButton = Ti.UI.createButton({
+        top : '3dp',
+        right : '3dp',
+        width : '42dp',
+        height : '42dp',
+        backgroundImage : '/images/cancel.png',
+        backgroundSelectedColor : '#BBBBBB'
+    });
+    toolbarView.add(cancelButton);
+    cancelButton.addEventListener('click', function(e) {
         self.close();
     });
 

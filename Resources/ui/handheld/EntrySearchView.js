@@ -1,4 +1,4 @@
-function SearchWin(parent) {
+function EntrySearchView(obj) {
 	var util = require('util');
     var schema = require('schema');
     var DatetimeRangeView = require('DatetimeRangeView');
@@ -10,11 +10,14 @@ function SearchWin(parent) {
         text: ''
     };
 
-    var self = Ti.UI.createWindow({
-		opacity: 0,
+    var self = Ti.UI.createView({
+    	top: '0dp',
+    	left: '0dp',
+    	width: Ti.UI.FILL,
+		height: Ti.UI.SIZE,
 		layout: 'vertical',
-        modal : true,
-		navBarHidden: true
+		touchEnabled: false,
+		visible: false
 	});
     
     var toolbarView = Ti.UI.createView({
@@ -31,7 +34,8 @@ function SearchWin(parent) {
 		right: '93dp',
 		backgroundColor : 'black',
         color : 'white',
-		hintText: L('searchEntries')
+		hintText: L('searchEntries'),
+		softKeyboardOnFocus : Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS
 	});
 	searchBar.addEventListener('change', function(e) {
 		searchCriteria['text'] = e.value;
@@ -62,7 +66,7 @@ function SearchWin(parent) {
     });
     toolbarView.add(cancelButton);
     cancelButton.addEventListener('click', function(e) {
-        self.close();
+        self.visible = false;
     });
     
 	var borderView = Ti.UI.createView({
@@ -114,11 +118,16 @@ function SearchWin(parent) {
         }));
     });
 
+	self.addEventListener('open', function(e){
+		self.visible = true;
+		searchBar.focus();
+	});
+
 	self.addEventListener('change', function(e) {
-		parent.fireEvent('search', {searchCriteria: searchCriteria});
+		obj.fireEvent('search', {searchCriteria: searchCriteria});
 	});
 
 	return self;
 };
 
-module.exports = SearchWin;
+module.exports = EntrySearchView;
