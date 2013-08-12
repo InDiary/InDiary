@@ -1,0 +1,12 @@
+exports.primaryTextColor = 'white';
+exports.secondaryTextColor = 'gray';
+exports.backgroundColor = 'black';
+exports.selectedBackgroundColor = '#BBBBBB';
+exports.primaryToolbarTextColor = 'white';
+exports.secondaryToolbarTextColor = 'gray';
+exports.toolbarBackgroundColor = 'black';
+exports.toolbarSelectedBackgroundColor = '#BBBBBB';
+exports.borderColor = '#444444';
+exports.toolbarFontSize = '18dp';
+exports.primaryFontSize = '22dp';
+exports.secondaryFontSize = '14dp';

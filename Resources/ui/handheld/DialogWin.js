@@ -1,4 +1,6 @@
 function DialogWin(parent, title, dialogView) {
+    var theme = require('theme');
+    
     var self = Ti.UI.createWindow({
         opacity : 0,
         modal : true,
@@ -10,14 +12,14 @@ function DialogWin(parent, title, dialogView) {
         width : '90%',
         center : {x: '50%', y: '50%'},
         layout : 'vertical',
-        backgroundColor: '#444444',
+        backgroundColor: theme.borderColor,
     });
     self.add(dialogBorder);
 
     dialogBorder.add(Ti.UI.createView({
         width : Ti.UI.FILL,
         height : 1,
-        backgroundColor : '#444444'
+        backgroundColor : theme.borderColor
     }));
 
     var dialog = Ti.UI.createView({
@@ -26,14 +28,14 @@ function DialogWin(parent, title, dialogView) {
         height : Ti.UI.SIZE,
         layout : 'vertical',
         backgroundColor : 'black',
-        color : 'white'
+        color : theme.primaryTextColor
     }); 
     dialogBorder.add(dialog);
 
     dialogBorder.add(Ti.UI.createView({
         width : Ti.UI.FILL,
         height : 1,
-        backgroundColor : '#444444'
+        backgroundColor : theme.borderColor
     }));
 
     var titleBar = Ti.UI.createView({
@@ -46,17 +48,17 @@ function DialogWin(parent, title, dialogView) {
         top: '12dp',
         left: '11dp',
         font : {
-            fontSize: '24dp'
+            fontSize: theme.primaryFontSize
         },
         text: title,
-        color: 'white'
+        color: theme.primaryTextColor
     });
 	titleBar.add(titleLabel);
 	
     dialog.add(Ti.UI.createView({
         width : Ti.UI.FILL,
         height : 2,
-        backgroundColor : '#444444'
+        backgroundColor : theme.borderColor
     }));
     dialog.add(Ti.UI.createView({
         width : Ti.UI.FILL,
@@ -72,7 +74,7 @@ function DialogWin(parent, title, dialogView) {
     dialog.add(Ti.UI.createView({
         width : Ti.UI.FILL,
         height : 2,
-        backgroundColor : '#444444'
+        backgroundColor : theme.borderColor
     }));
     
     var buttonBar = Ti.UI.createView({
@@ -85,14 +87,14 @@ function DialogWin(parent, title, dialogView) {
 	var setButton = Ti.UI.createView({
        height: '100%',
 	   width: '50%',
-	   backgroundSelectedColor : '#BBBBBB'
+	   backgroundSelectedColor : theme.selectedBackgroundColor
 	});
 	buttonBar.add(setButton);
 	var setLabel = Ti.UI.createLabel({
 	    center : {x: '50%', y: '50%'},
-	    color : 'white',
+	    color : theme.primaryTextColor,
         font : {
-            fontSize: '16dp'
+            fontSize: theme.secondaryFontSize
         },
         text: L('set'),
         touchEnabled: false
@@ -102,7 +104,7 @@ function DialogWin(parent, title, dialogView) {
         right : '0dp',
         height : '100%',
         width : 1,
-        backgroundColor : '#444444'
+        backgroundColor : theme.borderColor
     }); 
     setButton.add(rightBorder);
     setButton.addEventListener('click', function(e){
@@ -113,14 +115,14 @@ function DialogWin(parent, title, dialogView) {
 	var cancelButton = Ti.UI.createView({
        height: '100%',
        width: '50%',
-       backgroundSelectedColor : '#BBBBBB'
+       backgroundSelectedColor : theme.selectedBackgroundColor
     });
     buttonBar.add(cancelButton);
     var cancelLabel = Ti.UI.createLabel({
         center : {x: '50%', y: '50%'},
-        color : 'white',
+        color : theme.primaryTextColor,
         font : {
-            fontSize: '15dp'
+            fontSize: theme.secondaryFontSize
         },
         text: L('cancel'),
         touchEnabled: false
@@ -130,7 +132,7 @@ function DialogWin(parent, title, dialogView) {
         left : '0dp',
         height : '100%',
         width : 1,
-        backgroundColor : '#444444'
+        backgroundColor : theme.borderColor
     }); 
     cancelButton.add(leftBorder);
     cancelButton.addEventListener('click', function(e){

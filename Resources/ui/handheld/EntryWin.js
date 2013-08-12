@@ -5,6 +5,7 @@
 function EntryWin(entryId) {
     var schema = require('schema');
     var db = require('db');
+    var theme = require('theme');
     var EntryFieldView = require('EntryFieldView');
 
     var entryData = {};
@@ -25,13 +26,14 @@ function EntryWin(entryId) {
 
     var self = Ti.UI.createWindow({
         navBarHidden: true,
-        backgroundColor : 'black',
+        backgroundColor : theme.backgroundColor,
         layout : 'vertical'
     });
 
     var toolbarView = Ti.UI.createView({
         width : Titanium.UI.FILL,
-        height : '48dp'
+        height : '48dp',
+        backgroundColor : theme.toolbarBackgroundColor
     });
     self.add(toolbarView);
 
@@ -40,8 +42,8 @@ function EntryWin(entryId) {
         left : '3dp',
         right : '93dp',
         height : '42dp',
-        backgroundColor : 'black',
-        color : 'white',
+        backgroundColor : theme.toolbarBackgroundColor,
+        color : theme.primaryTextColor,
         textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
         hintText : L('newEntry'),
         font : {
@@ -60,7 +62,7 @@ function EntryWin(entryId) {
         width : '42dp',
         height : '42dp',
         backgroundImage : '/images/save.png',
-        backgroundSelectedColor : '#BBBBBB'
+        backgroundSelectedColor : theme.toolbarSelectedBackgroundColor
     });
     toolbarView.add(saveButton);
     saveButton.addEventListener('click', function(e) {
@@ -95,7 +97,7 @@ function EntryWin(entryId) {
         width : '42dp',
         height : '42dp',
         backgroundImage : '/images/cancel.png',
-        backgroundSelectedColor : '#BBBBBB'
+        backgroundSelectedColor : theme.toolbarSelectedBackgroundColor
     });
     toolbarView.add(cancelButton);
     cancelButton.addEventListener('click', function(e) {
@@ -105,7 +107,7 @@ function EntryWin(entryId) {
     var borderView = Ti.UI.createView({
         width : Titanium.UI.FILL,
         height : 2,
-        backgroundColor : '#444444'
+        backgroundColor : theme.borderColor
     });
     self.add(borderView);
 
@@ -125,7 +127,7 @@ function EntryWin(entryId) {
         self.add(Ti.UI.createView({
             width : Titanium.UI.FILL,
             height : 1,
-            backgroundColor : '#444444'
+            backgroundColor : theme.borderColor
         }));
     });
 
@@ -134,8 +136,8 @@ function EntryWin(entryId) {
         width : Titanium.UI.FILL,
         height : Titanium.UI.FILL,
         borderWidth : 0,
-        color : 'white',
-        backgroundColor : 'black',
+        color : theme.primaryTextColor,
+        backgroundColor : theme.backgroundColor,
         hintText: L('emptyEntryText'),
         value : entryData.text
     });

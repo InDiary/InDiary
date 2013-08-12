@@ -6,29 +6,31 @@
  * @property {Object} headerRowTemplate Prototype section header row properties.
  */
 function DynamicTableView(vars) {
+    var theme = require('theme');
+
     var self = Ti.UI.createTableView(vars);
     if (typeof(self.dynamicSections) === 'undefined'){
         self.dynamicSections = [];
     }
     if (typeof(self.rowTemplate) === 'undefined'){
         self.rowTemplate = {
-            color : 'white',
-            backgroundSelectedColor : '#BBBBBB',
+            color : theme.primaryTextColor,
+            backgroundSelectedColor : theme.selectedBackgroundColor,
             height : '48dp',
             font : {
-                fontSize : '18dp'
+                fontSize : theme.toolbarFontSize
             }
         };
     }
     self.rowTemplate.selectable = true; 
     if (typeof(self.headerRowTemplate) === 'undefined'){
         self.headerRowTemplate = {
-            color : 'white',
-            backgroundColor: '#444444',
-            backgroundSelectedColor: '#444444',
+            color : theme.primaryTextColor,
+            backgroundColor: theme.borderColor,
+            backgroundSelectedColor: theme.borderColor,
             height : '22dp',
             font : {
-                fontSize : '14dp'
+                fontSize : theme.secondaryFontSize
             }
         };
     }

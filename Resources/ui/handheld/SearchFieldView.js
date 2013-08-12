@@ -8,13 +8,13 @@
  */
 function SearchFieldView(vars) {
     var util = require('util');
+    var theme = require('theme');
     
     var self = Ti.UI.createView({
         width : Ti.UI.FILL,
         height : Ti.UI.SIZE,
         layout: 'vertical',
-        backgroundColor: 'black',
-        backgroundSelectedColor: 'black',
+        backgroundColor: theme.backgroundColor,
         type : vars.type,
         value : vars.value,
         touchEnabled: false
@@ -24,10 +24,10 @@ function SearchFieldView(vars) {
         top : '0dp',
         left : '0dp',
         right: '0dp',
-        backgroundColor: 'black',
-        color : 'white',
+        backgroundColor: theme.backgroundColor,
+        color : theme.primaryTextColor,
         font : {
-            fontSize : '22dp'
+            fontSize : theme.primaryFontSize
         },
         textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
         value: vars.value,
@@ -45,10 +45,10 @@ function SearchFieldView(vars) {
         bottom: '5dp',
         left : '11dp',
         right: '11dp',
-        color : 'gray',
+        color : theme.secondaryTextColor,
         textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
         font : {
-            fontSize : '15dp'
+            fontSize : theme.secondaryFontSize
         },
         text : vars.name,
         wordWrap: false,

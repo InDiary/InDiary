@@ -1,11 +1,12 @@
 var util = require('util');
+var theme = require('theme');
 var DynamicTableView = require('DynamicTableView');
 
 exports.createDatetimeDialogView = function(value){
     var dialogView = Ti.UI.createView({
         height: Ti.UI.SIZE,
         layout : 'vertical',
-        backgroundColor: 'black',
+        backgroundColor: theme.backgroundColor,
         value : value
     });
     var timePicker = Ti.UI.createPicker({
@@ -47,14 +48,14 @@ exports.createLocationDialogView = function(value, hintText, recentPropName){
     var dialogView = Ti.UI.createView({
         height : Ti.UI.SIZE,
         layout : 'vertical',
-        backgroundColor: 'black',
+        backgroundColor: theme.backgroundColor,
         value : value
     });
     
     var searchBar = Ti.UI.createTextField({
         width : Ti.UI.FILL,
-        color: 'white',
-        backgroundColor: 'black',
+        color: theme.primaryTextColor,
+        backgroundColor: theme.backgroundColor,
         hintText: hintText,
         softKeyboardOnFocus : Titanium.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS
     });
@@ -63,7 +64,7 @@ exports.createLocationDialogView = function(value, hintText, recentPropName){
     dialogView.add(Ti.UI.createView({
         width : Titanium.UI.FILL,
         height : 1,
-        backgroundColor : '#444444'
+        backgroundColor : theme.borderColor
     }));
     
     var locationTable = new DynamicTableView({
@@ -164,13 +165,13 @@ exports.createStringDialogView = function(value, hintText, recentPropName){
     var dialogView = Ti.UI.createView({
         height : Ti.UI.SIZE,
         layout : 'vertical',
-        backgroundColor: 'black',
+        backgroundColor: theme.backgroundColor,
         value : value
     });
     var textField = Ti.UI.createTextField({
         width : Ti.UI.FILL,
-        color: 'white',
-        backgroundColor: 'black',
+        color: theme.primaryTextColor,
+        backgroundColor: theme.backgroundColor,
         hintText : hintText,
         softKeyboardOnFocus : Titanium.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS
     });
@@ -178,7 +179,7 @@ exports.createStringDialogView = function(value, hintText, recentPropName){
     var borderView = Ti.UI.createView({
         width : Titanium.UI.FILL,
         height : 1,
-        backgroundColor : '#444444'
+        backgroundColor : theme.borderColor
     });
     dialogView.add(borderView);
     var recentTable = new DynamicTableView({

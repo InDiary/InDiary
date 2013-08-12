@@ -1,6 +1,10 @@
+/**
+ * View that overlays EntryListWin with search bar and advanced search options.
+ */
 function EntrySearchView(obj) {
 	var util = require('util');
     var schema = require('schema');
+    var theme = require('theme');
     var DatetimeRangeView = require('DatetimeRangeView');
 	var SearchFieldView = require('SearchFieldView');
     
@@ -21,7 +25,7 @@ function EntrySearchView(obj) {
 	});
     
     var toolbarView = Ti.UI.createView({
-		backgroundColor : 'black',
+		backgroundColor : theme.toolbarBackgroundColor,
         width : Ti.UI.FILL,
         height : '48dp'
     });
@@ -32,8 +36,8 @@ function EntrySearchView(obj) {
 		height: '42dp',
 		left: '3dp',
 		right: '93dp',
-		backgroundColor : 'black',
-        color : 'white',
+		backgroundColor : theme.toolbarBackgroundColor,
+        color : theme.primaryToolbarTextColor,
 		hintText: L('searchEntries'),
 		softKeyboardOnFocus : Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS
 	});
@@ -49,7 +53,7 @@ function EntrySearchView(obj) {
         width : '42dp',
         height : '42dp',
         backgroundImage : '/images/more.png',
-        backgroundSelectedColor : '#BBBBBB'
+        backgroundSelectedColor : theme.toolbarSelectedBackgroundColor
     });
     toolbarView.add(moreButton);
     moreButton.addEventListener('click', function(e) {
@@ -62,7 +66,7 @@ function EntrySearchView(obj) {
         width : '42dp',
         height : '42dp',
         backgroundImage : '/images/cancel.png',
-        backgroundSelectedColor : '#BBBBBB'
+        backgroundSelectedColor : theme.toolbarSelectedBackgroundColor
     });
     toolbarView.add(cancelButton);
     cancelButton.addEventListener('click', function(e) {
@@ -72,13 +76,13 @@ function EntrySearchView(obj) {
 	var borderView = Ti.UI.createView({
 		width: Ti.UI.FILL,
 		height: 2,
-		backgroundColor: '#444444'
+		backgroundColor: theme.borderColor
 	});
 	self.add(borderView);
 
     var moreView = Ti.UI.createView({
 		layout: 'vertical',
-        backgroundColor : 'black',
+        backgroundColor : theme.backgroundColor,
         height: Ti.UI.SIZE,
         width : Ti.UI.FILL,
         visible: false
@@ -114,7 +118,7 @@ function EntrySearchView(obj) {
         moreView.add(Ti.UI.createView({
             width : Ti.UI.FILL,
             height : 1,
-            backgroundColor : '#444444'
+            backgroundColor : theme.borderColor
         }));
     });
 

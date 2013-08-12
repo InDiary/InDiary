@@ -1,13 +1,17 @@
+/**
+ * Window displaying list of cases.
+ */
 function CaseListWin() {
 	var util = require('util');
+    var theme = require('theme');
 	var db = require('db');
 	
 	function createEntryRow(entryData) {
 		
         var row = Ti.UI.createTableViewRow({
             height : Ti.UI.SIZE,
-            backgroundColor: 'black',
-            backgroundSelectedColor: '#BBBBBB',
+            backgroundColor: theme.backgroundColor,
+            backgroundSelectedColor: theme.selectedBackgroundColor,
             className : 'entryRow',
             entryId : entryData.id
         });
@@ -17,9 +21,9 @@ function CaseListWin() {
 			left: '11dp',
 			right: '11dp',
 			text: entryData.text,
-			color: 'white',
+			color: theme.primaryTextColor,
 			font: {
-     		 	fontSize: '22dp',
+     		 	fontSize: theme.primaryFontSize,
   			},
   			wordWrap: false,
   			ellipsize: true,
@@ -34,9 +38,9 @@ function CaseListWin() {
 			right: '11dp',
 			text: util.entryDatetimeFormat(entryData.datetime) + ', '
 				+ entryData.location,
-			color: 'gray',
+			color: theme.secondaryTextColor,
 			font: {
-     		 	fontSize: '15dp'
+     		 	fontSize: theme.secondaryFontSize
   			},
   			wordWrap: false,
   			ellipsize: true,
@@ -49,7 +53,7 @@ function CaseListWin() {
 
 	var self = Ti.UI.createWindow({
 		title:L('entries'),
-		backgroundColor:'black',
+		backgroundColor:theme.backgroundColor,
 		navBarHidden: true
 	});
 	
@@ -64,14 +68,15 @@ function CaseListWin() {
 		
 	var toolbarView = Ti.UI.createView({
 		width: Ti.UI.FILL,
-		height: '48dp'
+		height: '48dp',
+        backgroundColor: theme.toolbarBackgroundColor
 	});
 	mainView.add(toolbarView);
 
 	var borderView = Ti.UI.createView({
 		width: Ti.UI.FILL,
 		height: 2,
-		backgroundColor: '#444444'
+		backgroundColor: theme.borderColor
 	});
 	mainView.add(borderView);
 	
@@ -80,7 +85,7 @@ function CaseListWin() {
 		height: '42dp',
 		left: '11dp',
 		right: '48dp',
-        color : 'white',
+        color : theme.primaryToolbarTextColor,
         font : {
             fontSize: '18dp'
         },
@@ -94,7 +99,7 @@ function CaseListWin() {
 		width: '42dp',
 		height: '42dp',
 		backgroundImage: '/images/new.png',
-		backgroundSelectedColor: '#BBBBBB'
+		backgroundSelectedColor: theme.toolbarSelectedBackgroundColor
 	});
 	toolbarView.add(newButton);
 	newButton.addEventListener('click', function() {

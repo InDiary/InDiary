@@ -10,6 +10,7 @@
  */
 function EntryFieldView(vars) {
     var util = require('util');
+    var theme = require('theme');
     var dv = require('DialogViews');
     var DialogWin = require('DialogWin');
     
@@ -17,8 +18,8 @@ function EntryFieldView(vars) {
         width : Ti.UI.FILL,
         height : Ti.UI.SIZE,
         horizontalWrap : false,
-        backgroundColor: 'black',
-        backgroundSelectedColor: '#BBBBBB',
+        backgroundColor: theme.backgroundColor,
+        backgroundSelectedColor: theme.backgroundSelectedColor,
         type : vars.type,
         value : vars.value
     });
@@ -27,10 +28,10 @@ function EntryFieldView(vars) {
         top : '7dp',
         left : '11dp',
         right: '11dp',
-        color : 'white',
+        color : theme.primaryTextColor,
         textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
         font : {
-            fontSize : '22dp'
+            fontSize : theme.primaryFontSize
         },
         hintText: vars.hintText,
         wordWrap: false,
@@ -56,10 +57,10 @@ function EntryFieldView(vars) {
         bottom: '5dp',
         left : '11dp',
         right: '11dp',
-        color : 'gray',
+        color : theme.secondaryFontColor,
         textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
         font : {
-            fontSize : '15dp'
+            fontSize : theme.secondaryFontSize
         },
         text : vars.name,
         wordWrap: false,

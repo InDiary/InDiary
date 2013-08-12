@@ -6,14 +6,14 @@
  */
 function DatetimeRangeView(vars) {
     var util = require('util');
+    var theme = require('theme');
     var EntryFieldView = require('EntryFieldView');
     
     var self = Ti.UI.createView({
         width : Ti.UI.FILL,
         height : Ti.UI.SIZE,
         layout: 'vertical',
-        backgroundColor: 'black',
-        backgroundSelectedColor: 'black',
+        backgroundColor: theme.backgroundColor,
         touchEnabled: false,
         value: vars.value.slice(0)
     });
@@ -38,7 +38,7 @@ function DatetimeRangeView(vars) {
     self.add(Ti.UI.createView({
         width : Titanium.UI.FILL,
         height : 1,
-        backgroundColor : '#444444'
+        backgroundColor : theme.borderColor
     }));
         
     var toFieldView = new EntryFieldView({
