@@ -70,6 +70,7 @@ function EntrySearchView(obj) {
     });
     toolbarView.add(cancelButton);
     cancelButton.addEventListener('click', function(e) {
+    	searchBar.blur();
         self.visible = false;
     });
     
