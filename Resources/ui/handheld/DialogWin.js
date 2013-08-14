@@ -1,5 +1,5 @@
 function DialogWin(parent, title, dialogView) {
-    var theme = require('theme');
+    var theme = require('ui/theme');
     
     var self = Ti.UI.createWindow({
         opacity : 0,
@@ -87,7 +87,7 @@ function DialogWin(parent, title, dialogView) {
 	var setButton = Ti.UI.createView({
        height: '100%',
 	   width: '50%',
-	   backgroundSelectedColor : theme.selectedBackgroundColor
+	   backgroundSelectedColor : theme.backgroundSelectedColor
 	});
 	buttonBar.add(setButton);
 	var setLabel = Ti.UI.createLabel({
@@ -115,7 +115,7 @@ function DialogWin(parent, title, dialogView) {
 	var cancelButton = Ti.UI.createView({
        height: '100%',
        width: '50%',
-       backgroundSelectedColor : theme.selectedBackgroundColor
+       backgroundSelectedColor : theme.backgroundSelectedColor
     });
     buttonBar.add(cancelButton);
     var cancelLabel = Ti.UI.createLabel({

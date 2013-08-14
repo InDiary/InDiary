@@ -4,7 +4,7 @@
 function EntrySearchView(obj) {
 	var util = require('util');
     var schema = require('schema');
-    var theme = require('theme');
+    var theme = require('ui/theme');
     var DatetimeRangeView = require('DatetimeRangeView');
 	var SearchFieldView = require('SearchFieldView');
     
@@ -53,7 +53,7 @@ function EntrySearchView(obj) {
         width : '42dp',
         height : '42dp',
         backgroundImage : '/images/more.png',
-        backgroundSelectedColor : theme.toolbarSelectedBackgroundColor
+        backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
     });
     toolbarView.add(moreButton);
     moreButton.addEventListener('click', function(e) {
@@ -66,7 +66,7 @@ function EntrySearchView(obj) {
         width : '42dp',
         height : '42dp',
         backgroundImage : '/images/cancel.png',
-        backgroundSelectedColor : theme.toolbarSelectedBackgroundColor
+        backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
     });
     toolbarView.add(cancelButton);
     cancelButton.addEventListener('click', function(e) {

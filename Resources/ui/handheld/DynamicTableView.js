@@ -6,7 +6,7 @@
  * @property {Object} headerRowTemplate Prototype section header row properties.
  */
 function DynamicTableView(vars) {
-    var theme = require('theme');
+    var theme = require('ui/theme');
 
     var self = Ti.UI.createTableView(vars);
     if (typeof(self.dynamicSections) === 'undefined'){
@@ -15,7 +15,7 @@ function DynamicTableView(vars) {
     if (typeof(self.rowTemplate) === 'undefined'){
         self.rowTemplate = {
             color : theme.primaryTextColor,
-            backgroundSelectedColor : theme.selectedBackgroundColor,
+            backgroundSelectedColor : theme.backgroundSelectedColor,
             height : '48dp',
             font : {
                 fontSize : theme.toolbarFontSize

@@ -5,7 +5,7 @@
 function EntryWin(entryId) {
     var schema = require('schema');
     var db = require('db');
-    var theme = require('theme');
+    var theme = require('ui/theme');
     var EntryFieldView = require('EntryFieldView');
 
     var entryData = {};
@@ -62,7 +62,7 @@ function EntryWin(entryId) {
         width : '42dp',
         height : '42dp',
         backgroundImage : '/images/save.png',
-        backgroundSelectedColor : theme.toolbarSelectedBackgroundColor
+        backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
     });
     toolbarView.add(saveButton);
     saveButton.addEventListener('click', function(e) {
@@ -97,7 +97,7 @@ function EntryWin(entryId) {
         width : '42dp',
         height : '42dp',
         backgroundImage : '/images/cancel.png',
-        backgroundSelectedColor : theme.toolbarSelectedBackgroundColor
+        backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
     });
     toolbarView.add(cancelButton);
     cancelButton.addEventListener('click', function(e) {

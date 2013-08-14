@@ -6,7 +6,7 @@
  */
 function DatetimeRangeView(vars) {
     var util = require('util');
-    var theme = require('theme');
+    var theme = require('ui/theme');
     var EntryFieldView = require('EntryFieldView');
     
     var self = Ti.UI.createView({

@@ -10,7 +10,7 @@
  */
 function EntryFieldView(vars) {
     var util = require('util');
-    var theme = require('theme');
+    var theme = require('ui/theme');
     var dv = require('DialogViews');
     var DialogWin = require('DialogWin');
     

@@ -1,5 +1,5 @@
 var util = require('util');
-var theme = require('theme');
+var theme = require('ui/theme');
 var DynamicTableView = require('DynamicTableView');
 
 exports.createDatetimeDialogView = function(value){

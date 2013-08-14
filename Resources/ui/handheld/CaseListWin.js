@@ -3,7 +3,7 @@
  */
 function CaseListWin() {
 	var util = require('util');
-    var theme = require('theme');
+    var theme = require('ui/theme');
 	var db = require('db');
 	
 	function createEntryRow(entryData) {
@@ -11,7 +11,7 @@ function CaseListWin() {
         var row = Ti.UI.createTableViewRow({
             height : Ti.UI.SIZE,
             backgroundColor: theme.backgroundColor,
-            backgroundSelectedColor: theme.selectedBackgroundColor,
+            backgroundSelectedColor: theme.backgroundSelectedColor,
             className : 'entryRow',
             entryId : entryData.id
         });
@@ -99,7 +99,7 @@ function CaseListWin() {
 		width: '42dp',
 		height: '42dp',
 		backgroundImage: '/images/new.png',
-		backgroundSelectedColor: theme.toolbarSelectedBackgroundColor
+		backgroundSelectedColor: theme.toolbarBackgroundSelectedColor
 	});
 	toolbarView.add(newButton);
 	newButton.addEventListener('click', function() {

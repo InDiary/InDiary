@@ -4,7 +4,7 @@
 function EntryListWin() {
 	var util = require('util');
 	var db = require('db');
-    var theme = require('theme');
+    var theme = require('ui/theme');
 	var CaseListWin = require('CaseListWin');
 	var EntryWin = require('EntryWin');
 	var EntrySearchView = require('EntrySearchView');
@@ -14,7 +14,7 @@ function EntryListWin() {
         var row = Ti.UI.createTableViewRow({
             height : Ti.UI.SIZE,
             backgroundColor: theme.backgroundColor,
-            backgroundSelectedColor: theme.selectedBackgroundColor,
+            backgroundSelectedColor: theme.backgroundSelectedColor,
             className : 'entryRow',
             entryId : entryData.id
         });
@@ -102,7 +102,7 @@ function EntryListWin() {
 		width: '42dp',
 		height: '42dp',
 		backgroundImage: '/images/search.png',
-		backgroundSelectedColor: theme.toolbarSelectedBackgroundColor
+		backgroundSelectedColor: theme.toolbarBackgroundSelectedColor
 	});
 	toolbarView.add(searchButton);
 
@@ -112,7 +112,7 @@ function EntryListWin() {
 		width: '42dp',
 		height: '42dp',
 		backgroundImage: '/images/cases.png',
-		backgroundSelectedColor: theme.toolbarSelectedBackgroundColor
+		backgroundSelectedColor: theme.toolbarBackgroundSelectedColor
 	});
 	toolbarView.add(casesButton);
 	casesButton.addEventListener('click', function() {
@@ -125,7 +125,7 @@ function EntryListWin() {
 		width: '42dp',
 		height: '42dp',
 		backgroundImage: '/images/new.png',
-		backgroundSelectedColor: theme.toolbarSelectedBackgroundColor
+		backgroundSelectedColor: theme.toolbarBackgroundSelectedColor
 	});
 	toolbarView.add(newButton);
 	newButton.addEventListener('click', function() {

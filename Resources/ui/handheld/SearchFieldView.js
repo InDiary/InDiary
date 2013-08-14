@@ -8,7 +8,7 @@
  */
 function SearchFieldView(vars) {
     var util = require('util');
-    var theme = require('theme');
+    var theme = require('ui/theme');
     
     var self = Ti.UI.createView({
         width : Ti.UI.FILL,
