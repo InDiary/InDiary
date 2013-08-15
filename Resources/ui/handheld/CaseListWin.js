@@ -5,51 +5,7 @@ function CaseListWin() {
 	var util = require('util');
     var theme = require('ui/theme');
 	var db = require('db');
-	
-	function createEntryRow(entryData) {
-		
-        var row = Ti.UI.createTableViewRow({
-            height : Ti.UI.SIZE,
-            backgroundColor: theme.backgroundColor,
-            backgroundSelectedColor: theme.backgroundSelectedColor,
-            className : 'entryRow',
-            entryId : entryData.id
-        });
-		
-		var blurb = Ti.UI.createLabel({
-			top: '7dp',
-			left: '11dp',
-			right: '11dp',
-			text: entryData.text,
-			color: theme.primaryTextColor,
-			font: {
-     		 	fontSize: theme.primaryFontSize,
-  			},
-  			wordWrap: false,
-  			ellipsize: true,
-  			touchEnabled: false
-		});
-		row.add(blurb);
-		
-		var metadata = Ti.UI.createLabel({
-			top: '37dp',
-			bottom: '5dp',
-			left: '11dp',
-			right: '11dp',
-			text: util.entryDatetimeFormat(entryData.datetime) + ', '
-				+ entryData.location,
-			color: theme.secondaryTextColor,
-			font: {
-     		 	fontSize: theme.secondaryFontSize
-  			},
-  			wordWrap: false,
-  			ellipsize: true,
-  			touchEnabled: false
-		});
-		row.add(metadata);
-		
-		return row;
-	};
+    var DualLabelRow = require('DualLabelRow');
 
 	var self = Ti.UI.createWindow({
 		title:L('entries'),

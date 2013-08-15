@@ -8,51 +8,7 @@ function EntryListWin() {
 	var CaseListWin = require('CaseListWin');
 	var EntryWin = require('EntryWin');
 	var EntrySearchView = require('EntrySearchView');
-	
-	function createEntryRow(entryData) {
-		
-        var row = Ti.UI.createTableViewRow({
-            height : Ti.UI.SIZE,
-            backgroundColor: theme.backgroundColor,
-            backgroundSelectedColor: theme.backgroundSelectedColor,
-            className : 'entryRow',
-            entryId : entryData.id
-        });
-		
-		var blurb = Ti.UI.createLabel({
-			top: '7dp',
-			left: '11dp',
-			right: '11dp',
-			text: entryData.text,
-			color: 'white',
-			font: {
-     		 	fontSize: theme.primaryFontSize
-  			},
-  			wordWrap: false,
-  			ellipsize: true,
-  			touchEnabled: false
-		});
-		row.add(blurb);
-		
-		var metadata = Ti.UI.createLabel({
-			top: '37dp',
-			bottom: '5dp',
-			left: '11dp',
-			right: '11dp',
-			text: util.entryDatetimeFormat(entryData.datetime) + ', '
-				+ entryData.location,
-			color: 'gray',
-			font: {
-     		 	fontSize: theme.secondaryFontSize
-  			},
-  			wordWrap: false,
-  			ellipsize: true,
-  			touchEnabled: false
-		});
-		row.add(metadata);
-		
-		return row;
-	};
+    var DualLabelRow = require('DualLabelRow');
 
 	var self = Ti.UI.createWindow({
 		title:L('entries'),
@@ -161,7 +117,11 @@ function EntryListWin() {
         var tableData = [];
         var entriesData = db.selectEntries(table.searchCriteria);
         entriesData.forEach(function(entryData) {
-            tableData.push(createEntryRow(entryData));
+            var metadataText = util.entryDatetimeFormat(entryData.datetime) +
+                               ', ' + entryData.location;
+            var entryRow = new DualLabelRow(entryData.text, metadataText,
+                                            {entryId: entryData.id});
+            tableData.push(entryRow);
         });
         table.setData(tableData);
     });
