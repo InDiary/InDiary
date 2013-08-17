@@ -7,6 +7,7 @@ function EntryListWin() {
     var theme = require('ui/theme');
 	var CaseListWin = require('CaseListWin');
 	var EntryWin = require('EntryWin');
+	var ToolbarView = require('ToolbarView');
 	var EntrySearchView = require('EntrySearchView');
     var DualLabelRow = require('DualLabelRow');
 
@@ -25,11 +26,7 @@ function EntryListWin() {
 	});
 	self.add(mainView);
 		
-	var toolbarView = Ti.UI.createView({
-		width: Ti.UI.FILL,
-		height: '48dp',
-        backgroundColor: theme.toolbarBackgroundColor
-	});
+	var toolbarView = new ToolbarView();
 	mainView.add(toolbarView);
 
 	var borderView = Ti.UI.createView({
@@ -51,43 +48,11 @@ function EntryListWin() {
 		text: L('entries')
 	});
 	toolbarView.add(titleLabel);
-	
-	var searchButton = Ti.UI.createButton({
-		top: '3dp',
-		right: '93dp',
-		width: '42dp',
-		height: '42dp',
-		backgroundImage: '/images/search.png',
-		backgroundSelectedColor: theme.toolbarBackgroundSelectedColor
-	});
-	toolbarView.add(searchButton);
 
-	var casesButton = Ti.UI.createButton({
-		top: '3dp',
-		right: '48dp',
-		width: '42dp',
-		height: '42dp',
-		backgroundImage: '/images/cases.png',
-		backgroundSelectedColor: theme.toolbarBackgroundSelectedColor
-	});
-	toolbarView.add(casesButton);
-	casesButton.addEventListener('click', function() {
-		new CaseListWin().open();
-	});
-	
-	var newButton = Ti.UI.createButton({
-		top: '3dp',
-		right: '3dp',
-		width: '42dp',
-		height: '42dp',
-		backgroundImage: '/images/new.png',
-		backgroundSelectedColor: theme.toolbarBackgroundSelectedColor
-	});
-	toolbarView.add(newButton);
-	newButton.addEventListener('click', function() {
-		new EntryWin(-1).open();
-	});
-    
+	var newButton = toolbarView.addButton('/images/new.png');
+	var casesButton = toolbarView.addButton('/images/cases.png');	
+	var searchButton = toolbarView.addButton('/images/search.png');
+	    
 	var table = Ti.UI.createTableView();
     table.searchCriteria = {
         orderBy: 'datetime',
@@ -98,6 +63,14 @@ function EntryListWin() {
 
 	var entrySearchView = new EntrySearchView(table);
 	self.add(entrySearchView);
+
+	newButton.addEventListener('click', function() {
+		new EntryWin(-1).open();
+	});
+
+	casesButton.addEventListener('click', function() {
+		new CaseListWin().open();
+	});
 
 	searchButton.addEventListener('click', function() {
 		entrySearchView.fireEvent('open');

@@ -5,6 +5,7 @@ function EntrySearchView(obj) {
 	var util = require('util');
     var schema = require('schema');
     var theme = require('ui/theme');
+    var ToolbarView = require('ToolbarView');
     var DatetimeRangeView = require('DatetimeRangeView');
 	var SearchFieldView = require('SearchFieldView');
     
@@ -24,11 +25,7 @@ function EntrySearchView(obj) {
 		visible: false
 	});
     
-    var toolbarView = Ti.UI.createView({
-		backgroundColor : theme.toolbarBackgroundColor,
-        width : Ti.UI.FILL,
-        height : '48dp'
-    });
+    var toolbarView = new ToolbarView();
     self.add(toolbarView);
 
     var searchBar = Ti.UI.createTextField({
@@ -47,31 +44,16 @@ function EntrySearchView(obj) {
 	});
 	toolbarView.add(searchBar);
 	    
-    var moreButton = Ti.UI.createButton({
-        top : '3dp',
-        right : '42dp',
-        width : '42dp',
-        height : '42dp',
-        backgroundImage : '/images/more.png',
-        backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
-    });
-    toolbarView.add(moreButton);
-    moreButton.addEventListener('click', function(e) {
-        moreView.visible = !moreView.visible;
-    });
+	var cancelButton = toolbarView.addButton('/images/cancel.png');
+	var moreButton = toolbarView.addButton('/images/more.png');
 
-    var cancelButton = Ti.UI.createButton({
-        top : '3dp',
-        right : '3dp',
-        width : '42dp',
-        height : '42dp',
-        backgroundImage : '/images/cancel.png',
-        backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
-    });
-    toolbarView.add(cancelButton);
     cancelButton.addEventListener('click', function(e) {
     	searchBar.blur();
         self.visible = false;
+    });
+    
+    moreButton.addEventListener('click', function(e) {
+        moreView.visible = !moreView.visible;
     });
     
 	var borderView = Ti.UI.createView({

@@ -6,6 +6,7 @@ function EntryWin(entryId) {
     var schema = require('schema');
     var db = require('db');
     var theme = require('ui/theme');
+    var ToolbarView = require('ToolbarView');
     var EntryFieldView = require('EntryFieldView');
 
     var entryData = {};
@@ -30,11 +31,7 @@ function EntryWin(entryId) {
         layout : 'vertical'
     });
 
-    var toolbarView = Ti.UI.createView({
-        width : Titanium.UI.FILL,
-        height : '48dp',
-        backgroundColor : theme.toolbarBackgroundColor
-    });
+    var toolbarView = new ToolbarView();
     self.add(toolbarView);
 
     var blurbField = Ti.UI.createTextField({
@@ -56,15 +53,13 @@ function EntryWin(entryId) {
     });
     toolbarView.add(blurbField);
 
-    var saveButton = Ti.UI.createButton({
-        top : '3dp',
-        right : '48dp',
-        width : '42dp',
-        height : '42dp',
-        backgroundImage : '/images/save.png',
-        backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
+	var cancelButton = toolbarView.addButton('/images/cancel.png');
+	var saveButton = toolbarView.addButton('/images/save.png');
+
+    cancelButton.addEventListener('click', function(e) {
+        self.close();
     });
-    toolbarView.add(saveButton);
+
     saveButton.addEventListener('click', function(e) {
         if (entryId == -1) {
             db.addEntry(entryData);
@@ -88,19 +83,6 @@ function EntryWin(entryId) {
                 Ti.App.Properties.setList(recentPropName, recentList);
             }
         }); 
-        self.close();
-    });
-
-    var cancelButton = Ti.UI.createButton({
-        top : '3dp',
-        right : '3dp',
-        width : '42dp',
-        height : '42dp',
-        backgroundImage : '/images/cancel.png',
-        backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
-    });
-    toolbarView.add(cancelButton);
-    cancelButton.addEventListener('click', function(e) {
         self.close();
     });
 

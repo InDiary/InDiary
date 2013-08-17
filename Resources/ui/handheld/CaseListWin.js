@@ -5,6 +5,7 @@ function CaseListWin() {
 	var util = require('util');
     var theme = require('ui/theme');
 	var db = require('db');
+	var ToolbarView = require('ToolbarView');
     var DualLabelRow = require('DualLabelRow');
 
 	var self = Ti.UI.createWindow({
@@ -22,11 +23,7 @@ function CaseListWin() {
 	});
 	self.add(mainView);
 		
-	var toolbarView = Ti.UI.createView({
-		width: Ti.UI.FILL,
-		height: '48dp',
-        backgroundColor: theme.toolbarBackgroundColor
-	});
+	var toolbarView = new ToolbarView();
 	mainView.add(toolbarView);
 
 	var borderView = Ti.UI.createView({
@@ -49,15 +46,8 @@ function CaseListWin() {
 	});
 	toolbarView.add(titleLabel);
 	
-	var newButton = Ti.UI.createButton({
-		top: '3dp',
-		right: '3dp',
-		width: '42dp',
-		height: '42dp',
-		backgroundImage: '/images/new.png',
-		backgroundSelectedColor: theme.toolbarBackgroundSelectedColor
-	});
-	toolbarView.add(newButton);
+	var newButton = toolbarView.addButton('/images/new.png');
+	
 	newButton.addEventListener('click', function() {
 	});
     
