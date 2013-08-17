@@ -33,19 +33,7 @@ function CaseListWin() {
 	});
 	mainView.add(borderView);
 	
-	var titleLabel = Ti.UI.createLabel({
-		top: '2dp',
-		height: '42dp',
-		left: '11dp',
-		right: '48dp',
-        color : theme.primaryToolbarTextColor,
-        font : {
-            fontSize: '18dp'
-        },
-		text: L('cases')
-	});
-	toolbarView.add(titleLabel);
-	
+	var titleLabel = toolbarView.addLabel(L('cases'));
 	var newButton = toolbarView.addButton('/images/new.png');
 	
 	newButton.addEventListener('click', function() {

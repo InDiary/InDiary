@@ -28,21 +28,12 @@ function EntrySearchView(obj) {
     var toolbarView = new ToolbarView();
     self.add(toolbarView);
 
-    var searchBar = Ti.UI.createTextField({
-		top: '4dp',
-		height: '42dp',
-		left: '3dp',
-		right: '93dp',
-		backgroundColor : theme.toolbarBackgroundColor,
-        color : theme.primaryToolbarTextColor,
-		hintText: L('searchEntries'),
-		softKeyboardOnFocus : Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS
-	});
+	var searchBar = toolbarView.addTextField('', L('searchEntries'));
+	searchBar.softKeyboardOnFocus = Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS;
 	searchBar.addEventListener('change', function(e) {
 		searchCriteria['text'] = e.value;
 		self.fireEvent('change');
 	});
-	toolbarView.add(searchBar);
 	    
 	var cancelButton = toolbarView.addButton('/images/cancel.png');
 	var moreButton = toolbarView.addButton('/images/more.png');

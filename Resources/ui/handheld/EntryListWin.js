@@ -35,20 +35,8 @@ function EntryListWin() {
 		backgroundColor: theme.borderColor
 	});
 	mainView.add(borderView);
-	
-	var titleLabel = Ti.UI.createLabel({
-		top: '2dp',
-		height: '42dp',
-		left: '11dp',
-		right: '48dp',
-        color : 'white',
-        font : {
-            fontSize: '18dp'
-        },
-		text: L('entries')
-	});
-	toolbarView.add(titleLabel);
 
+	var titleLabel = toolbarView.addLabel(L('entries'));
 	var newButton = toolbarView.addButton('/images/new.png');
 	var casesButton = toolbarView.addButton('/images/cases.png');	
 	var searchButton = toolbarView.addButton('/images/search.png');

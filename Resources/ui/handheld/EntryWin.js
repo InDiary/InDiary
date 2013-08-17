@@ -34,25 +34,9 @@ function EntryWin(entryId) {
     var toolbarView = new ToolbarView();
     self.add(toolbarView);
 
-    var blurbField = Ti.UI.createTextField({
-        top : '6dp',
-        left : '3dp',
-        right : '93dp',
-        height : '42dp',
-        backgroundColor : theme.toolbarBackgroundColor,
-        color : theme.primaryTextColor,
-        textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
-        hintText : L('newEntry'),
-        font : {
-            fontSize : '18dp'
-        },
-        value : entryData.text,
-        focusable: false,
-        enabled : false,
-        ellipsize : true
-    });
-    toolbarView.add(blurbField);
-
+	var blurbField = toolbarView.addTextField(entryData.text, L('newEntry'));
+	blurbField.focusable = false;
+	blurbField.enabled = false;
 	var cancelButton = toolbarView.addButton('/images/cancel.png');
 	var saveButton = toolbarView.addButton('/images/save.png');
 
