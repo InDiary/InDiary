@@ -1,9 +1,10 @@
 var util = require('util');
 var schema = require('schema');
-var DATABASE_NAME = 'InDiaryEntries';
+var ENTRIES_DATABASE_NAME = 'InDiaryEntries';
+var CASES_DATABASE_NAME = 'InDiaryCases';
 
-exports.createDatabase = function(){
-	var db = Ti.Database.open(DATABASE_NAME);
+exports.createEntriesDatabase = function(){
+	var db = Ti.Database.open(ENTRIES_DATABASE_NAME);
 	var fieldNameAndTypes = [];
 	schema.fields.forEach(function(field){
 	   fieldNameAndTypes.push(field.name + ' TEXT');
@@ -12,14 +13,14 @@ exports.createDatabase = function(){
 	db.close();
 };
 
-exports.deleteDatabase = function(){
-	var db = Ti.Database.open(DATABASE_NAME);
+exports.deleteEntriesDatabase = function(){
+	var db = Ti.Database.open(ENTRIES_DATABASE_NAME);
 	db.close();
 	db.remove();
 };
 
 exports.addEntry = function(entryData) {
-	var db = Ti.Database.open(DATABASE_NAME);
+	var db = Ti.Database.open(ENTRIES_DATABASE_NAME);
     var fieldNames = ['text'];
     var fieldValues = [util.quotify(entryData.text.replace(/'/g,"''"))];
     schema.fields.forEach(function(field) {
@@ -35,7 +36,7 @@ exports.addEntry = function(entryData) {
 };
 
 exports.editEntry = function(entryData) {
-    var db = Ti.Database.open(DATABASE_NAME);
+    var db = Ti.Database.open(ENTRIES_DATABASE_NAME);
     var fieldNamesAndValues = ['text=' + util.quotify(entryData.text.replace(/'/g,"''"))];
     schema.fields.forEach(function(field) {
         var value = entryData[field.name];
@@ -49,7 +50,7 @@ exports.editEntry = function(entryData) {
 };
 
 exports.selectEntry = function(id) {
-    var db = Ti.Database.open(DATABASE_NAME);
+    var db = Ti.Database.open(ENTRIES_DATABASE_NAME);
     var rows = db.execute('SELECT * FROM entries WHERE id=?', id);
     db.close();
     if (rows.isValidRow()) {
@@ -113,7 +114,7 @@ exports.selectEntries = function(searchCriteria) {
 	}
     
 	var entriesData = [];
-	var db = Ti.Database.open(DATABASE_NAME);
+	var db = Ti.Database.open(ENTRIES_DATABASE_NAME);
 	var rows = db.execute('SELECT * FROM entries ' + whereText + 'ORDER BY ' + orderBy + ' ' + ascText);
 	db.close();
 	while (rows.isValidRow()) {
@@ -133,4 +134,37 @@ exports.selectEntries = function(searchCriteria) {
 		rows.next();
 	}
 	return entriesData;
+};
+
+exports.createCasesDatabase = function(){
+	var db = Ti.Database.open(CASES_DATABASE_NAME);
+	db.execute('CREATE TABLE IF NOT EXISTS caes(id INTEGER PRIMARY KEY, name TEXT)');
+	db.close();
+};
+
+exports.deleteCasesDatabase = function(){
+	var db = Ti.Database.open(CASES_DATABASE_NAME);
+	db.close();
+	db.remove();
+};
+
+exports.addCase = function(caseData) {
+	var db = Ti.Database.open(CASES_DATABASE_NAME);
+    db.execute('INSERT INTO cases (name) VALUES (' +  caseData.name + ')');
+	db.close();
+};
+
+exports.selectCase = function(id) {
+    var db = Ti.Database.open(CASES_DATABASE_NAME);
+    var rows = db.execute('SELECT * FROM cases WHERE id=?', id);
+    db.close();
+    if (rows.isValidRow()) {
+        var caseData = {
+            id : rows.fieldByName('id'),
+            name : rows.fieldByName('name')
+        };
+        return caseData;
+    } else {
+        return false;
+    }
 };

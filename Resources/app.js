@@ -28,7 +28,7 @@ if (Ti.version < 1.8 ) {
 	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
 
     var db = require('db');
-	db.createDatabase();
+	db.createEntriesDatabase();
 	var EntryListWin = require('ui/handheld/EntryListWin');
 	new EntryListWin().open();
 })();
