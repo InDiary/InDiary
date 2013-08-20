@@ -23,7 +23,7 @@ exports.quotify = function(string, quoteChar) {
  * @param {String} name Name of variable.
  */
 exports.makeRecentPropName = function(name){
-    return 'recent' + util.capitalise(name) + 'List';
+    return 'recent' + exports.capitalise(name) + 'List';
 };
 
 /** 
