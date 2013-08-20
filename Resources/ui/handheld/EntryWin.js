@@ -3,6 +3,7 @@
  * @param {Number} entryId Id of entry to be edited. -1 corresponds to a new entry.
  */
 function EntryWin(entryId) {
+    var util = require('util');
     var schema = require('schema');
     var db = require('db');
     var theme = require('ui/theme');
@@ -11,12 +12,13 @@ function EntryWin(entryId) {
 
     var entryData = {};
     if (entryId == -1) {
-        entryData['text'] = '';
-        schema.fields.forEach(function(field) {
-            if (field.name == 'datetime'){
+        schema.entryFields.forEach(function(field) {
+            if (field.name == 'text'){
+                entryData[field.name] = '';
+            } else if (field.name == 'datetime'){
                 entryData[field.name] = new Date();                
             } else {
-                var recentPropName = schema.makeRecentPropName(field.name);
+                var recentPropName = util.makeRecentPropName(field.name);
                 var recentList = Ti.App.Properties.getList(recentPropName, ['']);
                 entryData[field.name] = recentList.slice(-1)[0];
             }
@@ -51,9 +53,9 @@ function EntryWin(entryId) {
             db.editEntry(entryData);
         }
         Ti.App.fireEvent('db:update');
-        schema.fields.forEach(function(field) {
-            if (field.name != 'datetime') {
-                var recentPropName = schema.makeRecentPropName(field.name);
+        schema.entryFields.forEach(function(field) {
+            if (field.name != 'text' && field.name != 'datetime') {
+                var recentPropName = util.makeRecentPropName(field.name);
                 var recentList = Ti.App.Properties.getList(recentPropName, []);
                 if (recentList.indexOf(entryData[field.name]) != - 1){
                     recentList = recentList.filter(function(element, index, array) {
@@ -77,14 +79,16 @@ function EntryWin(entryId) {
     });
     self.add(borderView);
 
-    schema.fields.forEach(function(field) {
+    schema.entryFields.forEach(function(field) {
+        if (field.name == 'text')
+            return;
         var fieldView = new EntryFieldView({
             type : field.type,
             name : field.displayName,
             value : entryData[field.name],
             hintText : field.hintText,
             dialogTitle : field.displayName,
-            recentPropName : schema.makeRecentPropName(field.name)
+            recentPropName : util.makeRecentPropName(field.name)
         });
         self.add(fieldView);
         fieldView.addEventListener('change', function(e) {
@@ -104,7 +108,7 @@ function EntryWin(entryId) {
         borderWidth : 0,
         color : theme.primaryTextColor,
         backgroundColor : theme.backgroundColor,
-        hintText: L('emptyEntryText'),
+        hintText: L('entryTextDefault'),
         value : entryData.text
     });
     self.add(entryTextArea);

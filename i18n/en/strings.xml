@@ -8,12 +8,13 @@
 	<string name="searchEntries">Search Entries</string>
 	<string name="newEntry">New Entry</string>
 	<string name="editEntry">Edit Entry</string>
-	<string name="emptyEntryText">Enter text here.</string>
 	<string name="openWindow">Open New Window</string>
 	<string name="newWindow">New Window</string>
 	<string name="set">Set</string>
 	<string name="cancel">Cancel</string>
 	<string name="loading">Loading...</string>
+    <string name="entryText">Entry Text</string>
+	<string name="entryTextDefault">Enter text here.</string>
 	<string name="datetime">Date &amp; Time</string>
 	<string name="datetimeDefault">Enter date &amp; time</string>
 	<string name="caseId">Case</string>

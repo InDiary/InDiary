@@ -18,8 +18,16 @@ exports.quotify = function(string, quoteChar) {
     return quoteChar + string + quoteChar;
 };
 
+/**
+ * Creates property name for recently used list from name of variable.
+ * @param {String} name Name of variable.
+ */
+exports.makeRecentPropName = function(name){
+    return 'recent' + util.capitalise(name) + 'List';
+};
+
 /** 
- * Convert Date object sto InDiary date and time format.
+ * Convert Date object to InDiary date and time format.
  * @param {Date} datetime
  * @returs {String} Formatted date and time.
  */

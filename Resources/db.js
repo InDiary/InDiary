@@ -6,10 +6,10 @@ var CASES_DATABASE_NAME = 'InDiaryCases';
 exports.createEntriesDatabase = function(){
 	var db = Ti.Database.open(ENTRIES_DATABASE_NAME);
 	var fieldNameAndTypes = [];
-	schema.fields.forEach(function(field){
+	schema.entryFields.forEach(function(field){
 	   fieldNameAndTypes.push(field.name + ' TEXT');
 	});
-	db.execute('CREATE TABLE IF NOT EXISTS entries(id INTEGER PRIMARY KEY, text TEXT, ' + fieldNameAndTypes.join(', ') + ')');
+	db.execute('CREATE TABLE IF NOT EXISTS entries(id INTEGER PRIMARY KEY, ' + fieldNameAndTypes.join(', ') + ')');
 	db.close();
 };
 
@@ -21,15 +21,15 @@ exports.deleteEntriesDatabase = function(){
 
 exports.addEntry = function(entryData) {
 	var db = Ti.Database.open(ENTRIES_DATABASE_NAME);
-    var fieldNames = ['text'];
-    var fieldValues = [util.quotify(entryData.text.replace(/'/g,"''"))];
-    schema.fields.forEach(function(field) {
+    var fieldNames = [];
+    var fieldValues = [];
+    schema.entryFields.forEach(function(field) {
         fieldNames.push(field.name);
         var value = entryData[field.name];
         if (field.type == 'datetime'){
             value = value.toISOString();
         }
-        fieldValues.push(util.quotify(value));
+        fieldValues.push(util.quotify(value.replace(/'/g,"''")));
     });
 	db.execute('INSERT INTO entries (' + fieldNames.join(', ') + ') VALUES (' +  fieldValues.join(', ') + ')');
 	db.close();
@@ -37,13 +37,13 @@ exports.addEntry = function(entryData) {
 
 exports.editEntry = function(entryData) {
     var db = Ti.Database.open(ENTRIES_DATABASE_NAME);
-    var fieldNamesAndValues = ['text=' + util.quotify(entryData.text.replace(/'/g,"''"))];
-    schema.fields.forEach(function(field) {
+    var fieldNamesAndValues = [];
+    schema.entryFields.forEach(function(field) {
         var value = entryData[field.name];
         if (field.type == 'datetime'){
             value = value.toISOString();
         }
-        fieldNamesAndValues.push(field.name + '=' + util.quotify(value));
+        fieldNamesAndValues.push(field.name + '=' + util.quotify(value.replace(/'/g,"''")));
     });
     db.execute('UPDATE entries SET ' +  fieldNamesAndValues.join(', ') + ' WHERE id=?', entryData.id);
     db.close();
@@ -55,10 +55,9 @@ exports.selectEntry = function(id) {
     db.close();
     if (rows.isValidRow()) {
         var entryData = {
-            id : rows.fieldByName('id'),
-            text : rows.fieldByName('text')
+            id : rows.fieldByName('id')
         };
-        schema.fields.forEach(function(field) {
+        schema.entryFields.forEach(function(field) {
             var value = rows.fieldByName(field.name);
             if (field.type == 'datetime') {
                 entryData[field.name] = new Date(value); 
@@ -83,12 +82,7 @@ exports.selectEntries = function(searchCriteria) {
     var matchFieldsAndValues = [];
     var rangeFieldsAndValues = [];
     
-    var fields = [{name : 'text',
-                   type : 'string'}];
-    schema.fields.forEach(function(field) {
-        fields.push(field);
-    });
-    fields.forEach(function(field) {
+    schema.entryFields.forEach(function(field) {
         var value = searchCriteria[field.name];
         if (typeof(value) !== 'undefined') {
             value = util.quotify(value.replace(matchRe, escapeChar + '$&'),'%');
@@ -119,10 +113,9 @@ exports.selectEntries = function(searchCriteria) {
 	db.close();
 	while (rows.isValidRow()) {
 		var	entryData = {
-		    id : rows.fieldByName('id'),
-		    text : rows.fieldByName('text')
+		    id : rows.fieldByName('id')
 		};
-        schema.fields.forEach(function(field) {
+        schema.entryFields.forEach(function(field) {
             var value = rows.fieldByName(field.name);
             if (field.type == 'datetime') {
                 entryData[field.name] = new Date(value); 

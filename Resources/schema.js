@@ -1,6 +1,14 @@
 var util = require('util');
 
-exports.fields = [];
+exports.entryFields = [];
+
+var textField = {
+    name : 'text',
+    type : 'string',
+    displayName : L('entryText'),
+    hintText : L('entryTextDefault'),
+};
+exports.entryFields.push(textField);
 
 var datetimeField = {
     name : 'datetime',
@@ -8,7 +16,7 @@ var datetimeField = {
     displayName : L('datetime'),
     hintText : L('datetimeDefault'),
 };
-exports.fields.push(datetimeField);
+exports.entryFields.push(datetimeField);
 
 var locationField = {
     name : 'location',
@@ -16,7 +24,7 @@ var locationField = {
     displayName : L('location'),
     hintText : L('locationDefault'),
 };
-exports.fields.push(locationField);
+exports.entryFields.push(locationField);
 
 var caseIdField = {
     name : 'caseId',
@@ -24,10 +32,6 @@ var caseIdField = {
     displayName : L('caseId'),
     hintText : L('caseIdDefault'),
 };
-exports.fields.push(caseIdField);
-
-exports.makeRecentPropName = function(name){
-    return 'recent' + util.capitalise(name) + 'List';
-};
+exports.entryFields.push(caseIdField);
 
 exports.maxRecentFieldEntries = 5;
