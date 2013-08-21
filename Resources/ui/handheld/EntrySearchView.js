@@ -63,7 +63,7 @@ function EntrySearchView(obj) {
     });
     self.add(moreView);
 	
-    schema.entryFields.forEach(function(field) {
+    schema.fields['entries'].forEach(function(field) {
         if (field.name == 'text')
             return;
         if (field.type == 'datetime'){

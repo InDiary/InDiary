@@ -12,7 +12,7 @@ function EntryWin(entryId) {
 
     var entryData = {};
     if (entryId == -1) {
-        schema.entryFields.forEach(function(field) {
+        schema.fields['entries'].forEach(function(field) {
             if (field.name == 'text'){
                 entryData[field.name] = '';
             } else if (field.name == 'datetime'){
@@ -53,7 +53,7 @@ function EntryWin(entryId) {
             db.editRow('entries', entryData);
         }
         Ti.App.fireEvent('db:update');
-        schema.entryFields.forEach(function(field) {
+        schema.fields['entries'].forEach(function(field) {
             if (field.name != 'text' && field.name != 'datetime') {
                 var recentPropName = util.makeRecentPropName(field.name);
                 var recentList = Ti.App.Properties.getList(recentPropName, []);
@@ -79,7 +79,7 @@ function EntryWin(entryId) {
     });
     self.add(borderView);
 
-    schema.entryFields.forEach(function(field) {
+    schema.fields['entries'].forEach(function(field) {
         if (field.name == 'text')
             return;
         var fieldView = new EntryFieldView({

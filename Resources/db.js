@@ -34,7 +34,7 @@ exports.addRow = function(tableName, rowData) {
         }
         fieldValues.push(util.quotify(value.replace(/'/g,"''")));
     });
-	db.execute('INSERT INTO ' + DATABASE_NAME + ' (' +
+	db.execute('INSERT INTO ' + tableName + ' (' +
                fieldNames.join(', ') + ') VALUES (' + 
                fieldValues.join(', ') + ')');
 	db.close();

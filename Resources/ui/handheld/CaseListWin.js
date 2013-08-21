@@ -5,6 +5,7 @@ function CaseListWin() {
 	var util = require('util');
     var theme = require('ui/theme');
 	var db = require('db');
+	var CaseWin = require('CaseWin');
 	var ToolbarView = require('ToolbarView');
     var DualLabelRow = require('DualLabelRow');
 
@@ -37,11 +38,12 @@ function CaseListWin() {
 	var newButton = toolbarView.addButton('/images/new.png');
 	
 	newButton.addEventListener('click', function() {
+        new CaseWin(-1).open();    
 	});
     
 	var table = Ti.UI.createTableView();
     table.searchCriteria = {
-        orderBy: 'datetime',
+        orderBy: 'id',
         ascending: false,
         text: ''
     };
@@ -59,10 +61,17 @@ function CaseListWin() {
     
     table.addEventListener('update', function(e) {
         var tableData = [];
+        var casesData = db.selectRows('cases', table.searchCriteria);
+        casesData.forEach(function(caseData) {
+            var caseRow = new DualLabelRow(caseData.name, '',
+                                           {caseId: caseData.id});
+            tableData.push(caseRow);
+        });
         table.setData(tableData);
     });
 	
     table.addEventListener('click', function(e) {
+        new CaseWin(e.rowData.caseId).open();
     });
     
     Ti.App.addEventListener('db:update', function(e) {
