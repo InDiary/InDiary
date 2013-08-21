@@ -1,37 +1,47 @@
-var util = require('util');
+exports.fields = {};
 
-exports.entryFields = [];
+exports.fields['entries'] = [];
 
-var textField = {
+var entryTextField = {
     name : 'text',
     type : 'string',
     displayName : L('entryText'),
-    hintText : L('entryTextDefault'),
+    hintText : L('entryTextDefault')
 };
-exports.entryFields.push(textField);
+exports.fields['entries'].push(entryTextField);
 
-var datetimeField = {
+var entryDatetimeField = {
     name : 'datetime',
     type : 'datetime',
     displayName : L('datetime'),
-    hintText : L('datetimeDefault'),
+    hintText : L('datetimeDefault')
 };
-exports.entryFields.push(datetimeField);
+exports.fields['entries'].push(entryDatetimeField);
 
-var locationField = {
+var entryLocationField = {
     name : 'location',
     type : 'location',
     displayName : L('location'),
-    hintText : L('locationDefault'),
+    hintText : L('locationDefault')
 };
-exports.entryFields.push(locationField);
+exports.fields['entries'].push(entryLocationField);
 
-var caseIdField = {
+var entryCaseIdField = {
     name : 'caseId',
     type : 'string',
     displayName : L('caseId'),
-    hintText : L('caseIdDefault'),
+    hintText : L('caseIdDefault')
 };
-exports.entryFields.push(caseIdField);
+exports.fields['entries'].push(entryCaseIdField);
+
+exports.fields['cases'] = [];
+
+var caseNameField = {
+    name : 'name',
+    type : 'string',
+    displayName : L('caseName'),
+    hintText : L('caseNameDefault')
+};
+exports.fields['cases'].push(caseNameField);
 
 exports.maxRecentFieldEntries = 5;

@@ -76,7 +76,7 @@ function EntryListWin() {
     
     table.addEventListener('update', function(e) {
         var tableData = [];
-        var entriesData = db.selectEntries(table.searchCriteria);
+        var entriesData = db.selectRows('entries', table.searchCriteria);
         entriesData.forEach(function(entryData) {
             var metadataText = util.entryDatetimeFormat(entryData.datetime) +
                                ', ' + entryData.location;

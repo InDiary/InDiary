@@ -24,7 +24,7 @@ function EntryWin(entryId) {
             }
         });
     } else {
-        entryData = db.selectEntry(entryId);
+        entryData = db.selectRow('entries', entryId);
     }
 
     var self = Ti.UI.createWindow({
@@ -48,9 +48,9 @@ function EntryWin(entryId) {
 
     saveButton.addEventListener('click', function(e) {
         if (entryId == -1) {
-            db.addEntry(entryData);
+            db.addRow('entries', entryData);
         } else {
-            db.editEntry(entryData);
+            db.editRow('entries', entryData);
         }
         Ti.App.fireEvent('db:update');
         schema.entryFields.forEach(function(field) {
