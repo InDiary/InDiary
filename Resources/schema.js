@@ -28,7 +28,8 @@ exports.fields['entries'].push(entryLocationField);
 
 var entryCaseIdField = {
     name : 'caseId',
-    type : 'integer',
+    type : 'id',
+    tableName: 'cases',
     displayName : L('caseId'),
     hintText : L('caseIdDefault')
 };

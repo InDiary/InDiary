@@ -7,7 +7,7 @@ exports.createDatabase = function(){
     ['entries', 'cases'].forEach(function(tableName) {
         var fieldNameAndTypes = [];
         schema.fields[tableName].forEach(function(field){
-            var fieldType = (field.type == 'integer') ? 'INTEGER' : 'TEXT';
+            var fieldType = (field.type == 'id') ? 'INTEGER' : 'TEXT';
             fieldNameAndTypes.push(field.name + ' ' + fieldType);
         });
         db.execute('CREATE TABLE IF NOT EXISTS ' + tableName + 
@@ -80,58 +80,72 @@ exports.selectRow = function(tableName, id) {
 };
 
 exports.selectRows = function(tableName, searchCriteria) {
-    var orderBy = (typeof(searchCriteria.orderBy) === 'undefined') ? 
-        'id' : searchCriteria.orderBy;
-    var ascending = (typeof(searchCriteria.ascending) === 'undefined') ? 
-        false : searchCriteria.ascending;
-    var ascText = (ascending) ? 'ASC' : 'DESC';
-    
-    var escapeChar = '~';
-    var matchRe = new RegExp('[%_' + escapeChar + ']','g');
-    
-    var matchFieldsAndValues = [];
-    var rangeFieldsAndValues = [];
-    
-    schema.fields[tableName].forEach(function(field) {
-        var value = searchCriteria[field.name];
-        if (typeof(value) == "string") {
-            value = util.quotify(value.replace(matchRe, escapeChar + '$&'),'%');
-            matchFieldsAndValues.push(field.name + ' LIKE ' + 
-                                      util.quotify(value.replace(/'/g, "''")));
-        } else if (typeof(value) == "number") {
-            matchFieldsAndValues.push(field.name + ' == ' + value);
-        }
-        var range = searchCriteria[field.name + 'Range'];
-        if (typeof (range) !== 'undefined') {
-            if (field.type == 'datetime') {
-                range = [range[0].toISOString(), range[1].toISOString()]
+    var selectRowsQueryText = function(tableName, searchCriteria, columnName){
+        columnName = (typeof(columnName) === 'undefined') ?
+            '*' : columnName; 
+        var orderBy = (typeof(searchCriteria.orderBy) === 'undefined') ? 
+            'id' : searchCriteria.orderBy;
+        var ascending = (typeof(searchCriteria.ascending) === 'undefined') ? 
+            false : searchCriteria.ascending;
+        var ascText = (ascending) ? 'ASC' : 'DESC';
+        
+        var escapeChar = '~';
+        var matchRe = new RegExp('[%_' + escapeChar + ']','g');
+        
+        var matchFieldsAndValues = [];
+        var rangeFieldsAndValues = [];
+        var inFieldsAndValues = [];
+        
+        schema.fields[tableName].forEach(function(field) {
+            var value = searchCriteria[field.name];
+            if (typeof(value) === "string") {
+                value = util.quotify(value.replace(matchRe, escapeChar + '$&'),
+                                     '%');
+                matchFieldsAndValues.push(field.name + ' LIKE ' + 
+                                          util.quotify(value.replace(/'/g,
+                                                                     "''")));
+            } else if (typeof(value) == "number") {
+                matchFieldsAndValues.push(field.name + ' == ' + value);
             }
-            rangeFieldsAndValues.push(field.name + ' BETWEEN ' +
-                                      util.quotify(range[0]) + ' AND ' + 
-                                      util.quotify(range[1]));
-        }
-    });
-    var matchText = matchFieldsAndValues.join(' AND ');
-    var rangeText = rangeFieldsAndValues.join(' AND '); 
-	var whereText = '';
-	if (matchText != '' && rangeText != ''){
-	    whereText = 'WHERE ' + rangeText + ' AND ' + matchText + ' ESCAPE ' + 
-                    util.quotify(escapeChar) + ' ';
-	} else if (matchText != '') {
-        whereText = 'WHERE ' + matchText + ' ESCAPE ' + 
-                    util.quotify(escapeChar) + ' ';
-	} else if (rangeText != '') {
-        whereText = 'WHERE ' + rangeText + ' '; 
-	}
-    
+            var range = searchCriteria[field.name + 'Range'];
+            if (range instanceof Array) {
+                if (field.type == 'datetime') {
+                    range = [range[0].toISOString(), range[1].toISOString()]
+                }
+                rangeFieldsAndValues.push(field.name + ' BETWEEN ' +
+                                          util.quotify(range[0]) + ' AND ' + 
+                                          util.quotify(range[1]));
+            }
+            var subCriteria = searchCriteria[field.name + 'Criteria'];
+            if (typeof(subCriteria) === "object") {
+                var subQueryText = selectRowsQueryText(field.tableName,
+                                                       subCriteria, 'id');
+                inFieldsAndValues.push(field.name + ' IN ' + '(' +
+                                       subQueryText + ')');
+            }
+        });
+        var matchText = matchFieldsAndValues.join(' AND ') + ' ESCAPE ' +
+                        util.quotify(escapeChar);
+        var rangeText = rangeFieldsAndValues.join(' AND ');
+        var inText = inFieldsAndValues.join(' AND ');
+        var whereComponents = [matchText, rangeText, inText].
+            filter(function(element){return (element !== '')});
+        var whereText = (whereComponents.length === 0) ?
+            '' : 'WHERE ' + whereComponents.join(' AND ') + ' ';
+
+        var queryText = 'SELECT ' + columnName + ' FROM ' + tableName + ' ' +
+                        whereText + 'ORDER BY ' + orderBy + ' ' + ascText;
+                        
+        return queryText;
+    };
+
 	var rowsData = [];
 	var db = Ti.Database.open(DATABASE_NAME);
-	var rows = db.execute('SELECT * FROM ' + tableName + ' ' + whereText +
-                          'ORDER BY ' + orderBy + ' ' + ascText);
+	var rows = db.execute(selectRowsQueryText(tableName, searchCriteria));
 	db.close();
 	while (rows.isValidRow()) {
 		var	rowData = {
-		    id : rows.fieldByName('id')
+            id : rows.fieldByName('id')
 		};
         schema.fields[tableName].forEach(function(field) {
             var value = rows.fieldByName(field.name);
