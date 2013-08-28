@@ -7,7 +7,8 @@ exports.createDatabase = function(){
     ['entries', 'cases'].forEach(function(tableName) {
         var fieldNameAndTypes = [];
         schema.fields[tableName].forEach(function(field){
-           fieldNameAndTypes.push(field.name + ' TEXT');
+            var fieldType = (field.type == 'integer') ? 'INTEGER' : 'TEXT';
+            fieldNameAndTypes.push(field.name + ' ' + fieldType);
         });
         db.execute('CREATE TABLE IF NOT EXISTS ' + tableName + 
                    '(id INTEGER PRIMARY KEY, ' + 
@@ -93,10 +94,12 @@ exports.selectRows = function(tableName, searchCriteria) {
     
     schema.fields[tableName].forEach(function(field) {
         var value = searchCriteria[field.name];
-        if (typeof(value) !== 'undefined') {
+        if (typeof(value) == "string") {
             value = util.quotify(value.replace(matchRe, escapeChar + '$&'),'%');
             matchFieldsAndValues.push(field.name + ' LIKE ' + 
                                       util.quotify(value.replace(/'/g, "''")));
+        } else if (typeof(value) == "number") {
+            matchFieldsAndValues.push(field.name + ' == ' + value);
         }
         var range = searchCriteria[field.name + 'Range'];
         if (typeof (range) !== 'undefined') {
