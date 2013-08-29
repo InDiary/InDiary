@@ -16,10 +16,10 @@ function EntrySearchView(obj) {
     };
 
     var self = Ti.UI.createView({
-    	top: '0dp',
-    	left: '0dp',
-    	width: Ti.UI.FILL,
-		height: Ti.UI.SIZE,
+        top: '0dp',
+        left: '0dp',
+        width: Ti.UI.FILL,
+        height: Ti.UI.SIZE,
 		layout: 'vertical',
 		touchEnabled: false,
 		visible: false
@@ -28,18 +28,18 @@ function EntrySearchView(obj) {
     var toolbarView = new ToolbarView();
     self.add(toolbarView);
 
-	var searchBar = toolbarView.addTextField('', L('searchEntries'));
+    var searchBar = toolbarView.addTextField('', L('searchEntries'));
 	searchBar.softKeyboardOnFocus = Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS;
 	searchBar.addEventListener('change', function(e) {
 		searchCriteria['text'] = e.value;
 		self.fireEvent('change');
 	});
-	    
+
 	var cancelButton = toolbarView.addButton('/images/cancel.png');
 	var moreButton = toolbarView.addButton('/images/more.png');
 
     cancelButton.addEventListener('click', function(e) {
-    	searchBar.blur();
+        searchBar.blur();
         self.visible = false;
     });
     
@@ -47,8 +47,8 @@ function EntrySearchView(obj) {
         moreView.visible = !moreView.visible;
     });
     
-	var borderView = Ti.UI.createView({
-		width: Ti.UI.FILL,
+    var borderView = Ti.UI.createView({
+        width: Ti.UI.FILL,
 		height: 2,
 		backgroundColor: theme.borderColor
 	});
@@ -63,19 +63,28 @@ function EntrySearchView(obj) {
     });
     self.add(moreView);
 	
-    schema.fields['entries'].forEach(function(field) {
+	var addSearchViewCallback = function(field) {
+        var searchCriteria = this;
         if (field.name == 'text')
             return;
+        if (field.type == 'id'){
+            searchCriteria[field.name + 'Criteria'] = {};
+            schema.fields[field.tableName].
+                forEach(addSearchViewCallback,
+                        searchCriteria[field.name + 'Criteria']);
+            return;
+        }
+        var searchFieldView;
         if (field.type == 'datetime'){
             var startDate = new Date();
             var endDate = new Date();
             startDate.setMonth(endDate.getMonth()-1);
-            var searchFieldView = new DatetimeRangeView({
+            searchFieldView = new DatetimeRangeView({
                 name : field.displayName,
                 value : [startDate, endDate]
             });
         } else {
-            var searchFieldView = new SearchFieldView({
+            searchFieldView = new SearchFieldView({
                 type : field.type,
                 name : field.displayName,
                 value : '',
@@ -96,7 +105,9 @@ function EntrySearchView(obj) {
             height : 1,
             backgroundColor : theme.borderColor
         }));
-    });
+    };
+	
+    schema.fields['entries'].forEach(addSearchViewCallback, searchCriteria);
 
 	self.addEventListener('open', function(e){
 		self.visible = true;

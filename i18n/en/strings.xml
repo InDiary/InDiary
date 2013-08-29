@@ -17,10 +17,12 @@
 	<string name="entryTextDefault">Enter text here.</string>
 	<string name="datetime">Date &amp; Time</string>
 	<string name="datetimeDefault">Enter date &amp; time</string>
-	<string name="caseId">Case</string>
-	<string name="caseIdDefault">Enter case identifier</string>
 	<string name="location">Location</string>
 	<string name="locationDefault">Enter location</string>
+	<string name="caseId">Case</string>
+	<string name="caseIdDefault">Enter case identifier</string>
+	<string name="caseName">Case</string>
+	<string name="caseNameDefault">Enter case identifier</string>
     <string name="locationDisabled">Location services not enabled.</string>
     <string name="locationError">Location(s) not available</string>
     <string name="recent">Recent</string>
