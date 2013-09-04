@@ -11,7 +11,6 @@
 function EntryFieldView(vars) {
     var util = require('util');
     var theme = require('ui/theme');
-    var dv = require('DialogViews');
     var DialogWin = require('DialogWin');
     
     var self = Ti.UI.createView({
@@ -72,13 +71,13 @@ function EntryFieldView(vars) {
     self.addEventListener('click', function(e) {
 		switch (self.type) {
 			case 'datetime':
-				self.dialogView = dv.createDatetimeDialogView(self.value);
+				self.dialogView = new require('DatetimeDialogView')(self.value);
 				break;
 			case 'location':
-				self.dialogView = dv.createLocationDialogView(self.value, vars.hintText, vars.recentPropName);
+				self.dialogView = new require('LocationDialogView')(self.value, vars.hintText, vars.recentPropName);
 				break;
 			case 'string':
-				self.dialogView = dv.createStringDialogView(self.value, vars.hintText, vars.recentPropName);
+				self.dialogView = new require('StringDialogView')(self.value, vars.hintText, vars.recentPropName);
 				break;
 		}
 		new DialogWin(self, vars.dialogTitle, self.dialogView).open();

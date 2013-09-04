@@ -1,50 +1,8 @@
-var util = require('util');
-var theme = require('ui/theme');
-var DynamicTableView = require('DynamicTableView');
+var LocationDialogView = function(value, hintText, recentPropName){
+    var util = require('util');
+    var theme = require('ui/theme');
+    var DynamicTableView = require('DynamicTableView');
 
-exports.createDatetimeDialogView = function(value){
-    var dialogView = Ti.UI.createView({
-        height: Ti.UI.SIZE,
-        layout : 'vertical',
-        backgroundColor: theme.backgroundColor,
-        value : value
-    });
-    var timePicker = Ti.UI.createPicker({
-        type : Ti.UI.PICKER_TYPE_TIME,
-        format24 : true
-    });
-    var datePicker = Ti.UI.createPicker({
-        type : Ti.UI.PICKER_TYPE_DATE
-    });
-    dialogView.add(timePicker);
-    dialogView.add(datePicker);
-    dialogView.addEventListener('open', function(e) {
-        timePicker.value = dialogView.value;
-        datePicker.value = dialogView.value;
-        dialogView.justOpened = true;
-    });
-    timePicker.addEventListener('change', function(e) {
-        if (dialogView.justOpened) {
-            dialogView.justOpened = false;
-        } else {
-            var date = dialogView.value;
-            var time = e.value;
-            var datetime = new Date(date.getFullYear(), date.getMonth(), date.getDate(),
-                                    time.getHours(), time.getMinutes(), time.getSeconds());
-            dialogView.value = datetime;
-        }
-    });
-    datePicker.addEventListener('change', function(e) {
-        var date = e.value;
-        var time = dialogView.value;
-        var datetime = new Date(date.getFullYear(), date.getMonth(), date.getDate(),
-                                time.getHours(), time.getMinutes(), time.getSeconds());
-        dialogView.value = datetime;
-    }); 
-    return dialogView;
-};
-
-exports.createLocationDialogView = function(value, hintText, recentPropName){
     var dialogView = Ti.UI.createView({
         height : Ti.UI.SIZE,
         layout : 'vertical',
@@ -161,59 +119,4 @@ exports.createLocationDialogView = function(value, hintText, recentPropName){
     return dialogView;
 };
 
-exports.createStringDialogView = function(value, hintText, recentPropName){
-    var dialogView = Ti.UI.createView({
-        height : Ti.UI.SIZE,
-        layout : 'vertical',
-        backgroundColor: theme.backgroundColor,
-        value : value
-    });
-    var textField = Ti.UI.createTextField({
-        width : Ti.UI.FILL,
-        color: theme.primaryTextColor,
-        backgroundColor: theme.backgroundColor,
-        hintText : hintText,
-        softKeyboardOnFocus : Titanium.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS
-    });
-    dialogView.add(textField);
-    var borderView = Ti.UI.createView({
-        width : Titanium.UI.FILL,
-        height : 1,
-        backgroundColor : theme.borderColor
-    });
-    dialogView.add(borderView);
-    var recentTable = new DynamicTableView({
-        width : Ti.UI.FILL,
-        height : 0
-    });
-    dialogView.add(recentTable);
-    var recentSection = recentTable.addDynamicSection(L('recent'));
-    dialogView.addEventListener('open', function(e) {
-        textField.value = dialogView.value;
-        textField.focus();
-        var recentValues = Ti.App.Properties.getList(recentPropName, []);
-        recentValues.reverse();
-        if (recentValues.length > 0) {
-            recentSection.rows = [];
-            for (var i = 0; i < recentValues.length; i++) {
-                recentSection.addRow(recentValues[i]);
-            }
-            recentSection.visible = true;
-            recentTable.update();
-            borderView.visible = true;
-            recentTable.height = Ti.Platform.displayCaps.platformHeight * 0.5;
-        } else {
-            borderView.visible = false;
-            recentTable.height = 0;
-        }
-    });
-    textField.addEventListener('change', function(e) {
-        dialogView.value = e.value;
-    });
-    recentTable.addEventListener('click', function(e) {
-        if (e.rowData.selectable == true) {
-            textField.value = e.rowData.title;
-        }
-    }); 
-    return dialogView;
-};
+module.exports = LocationDialogView;
