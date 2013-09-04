@@ -48,6 +48,7 @@ function DynamicTableView(vars) {
             var row = Ti.UI.createTableViewRow(self.rowTemplate);
             row.title = rowTitle;
             newSection.rows.push(row);
+            return row;
         };
         self.dynamicSections.push(newSection);
         return newSection;
