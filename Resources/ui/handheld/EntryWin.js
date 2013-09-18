@@ -82,12 +82,37 @@ function EntryWin(entryId) {
     schema.fields['entries'].forEach(function(field) {
         if (field.name == 'text')
             return;
+        var textFormatter = function(arg){return arg};
+        var dialogViewConstructor;
+        switch (field.name){
+            case 'caseId':
+                textFormatter = function(caseId){
+                    return db.selectRow(field.tableName, caseId).name;
+                };
+                dialogViewConstructor = require('CasesDialogView');
+                break;
+            default:
+                switch (field.type){
+                    case 'datetime':
+                        textFormatter = util.entryDatetimeFormat;
+                        dialogViewConstructor = require('DatetimeDialogView');
+                        break;
+                    case 'location':
+                        dialogViewConstructor = require('LocationDialogView');
+                        break;
+                    case 'string':
+                        dialogViewConstructor = require('StringDialogView');
+                        break;
+                }
+                break;
+        }
         var fieldView = new EntryFieldView({
-            type : field.type,
             name : field.displayName,
             value : entryData[field.name],
             hintText : field.hintText,
+            textFormatter : textFormatter,
             dialogTitle : field.displayName,
+            dialogViewConstructor : dialogViewConstructor,
             recentPropName : util.makeRecentPropName(field.name)
         });
         self.add(fieldView);
