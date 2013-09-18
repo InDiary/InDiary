@@ -87,7 +87,7 @@ function EntryWin(entryId) {
         switch (field.name){
             case 'caseId':
                 textFormatter = function(caseId){
-                    return db.selectRow(field.tableName, caseId).name;
+                    return db.selectRow('cases', caseId).name;
                 };
                 dialogViewConstructor = require('CasesDialogView');
                 break;

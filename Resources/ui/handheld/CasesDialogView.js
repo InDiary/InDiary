@@ -1,4 +1,4 @@
-var CasesDialogView = function(value, hintText, tableName, recentPropName){
+var CasesDialogView = function(value, hintText, recentPropName){
     var util = require('util');
     var db = require('db');
     var theme = require('ui/theme');
@@ -38,7 +38,7 @@ var CasesDialogView = function(value, hintText, tableName, recentPropName){
         if (recentValues.length > 0) {
             recentSection.rows = [];
             recentValues.forEach(function(value){
-                var caseName = db.selectRow(tableName, value);
+                var caseName = db.selectRow('cases', value).name;
                 var row = recentSection.addRow(caseName);
                 row.caseId = value;
             });

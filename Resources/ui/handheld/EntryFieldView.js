@@ -4,15 +4,18 @@
  * @property {String} name Name of the information field.
  * @property {Date|String|Number} value Value of information field.
  * @property {String} hintText Hint text for information field.
- * @property {Object} textFormatter Function that formats value into text displayed.
+ * @property {Function} textFormatter Function that formats value into text displayed.
  * @property {String} dialogTitle Title of dialog that pops up when pressed.
- * @property {Object} dialogViewConstructor Function that creates dialog view.
+ * @property {Function} dialogViewConstructor Function that creates dialog view.
  * @property {String} recentPropName App property name of list of recently used entry information.
  */
 function EntryFieldView(vars) {
     var util = require('util');
     var theme = require('ui/theme');
     var DialogWin = require('DialogWin');
+    
+    vars.textFormatter = (typeof(vars.textFormatter) === 'undefined') ?
+        function(arg){return arg} : vars.textFormatter;
     
     var self = Ti.UI.createView({
         width : Ti.UI.FILL,
