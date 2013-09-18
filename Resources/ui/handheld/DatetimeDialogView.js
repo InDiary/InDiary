@@ -23,23 +23,19 @@ var DatetimeDialogView = function(value){
         datePicker.value = dialogView.value;
         dialogView.justOpened = true;
     });
+    var mergeDateAndTime = function(date, time){
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate(),
+                        time.getHours(), time.getMinutes(), time.getSeconds());
+    };
     timePicker.addEventListener('change', function(e) {
         if (dialogView.justOpened) {
             dialogView.justOpened = false;
         } else {
-            var date = dialogView.value;
-            var time = e.value;
-            var datetime = new Date(date.getFullYear(), date.getMonth(), date.getDate(),
-                                    time.getHours(), time.getMinutes(), time.getSeconds());
-            dialogView.value = datetime;
+            dialogView.value = mergeDateAndTime(dialogView.value, e.value);
         }
     });
     datePicker.addEventListener('change', function(e) {
-        var date = e.value;
-        var time = dialogView.value;
-        var datetime = new Date(date.getFullYear(), date.getMonth(), date.getDate(),
-                                time.getHours(), time.getMinutes(), time.getSeconds());
-        dialogView.value = datetime;
+        dialogView.value = mergeDateAndTime(e.value, dialogView.value);
     }); 
     return dialogView;
 };
