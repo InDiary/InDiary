@@ -8,6 +8,7 @@ function DatetimeRangeView(vars) {
     var util = require('util');
     var theme = require('ui/theme');
     var EntryFieldView = require('EntryFieldView');
+    var DatetimeDialogView = require('DatetimeDialogView');
     
     var self = Ti.UI.createView({
         width : Ti.UI.FILL,
@@ -19,10 +20,11 @@ function DatetimeRangeView(vars) {
     });
 
     var fromFieldView = new EntryFieldView({
-        type : 'datetime',
         name : L('start') + ' ' + vars.name,
         value : self.value[0],
-        dialogTitle : vars.name
+        textFormatter : util.entryDatetimeFormat,
+        dialogTitle : vars.name,
+        dialogViewConstructor : DatetimeDialogView
     });
     self.add(fromFieldView);
     fromFieldView.addEventListener('change', function(e) {
@@ -45,7 +47,9 @@ function DatetimeRangeView(vars) {
         type : 'datetime',
         name : L('end') + ' ' + vars.name,
         value : self.value[1],
-        dialogTitle : vars.name
+        textFormatter : util.entryDatetimeFormat,
+        dialogTitle : vars.name,
+        dialogViewConstructor : DatetimeDialogView
     });
     self.add(toFieldView);
     toFieldView.addEventListener('change', function(e) {

@@ -27,7 +27,7 @@ var CasesDialogView = function(value, hintText, recentPropName){
     dialogView.add(borderView);
     var casesTable = new DynamicTableView({
         width : Ti.UI.FILL,
-        height : Ti.Platform.displayCaps.platformHeight * 0.5;
+        height : Ti.Platform.displayCaps.platformHeight * 0.5
     });
     dialogView.add(casesTable);
     var recentSection = casesTable.addDynamicSection(L('recent'));
