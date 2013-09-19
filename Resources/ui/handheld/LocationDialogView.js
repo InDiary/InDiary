@@ -44,7 +44,8 @@ var LocationDialogView = function(value, hintText, recentPropName){
             nearbySection.visible = true;
             util.getNearbyPlaces(dialogView);
         }
-        nearbySection.addRow(L('loading'));
+        if (nearbySection.rows.length == 0)
+            nearbySection.addRow(L('loading'));
         var recentLocations = Ti.App.Properties.getList(recentPropName, []);
         if (recentLocations.length > 0){
             for (var i = 0; i < recentLocations.length; i++) {
