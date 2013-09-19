@@ -10,15 +10,15 @@ var CasesDialogView = function(value, hintText, recentPropName){
         backgroundColor: theme.backgroundColor,
         value : value
     });
-    var textField = Ti.UI.createTextField({
+
+    var searchBar = Ti.UI.createTextField({
         width : Ti.UI.FILL,
         color: theme.primaryTextColor,
         backgroundColor: theme.backgroundColor,
         hintText : hintText,
-        focusable : false,
-        enabled : false
+        softKeyboardOnFocus : Titanium.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS        
     });
-    dialogView.add(textField);
+    dialogView.add(searchBar);
     var borderView = Ti.UI.createView({
         width : Titanium.UI.FILL,
         height : 1,
@@ -30,9 +30,14 @@ var CasesDialogView = function(value, hintText, recentPropName){
         height : Ti.Platform.displayCaps.platformHeight * 0.5
     });
     dialogView.add(casesTable);
+
+    var suggestedSection = casesTable.addDynamicSection(L('suggested'));
     var recentSection = casesTable.addDynamicSection(L('recent'));
+
     dialogView.addEventListener('open', function(e) {
-        textField.value = dialogView.value;
+        dialogView.justOpened = true;
+        searchBar.value = db.selectRow('cases', searchBar.value).name;
+        searchBar.focus();
         var recentValues = Ti.App.Properties.getList(recentPropName, []);
         recentValues.reverse();
         if (recentValues.length > 0) {
@@ -44,19 +49,48 @@ var CasesDialogView = function(value, hintText, recentPropName){
             });
             recentSection.visible = true;
             casesTable.update();
-            borderView.visible = true;
-            casesTable.visible = true;
-        } else {
-            borderView.visible = false;
-            casesTable.visible = false;
         }
     });
+
+    var autocompleteTimer = 0;
+    var autocompleteTimeout = 300;
+    searchBar.addEventListener('change', function(e) {
+        var autocompleteUpdateTable = function() {
+            suggestedSection.rows = [];
+            var searchCriteria = {
+                orderBy: 'datetime',
+                ascending: false,
+                name: e.value
+            };
+            var casesData = db.selectRows('cases', searchCriteria);
+            if (casesData.length == 0) {
+                suggestedSection.visible = false;
+                casesTable.update();
+                return;
+            }
+            casesData.forEach(function(caseData) {
+                var row = suggestedSection.addRow(caseData.name);
+                row.caseId = caseData.id;
+            });
+            suggestedSection.visible = true;
+            casesTable.update();
+        };
+        if (!dialogView.justOpened){
+            clearTimeout(autocompleteTimer);
+            autocompleteTimer = setTimeout(autocompleteUpdateTable,
+                                           autocompleteTimeout);
+        } else {
+            dialogView.justOpened = false;            
+        }
+    });    
+    
     casesTable.addEventListener('click', function(e) {
         if (e.rowData.selectable == true) {
             dialogView.value = e.rowData.caseId;
-            textField.value = e.rowData.title;
+            searchBar.value = e.rowData.title;
         }
     });
+
     return dialogView;
 };
 

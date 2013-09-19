@@ -44,8 +44,7 @@ function CaseListWin() {
 	var table = Ti.UI.createTableView();
     table.searchCriteria = {
         orderBy: 'id',
-        ascending: false,
-        text: ''
+        ascending: false
     };
 	mainView.add(table);
     

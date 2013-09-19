@@ -89,7 +89,8 @@ var LocationDialogView = function(value, hintText, recentPropName){
         var autocompleteUpdateTable = function() {
             if (Ti.Network.online && e.value.length > 1) {
                 util.autocompletePlaces(dialogView, e.value,
-                                        Ti.App.Properties.getString('countryCode', 'sg'));
+                                        Ti.App.Properties.
+                                            getString('countryCode', 'sg'));
                 if (!suggestedSection.visible) {
                     suggestedSection.addRow(L('loading'));
                     suggestedSection.visible = true;
@@ -103,7 +104,8 @@ var LocationDialogView = function(value, hintText, recentPropName){
         }; 
         if (!dialogView.justOpened){
             clearTimeout(autocompleteTimer);
-            autocompleteTimer = setTimeout(autocompleteUpdateTable, autocompleteTimeout);
+            autocompleteTimer = setTimeout(autocompleteUpdateTable,
+                                           autocompleteTimeout);
         } else {
             dialogView.justOpened = false;            
         }
