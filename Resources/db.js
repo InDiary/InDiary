@@ -98,12 +98,15 @@ exports.selectRows = function(tableName, searchCriteria) {
         
         schema.fields[tableName].forEach(function(field) {
             var value = searchCriteria[field.name];
+            if (value === '')
+                delete searchCriteria[field.name];
             if (typeof(value) === "string") {
                 value = util.quotify(value.replace(matchRe, escapeChar + '$&'),
                                      '%');
-                matchFieldsAndValues.push(field.name + ' LIKE ' + 
-                                          util.quotify(value.replace(/'/g,
-                                                                     "''")));
+                value = util.quotify(value.replace(/'/g, "''"));
+                matchFieldsAndValues.push(field.name + ' LIKE ' + value +
+                                          ' ESCAPE ' +
+                                          util.quotify(escapeChar));
             } else if (typeof(value) == "number") {
                 matchFieldsAndValues.push(field.name + ' == ' + value);
             }
@@ -118,24 +121,32 @@ exports.selectRows = function(tableName, searchCriteria) {
             }
             var subCriteria = searchCriteria[field.name + 'Criteria'];
             if (typeof(subCriteria) === "object") {
-                var subQueryText = selectRowsQueryText(field.tableName,
-                                                       subCriteria, 'id');
-                inFieldsAndValues.push(field.name + ' IN ' + '(' +
-                                       subQueryText + ')');
+                var emptyCriteria = true;
+                for (criterion in subCriteria) {
+                    if (subCriteria[criterion] !== ''){
+                        emptyCriteria = false;
+                        break;
+                    }
+                }
+                if (!emptyCriteria){
+                    var subQueryText = selectRowsQueryText(field.tableName,
+                                                           subCriteria, 'id');
+                    inFieldsAndValues.push(field.name + ' IN ' + '(' +
+                                           subQueryText + ')');
+                }
             }
         });
-        var matchText = matchFieldsAndValues.join(' AND ') + ' ESCAPE ' +
-                        util.quotify(escapeChar);
+        var matchText = matchFieldsAndValues.join(' AND ');
         var rangeText = rangeFieldsAndValues.join(' AND ');
         var inText = inFieldsAndValues.join(' AND ');
         var whereComponents = [matchText, rangeText, inText].
-            filter(function(element){return (element !== '')});
+            filter(function(element){return (element.length > 0)});
         var whereText = (whereComponents.length === 0) ?
             '' : 'WHERE ' + whereComponents.join(' AND ') + ' ';
 
         var queryText = 'SELECT ' + columnName + ' FROM ' + tableName + ' ' +
                         whereText + 'ORDER BY ' + orderBy + ' ' + ascText;
-                        
+        
         return queryText;
     };
 
