@@ -54,20 +54,22 @@ function EntryWin(entryId) {
         }
         Ti.App.fireEvent('db:update');
         schema.fields['entries'].forEach(function(field) {
-            if (field.name != 'text' && field.name != 'datetime') {
-                var recentPropName = util.makeRecentPropName(field.name);
-                var recentList = Ti.App.Properties.getList(recentPropName, []);
-                if (recentList.indexOf(entryData[field.name]) != - 1){
-                    recentList = recentList.filter(function(element, index, array) {
-                        return (element != entryData[field.name]);
-                    });
-                }
-                recentList.push(entryData[field.name]);
-                if (recentList.length > schema.maxRecentFieldEntries){
-                    recentList = recentList.slice(-schema.maxRecentFieldEntries);
-                }
-                Ti.App.Properties.setList(recentPropName, recentList);
+            if (field.name == 'text' || field.name == 'datetime')
+                return;
+            if (entryData[field.name] === '')
+                return;
+            var recentPropName = util.makeRecentPropName(field.name);
+            var recentList = Ti.App.Properties.getList(recentPropName, []);
+            if (recentList.indexOf(entryData[field.name]) != - 1){
+                recentList = recentList.filter(function(element, index, array) {
+                    return (element != entryData[field.name]);
+                });
             }
+            recentList.push(entryData[field.name]);
+            if (recentList.length > schema.maxRecentFieldEntries){
+                recentList = recentList.slice(-schema.maxRecentFieldEntries);
+            }
+            Ti.App.Properties.setList(recentPropName, recentList);
         }); 
         self.close();
     });
