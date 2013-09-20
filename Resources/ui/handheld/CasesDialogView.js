@@ -69,6 +69,8 @@ var CasesDialogView = function(value, hintText, recentPropName){
             casesData.forEach(function(caseData) {
                 var row = suggestedSection.addRow(caseData.name,
                                                   {caseId: caseData.id});
+                if (searchBar.value == caseData.name)
+                    dialogView.value = caseData.id;
             });
             suggestedSection.visible = true;
             casesTable.update();
