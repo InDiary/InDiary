@@ -65,13 +65,12 @@ function EntryListWin() {
     });
     
     var searchTimer = 0;
-    var searchTimeout = 300;
     table.addEventListener('search', function(e) {
         clearTimeout(searchTimer);
         searchTimer = setTimeout(function(){
         	table.searchCriteria = e.searchCriteria;
             table.fireEvent('update');
-        }, searchTimeout);
+        }, util.searchTimeout);
     });
     
     table.addEventListener('update', function(e) {

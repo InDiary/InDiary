@@ -84,7 +84,6 @@ var LocationDialogView = function(value, hintText, recentPropName){
     });
 
     var autocompleteTimer = 0;
-    var autocompleteTimeout = 300;
     searchBar.addEventListener('change', function(e) {
         var autocompleteUpdateTable = function() {
             if (Ti.Network.online && e.value.length > 1) {
@@ -105,7 +104,7 @@ var LocationDialogView = function(value, hintText, recentPropName){
         if (!dialogView.justOpened){
             clearTimeout(autocompleteTimer);
             autocompleteTimer = setTimeout(autocompleteUpdateTable,
-                                           autocompleteTimeout);
+                                           util.searchTimeout);
         } else {
             dialogView.justOpened = false;            
         }

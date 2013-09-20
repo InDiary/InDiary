@@ -1,5 +1,7 @@
 var moment = require('moment');
 
+exports.searchTimeout = 300;
+
 /**
  * Capitalises first letter of string.
  */

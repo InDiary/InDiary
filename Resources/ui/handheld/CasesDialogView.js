@@ -53,12 +53,11 @@ var CasesDialogView = function(value, hintText, recentPropName){
     });
 
     var autocompleteTimer = 0;
-    var autocompleteTimeout = 300;
     searchBar.addEventListener('change', function(e) {
         var autocompleteUpdateTable = function() {
             suggestedSection.rows = [];
             var searchCriteria = {
-                orderBy: 'datetime',
+                orderBy: 'id',
                 ascending: false,
                 name: e.value
             };
@@ -78,11 +77,11 @@ var CasesDialogView = function(value, hintText, recentPropName){
         if (!dialogView.justOpened){
             clearTimeout(autocompleteTimer);
             autocompleteTimer = setTimeout(autocompleteUpdateTable,
-                                           autocompleteTimeout);
+                                           util.searchTimeout);
         } else {
             dialogView.justOpened = false;            
         }
-    });    
+    });
     
     casesTable.addEventListener('click', function(e) {
         if (e.rowData.selectable == true) {
