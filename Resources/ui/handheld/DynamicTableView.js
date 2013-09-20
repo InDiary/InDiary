@@ -44,8 +44,12 @@ function DynamicTableView(vars) {
             headerRow: Ti.UI.createTableViewRow(self.headerRowTemplate)
         };
         newSection.headerRow.title = title;
-        newSection.addRow = function(rowTitle) {
-            var row = Ti.UI.createTableViewRow(self.rowTemplate);
+        newSection.addRow = function(rowTitle, otherProps) {
+            var rowProps = self.rowTemplate;
+            for (var propName in otherProps){
+                rowProps[propName] = otherProps[propName];
+            }
+            var row = Ti.UI.createTableViewRow(rowProps);
             row.title = rowTitle;
             newSection.rows.push(row);
             return row;

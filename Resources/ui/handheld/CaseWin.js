@@ -61,9 +61,9 @@ function CaseWin(caseId) {
     var table = Ti.UI.createTableView();
     table.searchCriteria = {
         orderBy: 'datetime',
-        ascending: false
+        ascending: false,
+        caseId: caseId
     };
-    table.searchCriteria.caseId = (caseId == -1) ? '' : caseId;
 	self.add(table);
 
     table.addEventListener('update', function(e) {

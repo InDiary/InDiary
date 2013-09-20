@@ -33,7 +33,10 @@ exports.addRow = function(tableName, rowData) {
         if (field.type == 'datetime'){
             value = value.toISOString();
         }
-        fieldValues.push(util.quotify(value.replace(/'/g,"''")));
+        if (field.type != 'id'){
+            value = util.quotify(value.replace(/'/g,"''"));
+        }       
+        fieldValues.push(value);
     });
 	db.execute('INSERT INTO ' + tableName + ' (' +
                fieldNames.join(', ') + ') VALUES (' + 
@@ -49,8 +52,10 @@ exports.editRow = function(tableName, rowData) {
         if (field.type == 'datetime'){
             value = value.toISOString();
         }
-        fieldNamesAndValues.push(field.name + '=' + 
-                                 util.quotify(value.replace(/'/g,"''")));
+        if (field.type != 'id'){
+            value = util.quotify(value.replace(/'/g,"''"));
+        }
+        fieldNamesAndValues.push(field.name + '=' + value);
     });
     db.execute('UPDATE ' + tableName + ' SET ' +
                fieldNamesAndValues.join(', ') + ' WHERE id=?', rowData.id);

@@ -44,8 +44,7 @@ var CasesDialogView = function(value, hintText, recentPropName){
             recentSection.rows = [];
             recentValues.forEach(function(value){
                 var caseName = db.selectRow('cases', value).name;
-                var row = recentSection.addRow(caseName);
-                row.caseId = value;
+                var row = recentSection.addRow(caseName, {caseId: value});
             });
             recentSection.visible = true;
             casesTable.update();
@@ -68,8 +67,8 @@ var CasesDialogView = function(value, hintText, recentPropName){
                 return;
             }
             casesData.forEach(function(caseData) {
-                var row = suggestedSection.addRow(caseData.name);
-                row.caseId = caseData.id;
+                var row = suggestedSection.addRow(caseData.name,
+                                                  {caseId: caseData.id});
             });
             suggestedSection.visible = true;
             casesTable.update();
