@@ -23,6 +23,7 @@ function DualLabelRow(primaryText, secondaryText, otherProps, className) {
         top: '7dp',
         left: '11dp',
         right: '11dp',
+        width: Ti.UI.FILL,
         text: primaryText,
         color: theme.primaryTextColor,
         font: {
@@ -39,6 +40,7 @@ function DualLabelRow(primaryText, secondaryText, otherProps, className) {
         bottom: '5dp',
         left: '11dp',
         right: '11dp',
+        width: Ti.UI.FILL,
         text: secondaryText,
         color: theme.secondaryTextColor,
         font: {

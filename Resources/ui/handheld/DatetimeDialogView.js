@@ -21,18 +21,13 @@ var DatetimeDialogView = function(value){
     dialogView.addEventListener('open', function(e) {
         timePicker.value = dialogView.value;
         datePicker.value = dialogView.value;
-        dialogView.justOpened = true;
     });
     var mergeDateAndTime = function(date, time){
         return new Date(date.getFullYear(), date.getMonth(), date.getDate(),
                         time.getHours(), time.getMinutes(), time.getSeconds());
     };
     timePicker.addEventListener('change', function(e) {
-        if (dialogView.justOpened) {
-            dialogView.justOpened = false;
-        } else {
-            dialogView.value = mergeDateAndTime(dialogView.value, e.value);
-        }
+        dialogView.value = mergeDateAndTime(dialogView.value, e.value);
     });
     datePicker.addEventListener('change', function(e) {
         dialogView.value = mergeDateAndTime(e.value, dialogView.value);
