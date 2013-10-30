@@ -53,7 +53,7 @@ function EntryListWin() {
 	self.add(entrySearchView);
 
 	newButton.addEventListener('click', function() {
-		new EntryWin(-1).open();
+		new EntryWin(table, -1).open();
 	});
 
 	casesButton.addEventListener('click', function() {
@@ -87,13 +87,9 @@ function EntryListWin() {
     });
 	
     table.addEventListener('click', function(e) {
-        new EntryWin(e.rowData.entryId).open();
+        new EntryWin(table, e.rowData.entryId).open();
     });
-    
-    Ti.App.addEventListener('db:update', function(e) {
-        table.fireEvent('update');
-    });
-    
+        
     table.fireEvent('update');
 
 	return self;

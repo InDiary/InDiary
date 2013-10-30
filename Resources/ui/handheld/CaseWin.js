@@ -2,7 +2,7 @@
  * Window for adding a new entry or editing an existing one.
  * @param {Number} entryId Id of entry to be edited. -1 corresponds to a new entry.
  */
-function CaseWin(caseId) {
+function CaseWin(parent, caseId) {
     var util = require('util');
     var schema = require('schema');
     var db = require('db');
@@ -80,11 +80,7 @@ function CaseWin(caseId) {
     });
 	
     table.addEventListener('click', function(e) {
-        new EntryWin(e.rowData.entryId).open();
-    });
-    
-    Ti.App.addEventListener('db:update', function(e) {
-        table.fireEvent('update');
+        new EntryWin(table, e.rowData.entryId).open();
     });
     
     table.fireEvent('update');
