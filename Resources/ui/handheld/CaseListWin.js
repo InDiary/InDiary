@@ -10,7 +10,6 @@ function CaseListWin() {
     var DualLabelRow = require('DualLabelRow');
 
 	var self = Ti.UI.createWindow({
-		title:L('entries'),
 		backgroundColor:theme.backgroundColor,
 		navBarHidden: true
 	});

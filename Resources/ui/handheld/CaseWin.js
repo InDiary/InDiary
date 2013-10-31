@@ -2,14 +2,14 @@
  * Window for adding a new entry or editing an existing one.
  * @param {Number} entryId Id of entry to be edited. -1 corresponds to a new entry.
  */
-function CaseWin(parent, caseId) {
+function CaseWin(parent, caseId, caseName) {
     var util = require('util');
     var schema = require('schema');
     var db = require('db');
     var theme = require('ui/theme');
 	var EntryWin = require('EntryWin');
     var ToolbarView = require('ToolbarView');
-    var DualLabelRow = require('DualLabelRow');    
+    var DualLabelRow = require('DualLabelRow');
 
     var caseData = {};
     if (caseId == -1) {
@@ -36,6 +36,9 @@ function CaseWin(parent, caseId) {
     nameField.addEventListener('change', function(e) {
         caseData.name = e.value;
     });
+
+    if (typeof(caseName) == 'string' && caseId == -1)
+        nameField.value = caseName;
     
     cancelButton.addEventListener('click', function(e) {
         self.close();
@@ -47,7 +50,7 @@ function CaseWin(parent, caseId) {
         } else {
             db.editRow('cases', caseData);
         }
-        Ti.App.fireEvent('db:update');
+        parent.fireEvent('update', {value: caseData});
         self.close();
     });
 

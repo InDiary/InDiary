@@ -2,7 +2,9 @@ var CasesDialogView = function(value, hintText, recentPropName){
     var util = require('util');
     var db = require('db');
     var theme = require('ui/theme');
+    var ToolbarView = require('ToolbarView');
     var DynamicTableView = require('DynamicTableView');
+    var CaseWin = require('CaseWin');
     
     var dialogView = Ti.UI.createView({
         height : Ti.UI.SIZE,
@@ -12,15 +14,18 @@ var CasesDialogView = function(value, hintText, recentPropName){
     });
 
     var validCaseId = typeof(value) == 'number' && value > 0;
-    
-    var searchBar = Ti.UI.createTextField({
-        width : Ti.UI.FILL,
-        color: theme.primaryTextColor,
-        backgroundColor: theme.backgroundColor,
-        hintText : hintText,
-        softKeyboardOnFocus : Titanium.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS        
-    });
-    dialogView.add(searchBar);
+
+    var toolbarView = new ToolbarView();
+    dialogView.add(toolbarView);
+
+    var searchBar = toolbarView.addTextField('', L('searchEntries'));
+	searchBar.softKeyboardOnFocus = Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS;
+
+    var newButton = toolbarView.addButton('/images/new.png');
+	    
+    newButton.addEventListener('click', function() {
+        new CaseWin(dialogView, -1, searchBar.value).open();    
+	});
     
     var borderView = Ti.UI.createView({
         width : Titanium.UI.FILL,
@@ -42,7 +47,7 @@ var CasesDialogView = function(value, hintText, recentPropName){
     dialogView.addEventListener('open', function(e) {
         dialogView.justOpened = true;
         validCaseId = typeof(value) == 'number' && value > 0;
-        searchBar.value = db.selectRow('cases', searchBar.value).name;
+        searchBar.value = db.selectRow('cases', value).name;
         searchBar.focus();
         searchBar.font = (validCaseId) ?
             {fontWeight : 'bold'} : {fontWeight : 'normal'};
@@ -65,6 +70,10 @@ var CasesDialogView = function(value, hintText, recentPropName){
         casesTable.update();
     });
 
+    dialogView.addEventListener('update', function(e) {
+        searchBar.value = e.value.name;
+    });
+    
     var autocompleteTimer = 0;
     searchBar.addEventListener('change', function(e) {
         var autocompleteUpdateTable = function() {
