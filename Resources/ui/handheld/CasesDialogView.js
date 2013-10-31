@@ -37,7 +37,8 @@ var CasesDialogView = function(value, hintText, recentPropName){
 
     var suggestedSection = casesTable.addDynamicSection(L('suggested'));
     var recentSection = casesTable.addDynamicSection(L('recent'));
-
+    var allSection = casesTable.addDynamicSection(L('all'));
+    
     dialogView.addEventListener('open', function(e) {
         dialogView.justOpened = true;
         validCaseId = typeof(value) == 'number' && value > 0;
@@ -54,8 +55,14 @@ var CasesDialogView = function(value, hintText, recentPropName){
                 var row = recentSection.addRow(caseName, {caseId: value});
             });
             recentSection.visible = true;
-            casesTable.update();
         }
+        var casesData = db.selectRows('cases', 
+            {orderBy: 'id', ascending: false});
+        casesData.forEach(function(caseData){
+            var row = allSection.addRow(caseData.name, caseData.id);
+        });
+        allSection.visible = true;
+        casesTable.update();
     });
 
     var autocompleteTimer = 0;
@@ -84,8 +91,10 @@ var CasesDialogView = function(value, hintText, recentPropName){
                     }
                 });
                 suggestedSection.visible = true;
+                allSection.visible = false;
             } else {
                 suggestedSection.visible = false;
+                allSection.visible = true;
             }
             casesTable.update();
         };
