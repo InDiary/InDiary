@@ -3,7 +3,6 @@ function DialogWin(parent, title, dialogView) {
     
     var self = Ti.UI.createWindow({
         opacity : 0,
-        modal : true,
         navBarHidden: true
     });
 
@@ -60,17 +59,9 @@ function DialogWin(parent, title, dialogView) {
         height : 2,
         backgroundColor : theme.borderColor
     }));
-    dialog.add(Ti.UI.createView({
-        width : Ti.UI.FILL,
-        height : '10dp'
-    }));
     
     dialog.add(dialogView);
 
-    dialog.add(Ti.UI.createView({
-        width : Ti.UI.FILL,
-        height : '10dp'
-    }));
     dialog.add(Ti.UI.createView({
         width : Ti.UI.FILL,
         height : 2,

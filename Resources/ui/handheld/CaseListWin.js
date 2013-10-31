@@ -72,10 +72,6 @@ function CaseListWin() {
         new CaseWin(table, e.rowData.caseId).open();
     });
     
-    Ti.App.addEventListener('db:update', function(e) {
-        table.fireEvent('update');
-    });
-    
     table.fireEvent('update');
 
 	return self;

@@ -16,8 +16,16 @@ var DatetimeDialogView = function(value){
     var datePicker = Ti.UI.createPicker({
         type : Ti.UI.PICKER_TYPE_DATE
     });
+    dialogView.add(Ti.UI.createView({
+        width : Ti.UI.FILL,
+        height : '10dp'
+    }));
     dialogView.add(timePicker);
     dialogView.add(datePicker);
+    dialogView.add(Ti.UI.createView({
+        width : Ti.UI.FILL,
+        height : '10dp'
+    }));    
     dialogView.addEventListener('open', function(e) {
         timePicker.value = dialogView.value;
         datePicker.value = dialogView.value;
