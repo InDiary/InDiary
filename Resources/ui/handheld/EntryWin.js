@@ -19,7 +19,8 @@ function EntryWin(parent, entryId) {
                 entryData[field.name] = new Date();                
             } else {
                 var recentPropName = util.makeRecentPropName(field.name);
-                var recentList = Ti.App.Properties.getList(recentPropName, ['']);
+                var recentList =
+                    Ti.App.Properties.getList(recentPropName, ['']);
                 entryData[field.name] = recentList.slice(-1)[0];
             }
         });

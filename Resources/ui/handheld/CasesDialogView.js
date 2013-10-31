@@ -62,27 +62,31 @@ var CasesDialogView = function(value, hintText, recentPropName){
     searchBar.addEventListener('change', function(e) {
         var autocompleteUpdateTable = function() {
             suggestedSection.rows = [];
-            var searchCriteria = {
-                orderBy: 'id',
-                ascending: false,
-                name: e.value
-            };
-            var casesData = db.selectRows('cases', searchCriteria);
-            if (casesData.length == 0) {
-                suggestedSection.visible = false;
-                casesTable.update();
-                return;
-            }
-            casesData.forEach(function(caseData) {
-                var row = suggestedSection.addRow(caseData.name,
-                                                  {caseId: caseData.id});
-                if (searchBar.value == caseData.name){
-                    validCaseId = true;
-                    dialogView.value = caseData.id;
-                    searchBar.font = {fontWeight : 'bold'};
+            if (e.value.length > 1) {
+                var searchCriteria = {
+                    orderBy: 'id',
+                    ascending: false,
+                    name: e.value
+                };
+                var casesData = db.selectRows('cases', searchCriteria);
+                if (casesData.length == 0) {
+                    suggestedSection.visible = false;
+                    casesTable.update();
+                    return;
                 }
-            });
-            suggestedSection.visible = true;
+                casesData.forEach(function(caseData) {
+                    var row = suggestedSection.addRow(caseData.name,
+                                                      {caseId: caseData.id});
+                    if (searchBar.value == caseData.name){
+                        validCaseId = true;
+                        dialogView.value = caseData.id;
+                        searchBar.font = {fontWeight : 'bold'};
+                    }
+                });
+                suggestedSection.visible = true;
+            } else {
+                suggestedSection.visible = false;
+            }
             casesTable.update();
         };
         if (!dialogView.justOpened){
