@@ -14,7 +14,8 @@ function EntryListWin() {
 	var self = Ti.UI.createWindow({
 		title:L('entries'),
 		backgroundColor: theme.backgroundColor,
-		navBarHidden: true
+		navBarHidden: true,
+		exitOnClose: true
 	});
 	
 	var mainView = Ti.UI.createView({
