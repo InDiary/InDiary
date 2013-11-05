@@ -1,6 +1,7 @@
 var LocationDialogView = function(value, hintText, recentPropName){
     var util = require('util');
     var theme = require('ui/theme');
+    var ToolbarView = require('ToolbarView');    
     var DynamicTableView = require('DynamicTableView');
 
     var dialogView = Ti.UI.createView({
@@ -10,14 +11,10 @@ var LocationDialogView = function(value, hintText, recentPropName){
         value : value
     });
     
-    var searchBar = Ti.UI.createTextField({
-        width : Ti.UI.FILL,
-        color: theme.primaryTextColor,
-        backgroundColor: theme.backgroundColor,
-        hintText: hintText,
-        softKeyboardOnFocus : Titanium.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS
-    });
-    dialogView.add(searchBar);
+    var toolbarView = new ToolbarView();
+    dialogView.add(toolbarView);
+
+    var searchBar = toolbarView.addTextField('', hintText, true);
 
     dialogView.add(Ti.UI.createView({
         width : Titanium.UI.FILL,
@@ -38,7 +35,6 @@ var LocationDialogView = function(value, hintText, recentPropName){
     dialogView.addEventListener('open', function(e) {
         dialogView.justOpened = true;
         searchBar.value = dialogView.value;
-        searchBar.focus();
         locationTable.reset();
         if (Ti.Geolocation.locationServicesEnabled && Ti.Network.online){
             nearbySection.visible = true;

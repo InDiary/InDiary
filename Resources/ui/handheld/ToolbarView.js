@@ -30,7 +30,7 @@ function ToolbarView() {
 		return button;
 	};
 	
-	self.addTextField = function(text, hintText) {
+	self.addTextField = function(text, hintText, hideFirstKeyboard) {
 		if (self.toolbarFull)
 			return false;
 		var textField = Ti.UI.createTextField({
@@ -48,6 +48,17 @@ function ToolbarView() {
 			hintText : hintText,
 			ellipsize : true
 		});
+		if (hideFirstKeyboard) {
+		    textField.justCreated = true;
+		    textField.addEventListener('focus', function f(e){
+                if (textField.justCreated) {
+                    textField.justCreated = false;
+                    textField.blur();
+                } else {
+                    textField.removeEventListener('focus', f);
+                }
+            });
+		}
 		self.add(textField);
 		self.toolbarFull = true;
 		self.labelOrTextField = textField;

@@ -18,8 +18,13 @@ var CasesDialogView = function(value, hintText, recentPropName){
     var toolbarView = new ToolbarView();
     dialogView.add(toolbarView);
 
-    var searchBar = toolbarView.addTextField('', L('searchEntries'));
-	searchBar.softKeyboardOnFocus = Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS;
+    var searchBar = toolbarView.addTextField('', hintText, true);
+    searchBar.visible = false;
+	var searchBarFont = searchBar.font;
+    var searchBarBoldFont = {
+        fontSize : searchBar.font.fontSize,
+        fontWeight : 'bold'
+    };
 
     var newButton = toolbarView.addButton('/images/new.png');
 	    
@@ -45,12 +50,11 @@ var CasesDialogView = function(value, hintText, recentPropName){
     var allSection = casesTable.addDynamicSection(L('all'));
     
     dialogView.addEventListener('open', function(e) {
-        dialogView.justOpened = true;
         validCaseId = typeof(value) == 'number' && value > 0;
         searchBar.value = db.selectRow('cases', value).name;
-        searchBar.focus();
-        searchBar.font = (validCaseId) ?
-            {fontWeight : 'bold'} : {fontWeight : 'normal'};
+        searchBar.font = (validCaseId) ? searchBarBoldFont : searchBarFont;
+        searchBar.blur();
+        searchBar.visible = true;
         var recentValues = Ti.App.Properties.getList(recentPropName, []);
         recentValues.reverse();
         if (recentValues.length > 0) {
@@ -96,7 +100,7 @@ var CasesDialogView = function(value, hintText, recentPropName){
                     if (searchBar.value == caseData.name){
                         validCaseId = true;
                         dialogView.value = caseData.id;
-                        searchBar.font = {fontWeight : 'bold'};
+                        searchBar.font = searchBarBoldFont;
                     }
                 });
                 suggestedSection.visible = true;
@@ -107,17 +111,13 @@ var CasesDialogView = function(value, hintText, recentPropName){
             }
             casesTable.update();
         };
-        if (!dialogView.justOpened){
-            if (validCaseId) {
-                searchBar.font = {fontWeight : 'normal'};
-                validCaseId = false;
-            }
-            clearTimeout(autocompleteTimer);
-            autocompleteTimer = setTimeout(autocompleteUpdateTable,
-                                           util.searchTimeout);
-        } else {
-            dialogView.justOpened = false;
+        if (validCaseId) {
+            searchBar.font = searchBarFont;
+            validCaseId = false;
         }
+        clearTimeout(autocompleteTimer);
+        autocompleteTimer = setTimeout(autocompleteUpdateTable,
+                                       util.searchTimeout);
     });
     
     casesTable.addEventListener('click', function(e) {
@@ -125,7 +125,7 @@ var CasesDialogView = function(value, hintText, recentPropName){
             validCaseId = true;
             dialogView.value = e.rowData.caseId;
             searchBar.value = e.rowData.title;
-            searchBar.font = {fontWeight : 'bold'};            
+            searchBar.font = searchBarBoldFont;          
         }
     });
 

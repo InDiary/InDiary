@@ -2,16 +2,25 @@ function DialogWin(parent, title, dialogView) {
     var theme = require('ui/theme');
     
     var self = Ti.UI.createWindow({
-        opacity : 0,
-        navBarHidden: true
+        navBarHidden : true,
+        backgroundColor : 'transparent',
+        opacity : 1.0
     });
+    
+    self.add(Ti.UI.createView({
+        height : Ti.UI.FILL,
+        width : Ti.UI.FILL,
+        backgroundColor : 'black',
+        opacity : 0.75
+    }));
 
     var dialogBorder = Ti.UI.createView({
         height : Ti.UI.SIZE,
         width : '90%',
         center : {x: '50%', y: '50%'},
         layout : 'vertical',
-        backgroundColor: theme.borderColor,
+        backgroundColor : theme.borderColor,
+        zindex : 1
     });
     self.add(dialogBorder);
 
@@ -99,8 +108,11 @@ function DialogWin(parent, title, dialogView) {
     }); 
     setButton.add(rightBorder);
     setButton.addEventListener('click', function(e){
-       parent.fireEvent('dialog:done', {set: true});
-       self.close();
+        parent.fireEvent('dialog:done', {set: true});
+        self.close({
+            activityEnterAnimation: Ti.Android.R.anim.fade_in,
+            activityExitAnimation: Ti.Android.R.anim.fade_out
+        });
     });
 	
 	var cancelButton = Ti.UI.createView({
@@ -127,8 +139,18 @@ function DialogWin(parent, title, dialogView) {
     }); 
     cancelButton.add(leftBorder);
     cancelButton.addEventListener('click', function(e){
-       parent.fireEvent('dialog:done', {set: false});
-       self.close();
+        parent.fireEvent('dialog:done', {set: false});
+        self.close({
+            activityEnterAnimation: Ti.Android.R.anim.fade_in,
+            activityExitAnimation: Ti.Android.R.anim.fade_out
+        });
+    });
+	
+	self.addEventListener('android:back', function(){
+        self.close({
+            activityEnterAnimation: Ti.Android.R.anim.fade_in,
+            activityExitAnimation: Ti.Android.R.anim.fade_out
+        });	    
     });
 	
 	return self;
