@@ -8,6 +8,9 @@
 function DynamicTableView(vars) {
     var theme = require('ui/theme');
 
+    if (typeof(vars.separatorColor) === 'undefined'){
+        vars.separatorColor = theme.borderColor
+    }
     var self = Ti.UI.createTableView(vars);
     if (typeof(self.dynamicSections) === 'undefined'){
         self.dynamicSections = [];
@@ -25,18 +28,21 @@ function DynamicTableView(vars) {
     self.rowTemplate.selectable = true; 
     if (typeof(self.headerRowTemplate) === 'undefined'){
         self.headerRowTemplate = {
-            color : theme.primaryTextColor,
-            backgroundColor: theme.borderColor,
-            backgroundSelectedColor: theme.borderColor,
+            color : theme.borderColor,
+            backgroundColor: theme.backgroundColor,
+            backgroundSelectedColor: theme.backgroundColor,
             height : '22dp',
             font : {
-                fontSize : theme.secondaryFontSize
+                fontSize : theme.secondaryFontSize,
+                fontWeight : 'bold'
             }
         };
     }
     self.headerRowTemplate.selectable = false; 
     
-    self.addDynamicSection = function(title) {
+    self.addDynamicSection = function(title, noUpperCase) {
+        if (!(noUpperCase === 'true'))
+            title = title.toUpperCase();
         var newSection = {
             title : title,
             visible : false,

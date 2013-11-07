@@ -40,7 +40,8 @@ var CasesDialogView = function(value, hintText, recentPropName){
     dialogView.add(borderView);
     
     var casesTable = new DynamicTableView({
-        width : Ti.UI.FILL,
+        left : '10dp',
+        right : '10dp',
         height : Ti.Platform.displayCaps.platformHeight * 0.5
     });
     dialogView.add(casesTable);

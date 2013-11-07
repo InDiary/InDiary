@@ -23,7 +23,8 @@ var LocationDialogView = function(value, hintText, recentPropName){
     }));
     
     var locationTable = new DynamicTableView({
-        width : Ti.UI.FILL,
+        left : '10dp',
+        right : '10dp',
         height : Ti.Platform.displayCaps.platformHeight * 0.5
     });
     dialogView.add(locationTable);

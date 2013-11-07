@@ -14,37 +14,19 @@ function DialogWin(parent, title, dialogView) {
         opacity : 0.75
     }));
 
-    var dialogBorder = Ti.UI.createView({
+    var dialog = Ti.UI.createView({
         height : Ti.UI.SIZE,
         width : '90%',
         center : {x: '50%', y: '50%'},
         layout : 'vertical',
-        backgroundColor : theme.borderColor,
-        zindex : 1
+        color : theme.primaryTextColor,
+        backgroundColor : theme.backgroundColor,
+        zindex : 1,
+        borderWidth : 1,
+        borderRadius : 3,
+        borderColor : theme.borderColor,
     });
-    self.add(dialogBorder);
-
-    dialogBorder.add(Ti.UI.createView({
-        width : Ti.UI.FILL,
-        height : 1,
-        backgroundColor : theme.borderColor
-    }));
-
-    var dialog = Ti.UI.createView({
-        left : 1,
-        right : 1,
-        height : Ti.UI.SIZE,
-        layout : 'vertical',
-        backgroundColor : 'black',
-        color : theme.primaryTextColor
-    }); 
-    dialogBorder.add(dialog);
-
-    dialogBorder.add(Ti.UI.createView({
-        width : Ti.UI.FILL,
-        height : 1,
-        backgroundColor : theme.borderColor
-    }));
+    self.add(dialog);
 
     var titleBar = Ti.UI.createView({
         width : Ti.UI.FILL,
