@@ -37,6 +37,8 @@ function EntryListWin() {
 	});
 	mainView.add(borderView);
 
+    var barIcon = toolbarView.addBarIcon('/images/appicon.png', 
+                                         '/images/drawer.png');
 	var titleLabel = toolbarView.addLabel(L('entries'));
 	var newButton = toolbarView.addButton('/images/new.png');
 	var casesButton = toolbarView.addButton('/images/cases.png');	

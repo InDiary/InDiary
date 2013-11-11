@@ -37,6 +37,8 @@ function EntryWin(parent, entryId) {
     var toolbarView = new ToolbarView();
     self.add(toolbarView);
 
+    var barIcon = toolbarView.addBarIcon('/images/appicon.png', 
+                                         '/images/up.png');
 	var blurbField = toolbarView.addTextField(entryData.text, L('newEntry'));
 	blurbField.focusable = false;
 	blurbField.enabled = false;
