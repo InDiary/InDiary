@@ -23,7 +23,7 @@ function DialogWin(parent, title, dialogView) {
         backgroundColor : theme.backgroundColor,
         zindex : 1,
         borderWidth : 1,
-        borderRadius : 3,
+        borderRadius : 4,
         borderColor : theme.borderColor,
     });
     self.add(dialog);
@@ -87,14 +87,11 @@ function DialogWin(parent, title, dialogView) {
         height : '100%',
         width : 1,
         backgroundColor : theme.borderColor
-    }); 
+    });
     setButton.add(rightBorder);
     setButton.addEventListener('click', function(e){
         parent.fireEvent('dialog:done', {set: true});
-        self.close({
-            activityEnterAnimation: Ti.Android.R.anim.fade_in,
-            activityExitAnimation: Ti.Android.R.anim.fade_out
-        });
+        self.close(closeArgs);
     });
 	
 	var cancelButton = Ti.UI.createView({
@@ -122,18 +119,14 @@ function DialogWin(parent, title, dialogView) {
     cancelButton.add(leftBorder);
     cancelButton.addEventListener('click', function(e){
         parent.fireEvent('dialog:done', {set: false});
-        self.close({
-            activityEnterAnimation: Ti.Android.R.anim.fade_in,
-            activityExitAnimation: Ti.Android.R.anim.fade_out
-        });
+        self.close(closeArgs);
     });
 	
 	self.addEventListener('android:back', function(){
-        self.close({
-            activityEnterAnimation: Ti.Android.R.anim.fade_in,
-            activityExitAnimation: Ti.Android.R.anim.fade_out
-        });	    
+        self.close(closeArgs);	    
     });
+
+    var closeArgs = {activityExitAnimation: Ti.App.Android.R.anim.expand_out};
 	
 	return self;
 };

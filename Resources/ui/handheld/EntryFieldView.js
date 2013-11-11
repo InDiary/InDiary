@@ -70,8 +70,7 @@ function EntryFieldView(vars) {
                                                          vars.hintText,
                                                          vars.recentPropName);
 		new DialogWin(self, vars.dialogTitle, self.dialogView).open({
-            activityEnterAnimation: Ti.Android.R.anim.fade_in,
-            activityExitAnimation: Ti.Android.R.anim.fade_out
+            activityEnterAnimation: Ti.App.Android.R.anim.contract_in
         });
         self.dialogView.fireEvent('open');
     });
