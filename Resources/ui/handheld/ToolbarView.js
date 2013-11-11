@@ -16,15 +16,22 @@ function ToolbarView() {
 	self.toolbarFull = false;
 
 	self.addButton = function(buttonImage) {
-		var button = Ti.UI.createButton({
-			top : '3dp',
-			right : 3 + 45 * self.numButtons + 'dp',
-			width : '42dp',
-			height : '42dp',
-			backgroundImage : buttonImage,
+		var button = Ti.UI.createView({
+			top : '0dp',
+			right : 56 * self.numButtons + 'dp',
+			width : '56dp',
+			height : '48dp',
+			backgroundColor : theme.toolbarBackgroundColor,
 			backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
 		});
 		self.add(button);
+		var image = Ti.UI.createView({
+            width : '32dp',
+            height : '32dp',
+            backgroundImage : buttonImage,
+            touchEnabled : false    
+		});
+		button.add(image);
 		self.numButtons++;
 		self.fireEvent('buttonAdded');
 		return button;

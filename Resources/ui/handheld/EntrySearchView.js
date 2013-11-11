@@ -22,7 +22,8 @@ function EntrySearchView(obj) {
         height: Ti.UI.SIZE,
 		layout: 'vertical',
 		touchEnabled: false,
-		visible: false
+		visible: false,
+		opacity: 0
 	});
     
     var toolbarView = new ToolbarView();
@@ -40,6 +41,7 @@ function EntrySearchView(obj) {
 
     cancelButton.addEventListener('click', function(e) {
         searchBar.blur();
+        self.animate({opacity: 0, duration: 250});
         self.visible = false;
     });
     
@@ -111,6 +113,7 @@ function EntrySearchView(obj) {
 
 	self.addEventListener('open', function(e){
 		self.visible = true;
+		self.animate({opacity: 1, duration: 250});
 		searchBar.focus();
 	});
 
