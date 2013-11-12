@@ -5,7 +5,7 @@ function EntryListWin() {
 	var util = require('util');
 	var db = require('db');
     var theme = require('ui/theme');
-	var CaseListWin = require('CaseListWin');
+	var MenuWin = require('MenuWin');
 	var EntryWin = require('EntryWin');
 	var ToolbarView = require('ToolbarView');
 	var EntrySearchView = require('EntrySearchView');
@@ -41,7 +41,6 @@ function EntryListWin() {
                                          '/images/drawer.png');
 	var titleLabel = toolbarView.addLabel(L('entries'));
 	var newButton = toolbarView.addButton('/images/new.png');
-	var casesButton = toolbarView.addButton('/images/cases.png');	
 	var searchButton = toolbarView.addButton('/images/search.png');
 	    
 	var table = Ti.UI.createTableView();
@@ -55,12 +54,12 @@ function EntryListWin() {
 	var entrySearchView = new EntrySearchView(table);
 	self.add(entrySearchView);
 
+	barIcon.addEventListener('click', function() {
+		new MenuWin().open();
+	});
+    
 	newButton.addEventListener('click', function() {
 		new EntryWin(-1).open();
-	});
-
-	casesButton.addEventListener('click', function() {
-		new CaseListWin().open();
 	});
 
 	searchButton.addEventListener('click', function() {

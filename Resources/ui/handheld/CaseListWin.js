@@ -5,6 +5,7 @@ function CaseListWin() {
 	var util = require('util');
     var theme = require('ui/theme');
 	var db = require('db');
+	var MenuWin = require('MenuWin');
 	var CaseWin = require('CaseWin');
 	var ToolbarView = require('ToolbarView');
     var DualLabelRow = require('DualLabelRow');
@@ -37,6 +38,10 @@ function CaseListWin() {
                                          '/images/drawer.png');
 	var titleLabel = toolbarView.addLabel(L('cases'));
 	var newButton = toolbarView.addButton('/images/new.png');
+
+	barIcon.addEventListener('click', function() {
+		new MenuWin().open();
+	});
 	
 	newButton.addEventListener('click', function() {
         new CaseWin(-1).open();    
