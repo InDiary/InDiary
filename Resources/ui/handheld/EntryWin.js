@@ -42,10 +42,9 @@ function EntryWin(parent, entryId) {
 	var blurbField = toolbarView.addTextField(entryData.text, L('newEntry'));
 	blurbField.focusable = false;
 	blurbField.enabled = false;
-	var cancelButton = toolbarView.addButton('/images/cancel.png');
 	var saveButton = toolbarView.addButton('/images/save.png');
 
-    cancelButton.addEventListener('click', function(e) {
+    barIcon.addEventListener('click', function(e) {
         self.close();
     });
 

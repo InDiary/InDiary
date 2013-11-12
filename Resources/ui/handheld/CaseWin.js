@@ -29,10 +29,15 @@ function CaseWin(parent, caseId, caseName) {
     var toolbarView = new ToolbarView();
     self.add(toolbarView);
 
+    var barIcon = toolbarView.addBarIcon('/images/appicon.png', 
+                                         '/images/up.png');    
 	var nameField = toolbarView.addTextField(caseData.name, L('caseIdDefault'));
-	var cancelButton = toolbarView.addButton('/images/cancel.png');
 	var saveButton = toolbarView.addButton('/images/save.png');
 
+    barIcon.addEventListener('click', function(e) {
+        self.close();
+    });    
+    
     nameField.addEventListener('change', function(e) {
         caseData.name = e.value;
     });
@@ -40,10 +45,6 @@ function CaseWin(parent, caseId, caseName) {
     if (typeof(caseName) == 'string' && caseId == -1)
         nameField.value = caseName;
     
-    cancelButton.addEventListener('click', function(e) {
-        self.close();
-    });
-
     saveButton.addEventListener('click', function(e) {
         if (caseId == -1) {
             db.addRow('cases', caseData);

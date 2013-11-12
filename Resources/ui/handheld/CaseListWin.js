@@ -32,7 +32,9 @@ function CaseListWin() {
 		backgroundColor: theme.borderColor
 	});
 	mainView.add(borderView);
-	
+
+    var barIcon = toolbarView.addBarIcon('/images/appicon.png', 
+                                         '/images/drawer.png');
 	var titleLabel = toolbarView.addLabel(L('cases'));
 	var newButton = toolbarView.addButton('/images/new.png');
 	

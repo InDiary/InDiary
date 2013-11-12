@@ -29,10 +29,19 @@ function ToolbarView() {
 		var imageView = Ti.UI.createView({
             width : '32dp',
             height : '32dp',
-            backgroundImage : buttonImage,
             touchEnabled : false
 		});
 		button.add(imageView);
+        if (Array.isArray(buttonImage)){
+            var imageId = 0;
+            imageView.backgroundImage = buttonImage[imageId];
+            button.addEventListener('click', function(e){
+                imageId = (imageId + 1) % buttonImage.length;
+                imageView.backgroundImage = buttonImage[imageId];
+            });        
+        } else {
+            imageView.backgroundImage = buttonImage;
+        }
 		self.numButtons++;
 		self.fireEvent('buttonAdded');
 		return button;
@@ -44,7 +53,7 @@ function ToolbarView() {
         var containerView = Ti.UI.createView({
             top : '0dp',
             left : '0dp',
-            width : '44dp',
+            width : '48dp',
             height : '48dp',
             backgroundColor : theme.toolbarBackgroundColor,
             backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
@@ -80,6 +89,7 @@ function ToolbarView() {
 			top : '6dp',
 			left : 4 + self.hasBarIcon * 36 + 'dp',
 			right : 56 * self.numButtons + 'dp',
+            width : Ti.UI.FILL,
 			height : '42dp',
 			backgroundColor : 'transparent',
 			color : theme.primaryToolbarTextColor,
@@ -113,9 +123,10 @@ function ToolbarView() {
 			return false;
 		var label = Ti.UI.createLabel({
 			top : '3dp',
-			height : '42dp',
-			left : 12 + self.hasBarIcon * 36 + 'dp',
+			left : 14 + self.hasBarIcon * 36 + 'dp',
 			right : 56 * self.numButtons + 'dp',
+            width : Ti.UI.FILL,
+			height : '42dp',
 			color : theme.primaryToolbarTextColor,
 			font : {
 				fontSize : theme.toolbarFontSize 

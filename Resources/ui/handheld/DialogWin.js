@@ -36,7 +36,7 @@ function DialogWin(parent, title, dialogView) {
     dialog.add(titleBar);    
     var titleLabel = Ti.UI.createLabel({
         top: '12dp',
-        left: '11dp',
+        left: '12dp',
         font : {
             fontSize: theme.primaryFontSize
         },

@@ -37,7 +37,8 @@ function EntrySearchView(obj) {
 	});
 
 	var cancelButton = toolbarView.addButton('/images/cancel.png');
-	var moreButton = toolbarView.addButton('/images/more.png');
+	var moreButton = toolbarView.addButton(['/images/more.png',
+                                            '/images/less.png']);
 
     cancelButton.addEventListener('click', function(e) {
         searchBar.blur();
