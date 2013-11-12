@@ -2,7 +2,7 @@
  * Window for adding a new entry or editing an existing one.
  * @param {Number} entryId Id of entry to be edited. -1 corresponds to a new entry.
  */
-function EntryWin(parent, entryId) {
+function EntryWin(entryId) {
     var util = require('util');
     var schema = require('schema');
     var db = require('db');
@@ -72,7 +72,6 @@ function EntryWin(parent, entryId) {
             }
             Ti.App.Properties.setList(recentPropName, recentList);
         });
-        parent.fireEvent('update');
         self.close();
     });
 

@@ -2,7 +2,7 @@
  * Window for adding a new entry or editing an existing one.
  * @param {Number} entryId Id of entry to be edited. -1 corresponds to a new entry.
  */
-function CaseWin(parent, caseId, caseName) {
+function CaseWin(caseId, caseName, parent) {
     var util = require('util');
     var schema = require('schema');
     var db = require('db');
@@ -51,7 +51,9 @@ function CaseWin(parent, caseId, caseName) {
         } else {
             db.editRow('cases', caseData);
         }
-        parent.fireEvent('update', {value: caseData});
+        if (typeof(parent) === 'object'){
+            parent.fireEvent('update', {value: caseData});
+        }
         self.close();
     });
 
@@ -86,8 +88,10 @@ function CaseWin(parent, caseId, caseName) {
     table.addEventListener('click', function(e) {
         new EntryWin(table, e.rowData.entryId).open();
     });
-    
-    table.fireEvent('update');
+
+    self.addEventListener('focus', function(e) {
+        table.fireEvent('update');
+    });
     
     return self;
 };

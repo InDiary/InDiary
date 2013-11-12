@@ -56,7 +56,7 @@ function EntryListWin() {
 	self.add(entrySearchView);
 
 	newButton.addEventListener('click', function() {
-		new EntryWin(table, -1).open();
+		new EntryWin(-1).open();
 	});
 
 	casesButton.addEventListener('click', function() {
@@ -90,10 +90,12 @@ function EntryListWin() {
     });
 	
     table.addEventListener('click', function(e) {
-        new EntryWin(table, e.rowData.entryId).open();
+        new EntryWin(e.rowData.entryId).open();
     });
-        
-    table.fireEvent('update');
+
+    self.addEventListener('focus', function(e) {
+        table.fireEvent('update');
+    });
 
 	return self;
 };

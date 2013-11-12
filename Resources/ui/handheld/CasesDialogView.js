@@ -29,7 +29,7 @@ var CasesDialogView = function(value, hintText, recentPropName){
     var newButton = toolbarView.addButton('/images/new.png');
 	    
     newButton.addEventListener('click', function() {
-        new CaseWin(dialogView, -1, searchBar.value).open();    
+        new CaseWin(-1, searchBar.value, dialogView).open();    
 	});
     
     var borderView = Ti.UI.createView({

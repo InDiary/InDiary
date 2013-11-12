@@ -39,7 +39,7 @@ function CaseListWin() {
 	var newButton = toolbarView.addButton('/images/new.png');
 	
 	newButton.addEventListener('click', function() {
-        new CaseWin(table, -1).open();    
+        new CaseWin(-1).open();    
 	});
     
 	var table = Ti.UI.createTableView();
@@ -71,11 +71,13 @@ function CaseListWin() {
     });
 	
     table.addEventListener('click', function(e) {
-        new CaseWin(table, e.rowData.caseId).open();
+        new CaseWin(e.rowData.caseId).open();
     });
-    
-    table.fireEvent('update');
 
+    self.addEventListener('focus', function(e) {
+        table.fireEvent('update');
+    });
+   
 	return self;
 };
 
