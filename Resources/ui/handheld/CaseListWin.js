@@ -40,7 +40,10 @@ function CaseListWin() {
 	var newButton = toolbarView.addButton('/images/new.png');
 
 	barIcon.addEventListener('click', function() {
-		new MenuWin().open();
+        new MenuWin().open({
+            activityEnterAnimation: Ti.App.Android.R.anim.push_right_in,
+            activityExitAnimation: Ti.Android.R.anim.fade_out
+        });
 	});
 	
 	newButton.addEventListener('click', function() {

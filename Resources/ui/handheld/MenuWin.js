@@ -24,7 +24,7 @@ function MenuWin() {
 	var titleLabel = toolbarView.addLabel(L('InDiary'));
 
     barIcon.addEventListener('click', function(e) {
-        self.close();
+        self.close(winOpenCloseArgs);
     });
     
     var borderView = Ti.UI.createView({
@@ -41,9 +41,18 @@ function MenuWin() {
                    new DualLabelRow(L('cases'), '', {win: CaseListWin})]);
     
     table.addEventListener('click', function(e) {
-        new e.rowData.win().open();
-        self.close();
+        new e.rowData.win().open(winOpenCloseArgs);
+        self.close(winOpenCloseArgs);
     });
+
+    self.addEventListener('android:back', function(){
+        self.close(winOpenCloseArgs);      
+    });
+    
+    var winOpenCloseArgs = {
+        activityEnterAnimation: Ti.Android.R.anim.fade_in,
+        activityExitAnimation: Ti.App.Android.R.anim.push_left_out
+    };
     
     return self;
 };
