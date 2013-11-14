@@ -39,9 +39,7 @@ function EntryWin(entryId) {
 
     var barIcon = toolbarView.addBarIcon('/images/appicon.png', 
                                          '/images/up.png');
-	var blurbField = toolbarView.addTextField(entryData.text, L('newEntry'));
-	blurbField.focusable = false;
-	blurbField.enabled = false;
+	var blurbLabel = toolbarView.addLabel(entryData.text, L('newEntry'));
 	var saveButton = toolbarView.addButton('/images/save.png');
 
     barIcon.addEventListener('click', function(e) {
@@ -141,7 +139,8 @@ function EntryWin(entryId) {
     });
     self.add(entryTextArea);
     entryTextArea.addEventListener('change', function(e) {
-        blurbField.value = e.value;
+        blurbLabel.text = e.value;
+        blurbLabel.fireEvent('change', {value: e.value});
         entryData.text = e.value;
     });
 

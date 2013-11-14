@@ -118,7 +118,7 @@ function ToolbarView() {
 		return textField;
 	};
 
-	self.addLabel = function(text) {
+	self.addLabel = function(text, hintText) {
 		if (self.toolbarFull)
 			return false;
 		var label = Ti.UI.createLabel({
@@ -136,6 +136,17 @@ function ToolbarView() {
 			ellipsize : true
 		});
 		self.add(label);
+        if (typeof(hintText) == 'string'){
+            label.addEventListener('change', function(e){
+                if (e.value === ''){
+                    label.text = hintText;
+                    label.color = theme.secondaryToolbarTextColor;
+                } else {
+                    label.text = text;
+                    label.color = theme.primaryToolbarTextColor;
+                }
+            });
+        }
 		self.toolbarFull = true;
 		self.textElement = label;
 		return label;
