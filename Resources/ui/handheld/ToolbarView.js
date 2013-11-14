@@ -133,16 +133,21 @@ function ToolbarView() {
 			},
 			textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
 			text : text,
+			wordWrap : false,
 			ellipsize : true
 		});
 		self.add(label);
         if (typeof(hintText) == 'string'){
+            if (text === ''){
+                label.text = hintText;
+                label.color = theme.secondaryToolbarTextColor;
+            }
             label.addEventListener('change', function(e){
                 if (e.value === ''){
                     label.text = hintText;
                     label.color = theme.secondaryToolbarTextColor;
                 } else {
-                    label.text = text;
+                    label.text = e.value;
                     label.color = theme.primaryToolbarTextColor;
                 }
             });

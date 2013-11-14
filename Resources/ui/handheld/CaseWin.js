@@ -9,6 +9,7 @@ function CaseWin(caseId, caseName, parent) {
     var theme = require('ui/theme');
 	var EntryWin = require('EntryWin');
     var ToolbarView = require('ToolbarView');
+    var EntryFieldView = require('EntryFieldView');    
     var DualLabelRow = require('DualLabelRow');
 
     var caseData = {};
@@ -31,19 +32,15 @@ function CaseWin(caseId, caseName, parent) {
 
     var barIcon = toolbarView.addBarIcon('/images/appicon.png', 
                                          '/images/up.png');    
-	var nameField = toolbarView.addTextField(caseData.name, L('caseIdDefault'));
+	var nameLabel = toolbarView.addLabel(caseData.name, L('newCase'));
 	var saveButton = toolbarView.addButton('/images/save.png');
 
     barIcon.addEventListener('click', function(e) {
         self.close();
-    });    
-    
-    nameField.addEventListener('change', function(e) {
-        caseData.name = e.value;
     });
 
     if (typeof(caseName) == 'string' && caseId == -1)
-        nameField.value = caseName;
+        caseData['name'] = caseName;
     
     saveButton.addEventListener('click', function(e) {
         if (caseId == -1) {
@@ -63,6 +60,50 @@ function CaseWin(caseId, caseName, parent) {
         backgroundColor : theme.borderColor
     });
     self.add(borderView);
+
+    schema.fields['cases'].forEach(function(field) {
+        var textFormatter = function(arg){return arg};
+        var dialogViewConstructor;
+        switch (field.name){
+            default:
+                switch (field.type){
+                    case 'datetime':
+                        textFormatter = util.entryDatetimeFormat;
+                        dialogViewConstructor = require('DatetimeDialogView');
+                        break;
+                    case 'location':
+                        dialogViewConstructor = require('LocationDialogView');
+                        break;
+                    case 'string':
+                        dialogViewConstructor = require('StringDialogView');
+                        break;
+                }
+                break;
+        }
+        
+        var fieldView = new EntryFieldView({
+            name : field.displayName,
+            value : caseData[field.name],
+            hintText : field.hintText,
+            textFormatter : textFormatter,
+            dialogTitle : field.displayName,
+            dialogViewConstructor : dialogViewConstructor,
+            recentPropName : util.makeRecentPropName(field.name)
+        });
+        self.add(fieldView);
+        fieldView.addEventListener('change', function(e) {
+            caseData[field.name] = e.value;
+            if (field.name == 'name'){
+                nameLabel.text = e.value;
+                nameLabel.fireEvent('change', {value : e.value});
+            }
+        });
+        self.add(Ti.UI.createView({
+            width : Titanium.UI.FILL,
+            height : 1,
+            backgroundColor : theme.borderColor
+        }));
+    });
 
     var table = Ti.UI.createTableView();
     table.searchCriteria = {
