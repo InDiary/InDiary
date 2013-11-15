@@ -21,9 +21,11 @@
 	<string name="locationDefault">Enter location</string>
     <string name="newCase">New Case</string>
 	<string name="caseId">Case</string>	
-	<string name="caseIdDefault">Enter case identifier</string>
-	<string name="caseName">Case</string>
-	<string name="caseNameDefault">Enter case identifier</string>
+	<string name="caseIdDefault">Enter case</string>
+	<string name="caseName">Case Name</string>
+	<string name="caseNameDefault">Enter case name</string>
+	<string name="caseDatetime">Date &amp; Time Commenced</string>
+	<string name="caseDatetimeDefault">Enter date &amp; time</string>
     <string name="locationDisabled">Location services not enabled.</string>
     <string name="locationError">Location(s) not available</string>
     <string name="recent">Recent</string>

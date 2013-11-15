@@ -19,7 +19,6 @@ var CasesDialogView = function(value, hintText, recentPropName){
     dialogView.add(toolbarView);
 
     var searchBar = toolbarView.addTextField('', hintText, true);
-    searchBar.visible = false;
 	var searchBarFont = searchBar.font;
     var searchBarBoldFont = {
         fontSize : searchBar.font.fontSize,
@@ -54,8 +53,6 @@ var CasesDialogView = function(value, hintText, recentPropName){
         validCaseId = typeof(value) == 'number' && value > 0;
         searchBar.value = db.selectRow('cases', value).name;
         searchBar.font = (validCaseId) ? searchBarBoldFont : searchBarFont;
-        searchBar.blur();
-        searchBar.visible = true;
         var recentValues = Ti.App.Properties.getList(recentPropName, []);
         recentValues.reverse();
         if (recentValues.length > 0) {

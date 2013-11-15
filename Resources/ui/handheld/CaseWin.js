@@ -1,6 +1,6 @@
 /**
- * Window for adding a new entry or editing an existing one.
- * @param {Number} entryId Id of entry to be edited. -1 corresponds to a new entry.
+ * Window for adding a new case or editing an existing one.
+ * @param {Number} caseId Id of case to be edited. -1 corresponds to a new case.
  */
 function CaseWin(caseId, caseName, parent) {
     var util = require('util');
@@ -20,7 +20,8 @@ function CaseWin(caseId, caseName, parent) {
             } else if (field.type == 'datetime'){
                 caseData[field.name] = new Date();                
             } else {
-                var recentPropName = util.makeRecentPropName(field.name);
+                var recentPropName = util.makeRecentPropName('cases',
+                                                             field.name);
                 var recentList =
                     Ti.App.Properties.getList(recentPropName, ['']);
                 caseData[field.name] = recentList.slice(-1)[0];
@@ -65,7 +66,7 @@ function CaseWin(caseId, caseName, parent) {
                 return;
             if (caseData[field.name] === '')
                 return;
-            var recentPropName = util.makeRecentPropName(field.name);
+            var recentPropName = util.makeRecentPropName('cases', field.name);
             var recentList = Ti.App.Properties.getList(recentPropName, []);
             if (recentList.indexOf(entryData[field.name]) != - 1){
                 recentList = recentList.filter(function(element, index, array) {
@@ -115,7 +116,7 @@ function CaseWin(caseId, caseName, parent) {
             textFormatter : textFormatter,
             dialogTitle : field.displayName,
             dialogViewConstructor : dialogViewConstructor,
-            recentPropName : util.makeRecentPropName(field.name)
+            recentPropName : util.makeRecentPropName('cases', field.name)
         });
         self.add(fieldView);
         fieldView.addEventListener('change', function(e) {

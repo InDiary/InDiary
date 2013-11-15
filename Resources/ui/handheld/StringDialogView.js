@@ -15,6 +15,7 @@ var StringDialogView = function(value, hintText){
     dialogView.add(toolbarView);
 
     var textField = toolbarView.addTextField('', hintText);
+    textField.softKeyboardOnFocus = Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS;
 
     var borderView = Ti.UI.createView({
         width : Titanium.UI.FILL,

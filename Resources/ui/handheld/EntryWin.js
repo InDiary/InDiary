@@ -18,7 +18,8 @@ function EntryWin(entryId) {
             } else if (field.type == 'datetime'){
                 entryData[field.name] = new Date();                
             } else {
-                var recentPropName = util.makeRecentPropName(field.name);
+                var recentPropName = util.makeRecentPropName('entries', 
+                                                             field.name);
                 var recentList =
                     Ti.App.Properties.getList(recentPropName, ['']);
                 entryData[field.name] = recentList.slice(-1)[0];
@@ -57,7 +58,7 @@ function EntryWin(entryId) {
                 return;
             if (entryData[field.name] === '')
                 return;
-            var recentPropName = util.makeRecentPropName(field.name);
+            var recentPropName = util.makeRecentPropName('entries', field.name);
             var recentList = Ti.App.Properties.getList(recentPropName, []);
             if (recentList.indexOf(entryData[field.name]) != - 1){
                 recentList = recentList.filter(function(element, index, array) {
@@ -114,7 +115,7 @@ function EntryWin(entryId) {
             textFormatter : textFormatter,
             dialogTitle : field.displayName,
             dialogViewConstructor : dialogViewConstructor,
-            recentPropName : util.makeRecentPropName(field.name)
+            recentPropName : util.makeRecentPropName('entries', field.name)
         });
         self.add(fieldView);
         fieldView.addEventListener('change', function(e) {

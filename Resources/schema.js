@@ -45,4 +45,12 @@ var caseNameField = {
 };
 exports.fields['cases'].push(caseNameField);
 
+var caseDatetimeField = {
+    name : 'datetime',
+    type : 'datetime',
+    displayName : L('caseDatetime'),
+    hintText : L('caseDatetimeDefault')
+};
+exports.fields['cases'].push(caseDatetimeField);
+
 exports.maxRecentFieldEntries = 5;

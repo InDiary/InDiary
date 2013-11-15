@@ -24,8 +24,9 @@ exports.quotify = function(string, quoteChar) {
  * Creates property name for recently used list from name of variable.
  * @param {String} name Name of variable.
  */
-exports.makeRecentPropName = function(name){
-    return 'recent' + exports.capitalise(name) + 'List';
+exports.makeRecentPropName = function(tableName, name){
+    return 'recent' + exports.capitalise(tableName) +
+            exports.capitalise(name) + 'List';
 };
 
 /** 

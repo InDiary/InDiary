@@ -101,7 +101,7 @@ function ToolbarView() {
 			hintText : hintText,
 			ellipsize : true
 		});
-		if (hideFirstKeyboard) {
+		if (typeof(hideFirstKeyboard) == 'boolean' && hideFirstKeyboard) {
 		    textField.justCreated = true;
 		    textField.addEventListener('focus', function f(e){
                 if (textField.justCreated) {
