@@ -13,9 +13,9 @@ function EntryWin(entryId) {
     var entryData = {};
     if (entryId == -1) {
         schema.fields['entries'].forEach(function(field) {
-            if (field.name == 'text'){
+            if (field.type == 'string'){
                 entryData[field.name] = '';
-            } else if (field.name == 'datetime'){
+            } else if (field.type == 'datetime'){
                 entryData[field.name] = new Date();                
             } else {
                 var recentPropName = util.makeRecentPropName(field.name);
@@ -53,9 +53,7 @@ function EntryWin(entryId) {
             db.editRow('entries', entryData);
         }
         schema.fields['entries'].forEach(function(field) {
-            if (field.type == 'string')
-                return;
-            if (field.name == 'text' || field.name == 'datetime')
+            if (field.type == 'string' || field.type == 'datetime')
                 return;
             if (entryData[field.name] === '')
                 return;

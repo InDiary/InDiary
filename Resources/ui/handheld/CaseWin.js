@@ -15,7 +15,16 @@ function CaseWin(caseId, caseName, parent) {
     var caseData = {};
     if (caseId == -1) {
         schema.fields['cases'].forEach(function(field) {
-            caseData[field.name] = '';
+            if (field.type == 'string'){
+                caseData[field.name] = '';
+            } else if (field.type == 'datetime'){
+                caseData[field.name] = new Date();                
+            } else {
+                var recentPropName = util.makeRecentPropName(field.name);
+                var recentList =
+                    Ti.App.Properties.getList(recentPropName, ['']);
+                caseData[field.name] = recentList.slice(-1)[0];
+            }
         });
     } else {
         caseData = db.selectRow('cases', caseId);
@@ -51,6 +60,24 @@ function CaseWin(caseId, caseName, parent) {
         if (typeof(parent) === 'object'){
             parent.fireEvent('update', {value: caseData});
         }
+        schema.fields['cases'].forEach(function(field) {
+            if (field.type == 'string' || field.type == 'datetime')
+                return;
+            if (caseData[field.name] === '')
+                return;
+            var recentPropName = util.makeRecentPropName(field.name);
+            var recentList = Ti.App.Properties.getList(recentPropName, []);
+            if (recentList.indexOf(entryData[field.name]) != - 1){
+                recentList = recentList.filter(function(element, index, array) {
+                    return (element != caseData[field.name]);
+                });
+            }
+            recentList.push(caseData[field.name]);
+            if (recentList.length > schema.maxRecentFieldEntries){
+                recentList = recentList.slice(-schema.maxRecentFieldEntries);
+            }
+            Ti.App.Properties.setList(recentPropName, recentList);
+        });
         self.close();
     });
 
