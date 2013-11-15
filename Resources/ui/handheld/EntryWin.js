@@ -53,6 +53,8 @@ function EntryWin(entryId) {
             db.editRow('entries', entryData);
         }
         schema.fields['entries'].forEach(function(field) {
+            if (field.type == 'string')
+                return;
             if (field.name == 'text' || field.name == 'datetime')
                 return;
             if (entryData[field.name] === '')
