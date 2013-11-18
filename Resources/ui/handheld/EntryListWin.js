@@ -43,7 +43,9 @@ function EntryListWin() {
 	var newButton = toolbarView.addButton('/images/new.png');
 	var searchButton = toolbarView.addButton('/images/search.png');
 	    
-	var table = Ti.UI.createTableView();
+    var table = Ti.UI.createTableView({
+        separatorColor : theme.borderColor
+    });
     table.searchCriteria = {
         orderBy: 'datetime',
         ascending: false,

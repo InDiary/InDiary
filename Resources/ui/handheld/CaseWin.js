@@ -89,6 +89,14 @@ function CaseWin(caseId, caseName, parent) {
     });
     self.add(borderView);
 
+    var scrollView = Ti.UI.createScrollView({
+        width : Ti.UI.FILL,
+        height : Ti.UI.FILL,
+        contentHeight : Ti.UI.SIZE,
+        layout : 'vertical'
+    });
+    self.add(scrollView);
+
     schema.fields['cases'].forEach(function(field) {
         var textFormatter = function(arg){return arg};
         var dialogViewConstructor;
@@ -118,7 +126,7 @@ function CaseWin(caseId, caseName, parent) {
             dialogViewConstructor : dialogViewConstructor,
             recentPropName : util.makeRecentPropName('cases', field.name)
         });
-        self.add(fieldView);
+        scrollView.add(fieldView);
         fieldView.addEventListener('change', function(e) {
             caseData[field.name] = e.value;
             if (field.name == 'name'){
@@ -126,20 +134,23 @@ function CaseWin(caseId, caseName, parent) {
                 nameLabel.fireEvent('change', {value : e.value});
             }
         });
-        self.add(Ti.UI.createView({
-            width : Titanium.UI.FILL,
+        scrollView.add(Ti.UI.createView({
+            width : Ti.UI.FILL,
             height : 1,
             backgroundColor : theme.borderColor
         }));
     });
 
-    var table = Ti.UI.createTableView();
+    var table = Ti.UI.createTableView({
+        width : Ti.UI.FILL,
+        separatorColor : theme.borderColor
+    });
     table.searchCriteria = {
         orderBy: 'datetime',
         ascending: false,
         caseId: caseId
     };
-	self.add(table);
+	scrollView.add(table);
 
     table.addEventListener('update', function(e) {
         var tableData = [];
@@ -152,14 +163,17 @@ function CaseWin(caseId, caseName, parent) {
             tableData.push(entryRow);
         });
         table.setData(tableData);
+        var entryRowHeight = (new DualLabelRow('', '').height).slice(0, -2);
+        table.height = Number(entryRowHeight) * tableData.length + 'dp';
     });
 	
     table.addEventListener('click', function(e) {
-        new EntryWin(table, e.rowData.entryId).open();
+        new EntryWin(e.rowData.entryId).open();
     });
 
     self.addEventListener('focus', function(e) {
         table.fireEvent('update');
+        scrollView.scrollTo(0,0);
     });
     
     return self;

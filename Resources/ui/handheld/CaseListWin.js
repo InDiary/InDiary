@@ -50,7 +50,9 @@ function CaseListWin() {
         new CaseWin(-1).open();    
 	});
     
-	var table = Ti.UI.createTableView();
+	var table = Ti.UI.createTableView({
+	    separatorColor : theme.borderColor
+	});
     table.searchCriteria = {
         orderBy: 'id',
         ascending: false

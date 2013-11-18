@@ -19,7 +19,7 @@ function EntryFieldView(vars) {
     
     var self = Ti.UI.createView({
         width : Ti.UI.FILL,
-        height : Ti.UI.SIZE,
+        height : '61dp',
         horizontalWrap : false,
         backgroundColor: theme.backgroundColor,
         backgroundSelectedColor: theme.backgroundSelectedColor,

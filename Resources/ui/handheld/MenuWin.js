@@ -34,7 +34,9 @@ function MenuWin() {
     });
     self.add(borderView);
 
-	var table = Ti.UI.createTableView();
+	var table = Ti.UI.createTableView({
+	    separatorColor: theme.borderColor
+	});
     self.add(table);
     
     table.setData([new DualLabelRow(L('entries'), '', {win: EntryListWin}),

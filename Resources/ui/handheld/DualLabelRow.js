@@ -10,7 +10,7 @@ function DualLabelRow(primaryText, secondaryText, otherProps, className) {
     var theme = require('ui/theme');
     
     var props = {
-        height : Ti.UI.SIZE,
+        height : '61dp',
         backgroundColor: theme.backgroundColor,
         backgroundSelectedColor: theme.backgroundSelectedColor,
         className : className
