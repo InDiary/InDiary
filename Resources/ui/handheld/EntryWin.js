@@ -75,11 +75,19 @@ function EntryWin(entryId) {
     });
 
     var borderView = Ti.UI.createView({
-        width : Titanium.UI.FILL,
+        width : Ti.UI.FILL,
         height : 2,
         backgroundColor : theme.borderColor
     });
     self.add(borderView);
+
+    var scrollView = Ti.UI.createScrollView({
+        width : Ti.UI.FILL,
+        height : Ti.UI.FILL,
+        contentHeight : Ti.UI.SIZE,
+        layout : 'vertical'
+    });
+    self.add(scrollView);
 
     schema.fields['entries'].forEach(function(field) {
         if (field.name == 'text')
@@ -117,11 +125,11 @@ function EntryWin(entryId) {
             dialogViewConstructor : dialogViewConstructor,
             recentPropName : util.makeRecentPropName('entries', field.name)
         });
-        self.add(fieldView);
+        scrollView.add(fieldView);
         fieldView.addEventListener('change', function(e) {
             entryData[field.name] = e.value;
         });
-        self.add(Ti.UI.createView({
+        scrollView.add(Ti.UI.createView({
             width : Titanium.UI.FILL,
             height : 1,
             backgroundColor : theme.borderColor
@@ -131,14 +139,14 @@ function EntryWin(entryId) {
     var entryTextArea = Ti.UI.createTextArea({
         top: '3dp',
         width : Titanium.UI.FILL,
-        height : Titanium.UI.FILL,
+        height : Titanium.UI.SIZE,
         borderWidth : 0,
         color : theme.primaryTextColor,
         backgroundColor : theme.backgroundColor,
         hintText: L('entryTextDefault'),
         value : entryData.text
     });
-    self.add(entryTextArea);
+    scrollView.add(entryTextArea);
     entryTextArea.addEventListener('change', function(e) {
         blurbLabel.text = e.value;
         blurbLabel.fireEvent('change', {value: e.value});
