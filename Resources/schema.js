@@ -63,4 +63,14 @@ var caseSummaryField = {
 };
 exports.fields['cases'].push(caseSummaryField);
 
+var caseEntriesField = {
+    name : 'entries',
+    type : 'list',
+    tableName : 'entries',
+    idField : 'caseId',
+    orderBy : 'datetime',
+    displayName : L('caseEntries')
+};
+exports.fields['cases'].push(caseEntriesField);
+
 exports.maxRecentFieldEntries = 5;

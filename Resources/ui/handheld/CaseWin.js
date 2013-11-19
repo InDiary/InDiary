@@ -18,7 +18,9 @@ function CaseWin(caseId, caseName, parent) {
             if (util.inArray(field.type, ['string', 'areaString'])){
                 caseData[field.name] = '';
             } else if (field.type == 'datetime'){
-                caseData[field.name] = new Date();                
+                caseData[field.name] = new Date();
+            } else if (field.type = 'list'){
+                return;
             } else {
                 var recentPropName = util.makeRecentPropName('cases',
                                                              field.name);
@@ -62,7 +64,8 @@ function CaseWin(caseId, caseName, parent) {
             parent.fireEvent('update', {value: caseData});
         }
         schema.fields['cases'].forEach(function(field) {
-            if (util.inArray(field.type, ['string', 'areaString', 'datetime']))
+            if (util.inArray(field.type, ['string', 'areaString',
+                                          'datetime', 'list']))
                 return;
             if (caseData[field.name] === '')
                 return;
@@ -124,6 +127,50 @@ function CaseWin(caseId, caseName, parent) {
             }));
             return;
         }
+        if (field.type == 'list'){
+            var table = Ti.UI.createTableView({
+                width : Ti.UI.FILL,
+                separatorColor : theme.borderColor
+            });
+            table.searchCriteria = {
+                orderBy: field.orderBy,
+                ascending: false
+            };
+            table.searchCriteria[field.idField] = caseId;
+            scrollView.add(table);
+            
+            scrollView.add(Ti.UI.createView({
+                width : Ti.UI.FILL,
+                height : 1,
+                backgroundColor : theme.borderColor
+            }));
+
+            table.addEventListener('update', function(e) {
+                var tableData = [];
+                var rowsData = db.selectRows(field.tableName,
+                                             table.searchCriteria);
+                rowsData.forEach(function(rowData) {
+                    var metadataText = util.entryDatetimeFormat(rowData.datetime) +
+                                       ', ' + rowData.location;
+                    var tableRow = new DualLabelRow(rowData.text, metadataText,
+                                                    {rowId: rowData.id});
+                    tableData.push(tableRow);
+                });
+                table.setData(tableData);
+                var tableRowHeight = (new DualLabelRow('', '').height).
+                                        slice(0, -2);
+                table.height = Number(tableRowHeight) * tableData.length + 'dp';
+            });
+            
+            table.addEventListener('click', function(e) {
+                new EntryWin(e.rowData.rowId).open();
+            });
+
+            self.addEventListener('focus', function(e) {
+                table.fireEvent('update');
+            });
+            return;
+        }
         var textFormatter = function(arg){return arg};
         var dialogViewConstructor;
         switch (field.name){
@@ -167,44 +214,7 @@ function CaseWin(caseId, caseName, parent) {
         }));
     });
 
-    var table = Ti.UI.createTableView({
-        width : Ti.UI.FILL,
-        separatorColor : theme.borderColor
-    });
-    table.searchCriteria = {
-        orderBy: 'datetime',
-        ascending: false,
-        caseId: caseId
-    };
-	scrollView.add(table);
-    
-    scrollView.add(Ti.UI.createView({
-        width : Ti.UI.FILL,
-        height : 1,
-        backgroundColor : theme.borderColor
-    }));
-
-    table.addEventListener('update', function(e) {
-        var tableData = [];
-        var entriesData = db.selectRows('entries', table.searchCriteria);
-        entriesData.forEach(function(entryData) {
-            var metadataText = util.entryDatetimeFormat(entryData.datetime) +
-                               ', ' + entryData.location;
-            var entryRow = new DualLabelRow(entryData.text, metadataText,
-                                            {entryId: entryData.id});
-            tableData.push(entryRow);
-        });
-        table.setData(tableData);
-        var entryRowHeight = (new DualLabelRow('', '').height).slice(0, -2);
-        table.height = Number(entryRowHeight) * tableData.length + 'dp';
-    });
-	
-    table.addEventListener('click', function(e) {
-        new EntryWin(e.rowData.entryId).open();
-    });
-
     self.addEventListener('focus', function(e) {
-        table.fireEvent('update');
         scrollView.scrollTo(0,0);
     });
     
