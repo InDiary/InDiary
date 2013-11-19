@@ -52,8 +52,6 @@ function DualLabelRow(primaryText, secondaryText, otherProps, className) {
         });
         self.add(secondaryLabel);
         primaryLabel.top = '7dp';
-    } else {
-        primaryLabel.center.y = '50%';
     }
     return self;
 };

@@ -2,14 +2,6 @@ exports.fields = {};
 
 exports.fields['entries'] = [];
 
-var entryTextField = {
-    name : 'text',
-    type : 'string',
-    displayName : L('entryText'),
-    hintText : L('entryTextDefault')
-};
-exports.fields['entries'].push(entryTextField);
-
 var entryDatetimeField = {
     name : 'datetime',
     type : 'datetime',
@@ -34,6 +26,14 @@ var entryCaseIdField = {
     hintText : L('caseIdDefault')
 };
 exports.fields['entries'].push(entryCaseIdField);
+
+var entryTextField = {
+    name : 'text',
+    type : 'string',
+    displayName : L('entryText'),
+    hintText : L('entryTextDefault')
+};
+exports.fields['entries'].push(entryTextField);
 
 exports.fields['cases'] = [];
 
