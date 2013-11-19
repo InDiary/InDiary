@@ -9,7 +9,7 @@
  * @property {Function} dialogViewConstructor Function that creates dialog view.
  * @property {String} recentPropName App property name of list of recently used entry information.
  */
-function EntryFieldView(vars) {
+function FieldView(vars) {
     var util = require('util');
     var theme = require('ui/theme');
     var DialogWin = require('DialogWin');
@@ -93,4 +93,4 @@ function EntryFieldView(vars) {
     return self;
 };
 
-module.exports = EntryFieldView;
+module.exports = FieldView;

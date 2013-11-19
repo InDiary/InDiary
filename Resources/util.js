@@ -3,6 +3,13 @@ var moment = require('moment');
 exports.searchTimeout = 300;
 
 /**
+ * Checks if value is in array.
+ */
+exports.inArray = function(value, array) {
+  return array.indexOf(value) > -1 ? true : false;
+}
+
+/**
  * Capitalises first letter of string.
  */
 exports.capitalise = function(string) {

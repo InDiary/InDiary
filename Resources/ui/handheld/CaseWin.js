@@ -9,13 +9,13 @@ function CaseWin(caseId, caseName, parent) {
     var theme = require('ui/theme');
 	var EntryWin = require('EntryWin');
     var ToolbarView = require('ToolbarView');
-    var EntryFieldView = require('EntryFieldView');    
+    var FieldView = require('FieldView');
     var DualLabelRow = require('DualLabelRow');
 
     var caseData = {};
     if (caseId == -1) {
         schema.fields['cases'].forEach(function(field) {
-            if (field.type == 'string'){
+            if (util.inArray(field.type, ['string', 'areaString'])){
                 caseData[field.name] = '';
             } else if (field.type == 'datetime'){
                 caseData[field.name] = new Date();                
@@ -62,7 +62,7 @@ function CaseWin(caseId, caseName, parent) {
             parent.fireEvent('update', {value: caseData});
         }
         schema.fields['cases'].forEach(function(field) {
-            if (field.type == 'string' || field.type == 'datetime')
+            if (util.inArray(field.type, ['string', 'areaString', 'datetime']))
                 return;
             if (caseData[field.name] === '')
                 return;
@@ -98,6 +98,32 @@ function CaseWin(caseId, caseName, parent) {
     self.add(scrollView);
 
     schema.fields['cases'].forEach(function(field) {
+        if (field.type == 'areaString'){
+            var textArea = Ti.UI.createTextArea({
+                top: '3dp',
+                width : Ti.UI.FILL,
+                height : Ti.UI.SIZE,
+                borderWidth : 0,
+                color : theme.primaryTextColor,
+                backgroundColor : theme.backgroundColor,
+                hintText: field.hintText,
+                value : caseData[field.name]
+            });
+            scrollView.add(textArea);
+            textArea.addEventListener('change', function(e) {
+                caseData[field.name] = e.value;
+                if (field.showInToolbar){
+                    nameLabel.text = e.value;
+                    nameLabel.fireEvent('change', {value: e.value});
+                }
+            });
+            scrollView.add(Ti.UI.createView({
+                width : Ti.UI.FILL,
+                height : 1,
+                backgroundColor : theme.borderColor
+            }));
+            return;
+        }
         var textFormatter = function(arg){return arg};
         var dialogViewConstructor;
         switch (field.name){
@@ -117,7 +143,7 @@ function CaseWin(caseId, caseName, parent) {
                 break;
         }
         
-        var fieldView = new EntryFieldView({
+        var fieldView = new FieldView({
             name : field.displayName,
             value : caseData[field.name],
             hintText : field.hintText,
@@ -129,7 +155,7 @@ function CaseWin(caseId, caseName, parent) {
         scrollView.add(fieldView);
         fieldView.addEventListener('change', function(e) {
             caseData[field.name] = e.value;
-            if (field.name == 'name'){
+            if (field.showInToolbar){
                 nameLabel.text = e.value;
                 nameLabel.fireEvent('change', {value : e.value});
             }
@@ -151,6 +177,12 @@ function CaseWin(caseId, caseName, parent) {
         caseId: caseId
     };
 	scrollView.add(table);
+    
+    scrollView.add(Ti.UI.createView({
+        width : Ti.UI.FILL,
+        height : 1,
+        backgroundColor : theme.borderColor
+    }));
 
     table.addEventListener('update', function(e) {
         var tableData = [];

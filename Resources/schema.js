@@ -29,9 +29,10 @@ exports.fields['entries'].push(entryCaseIdField);
 
 var entryTextField = {
     name : 'text',
-    type : 'string',
+    type : 'areaString',
     displayName : L('entryText'),
-    hintText : L('entryTextDefault')
+    hintText : L('entryTextDefault'),
+    showInToolbar : true
 };
 exports.fields['entries'].push(entryTextField);
 
@@ -41,7 +42,8 @@ var caseNameField = {
     name : 'name',
     type : 'string',
     displayName : L('caseName'),
-    hintText : L('caseNameDefault')
+    hintText : L('caseNameDefault'),
+    showInToolbar : true
 };
 exports.fields['cases'].push(caseNameField);
 
@@ -52,5 +54,13 @@ var caseDatetimeField = {
     hintText : L('caseDatetimeDefault')
 };
 exports.fields['cases'].push(caseDatetimeField);
+
+var caseSummaryField = {
+    name : 'summary',
+    type : 'areaString',
+    displayName : L('caseSummary'),
+    hintText : L('caseSummaryDefault')
+};
+exports.fields['cases'].push(caseSummaryField);
 
 exports.maxRecentFieldEntries = 5;

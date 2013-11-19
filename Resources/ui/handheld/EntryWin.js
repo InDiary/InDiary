@@ -8,12 +8,12 @@ function EntryWin(entryId) {
     var db = require('db');
     var theme = require('ui/theme');
     var ToolbarView = require('ToolbarView');
-    var EntryFieldView = require('EntryFieldView');
+    var FieldView = require('FieldView');
 
     var entryData = {};
     if (entryId == -1) {
         schema.fields['entries'].forEach(function(field) {
-            if (field.type == 'string'){
+            if (util.inArray(field.type, ['string', 'areaString'])){
                 entryData[field.name] = '';
             } else if (field.type == 'datetime'){
                 entryData[field.name] = new Date();                
@@ -54,9 +54,7 @@ function EntryWin(entryId) {
             db.editRow('entries', entryData);
         }
         schema.fields['entries'].forEach(function(field) {
-            if (field.type == 'string' || field.type == 'datetime')
-                return;
-            if (entryData[field.name] === '')
+            if (util.inArray(field.type, ['string', 'areaString', 'datetime']))
                 return;
             var recentPropName = util.makeRecentPropName('entries', field.name);
             var recentList = Ti.App.Properties.getList(recentPropName, []);
@@ -90,8 +88,32 @@ function EntryWin(entryId) {
     self.add(scrollView);
 
     schema.fields['entries'].forEach(function(field) {
-        if (field.name == 'text')
+        if (field.type == 'areaString'){
+            var textArea = Ti.UI.createTextArea({
+                top: '3dp',
+                width : Titanium.UI.FILL,
+                height : Titanium.UI.SIZE,
+                borderWidth : 0,
+                color : theme.primaryTextColor,
+                backgroundColor : theme.backgroundColor,
+                hintText: field.hintText,
+                value : entryData[field.name]
+            });
+            scrollView.add(textArea);
+            textArea.addEventListener('change', function(e) {
+                entryData[field.name] = e.value;
+                if (field.showInToolbar){
+                    blurbLabel.text = e.value;
+                    blurbLabel.fireEvent('change', {value: e.value});
+                }
+            });
+            scrollView.add(Ti.UI.createView({
+                width : Ti.UI.FILL,
+                height : 1,
+                backgroundColor : theme.borderColor
+            }));            
             return;
+        }
         var textFormatter = function(arg){return arg};
         var dialogViewConstructor;
         switch (field.name){
@@ -116,7 +138,7 @@ function EntryWin(entryId) {
                 }
                 break;
         }
-        var fieldView = new EntryFieldView({
+        var fieldView = new FieldView({
             name : field.displayName,
             value : entryData[field.name],
             hintText : field.hintText,
@@ -128,29 +150,16 @@ function EntryWin(entryId) {
         scrollView.add(fieldView);
         fieldView.addEventListener('change', function(e) {
             entryData[field.name] = e.value;
+            if (field.showInToolbar){
+                blurbLabel.text = e.value;
+                blurbLabel.fireEvent('change', {value: e.value});
+            }
         });
         scrollView.add(Ti.UI.createView({
             width : Titanium.UI.FILL,
             height : 1,
             backgroundColor : theme.borderColor
         }));
-    });
-
-    var entryTextArea = Ti.UI.createTextArea({
-        top: '3dp',
-        width : Titanium.UI.FILL,
-        height : Titanium.UI.SIZE,
-        borderWidth : 0,
-        color : theme.primaryTextColor,
-        backgroundColor : theme.backgroundColor,
-        hintText: L('entryTextDefault'),
-        value : entryData.text
-    });
-    scrollView.add(entryTextArea);
-    entryTextArea.addEventListener('change', function(e) {
-        blurbLabel.text = e.value;
-        blurbLabel.fireEvent('change', {value: e.value});
-        entryData.text = e.value;
     });
 
     return self;
