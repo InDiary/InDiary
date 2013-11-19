@@ -20,7 +20,6 @@ function DualLabelRow(primaryText, secondaryText, otherProps, className) {
     var self = Ti.UI.createTableViewRow(props);
     
     var primaryLabel = Ti.UI.createLabel({
-        top: '7dp',
         left: '11dp',
         right: '11dp',
         width: Ti.UI.FILL,
@@ -35,23 +34,27 @@ function DualLabelRow(primaryText, secondaryText, otherProps, className) {
     });
     self.add(primaryLabel);
     
-    var secondaryLabel = Ti.UI.createLabel({
-        top: '37dp',
-        bottom: '5dp',
-        left: '11dp',
-        right: '11dp',
-        width: Ti.UI.FILL,
-        text: secondaryText,
-        color: theme.secondaryTextColor,
-        font: {
-            fontSize: theme.secondaryFontSize
-        },
-        wordWrap: false,
-        ellipsize: true,
-        touchEnabled: false
-    });
-    self.add(secondaryLabel);
-    
+    if (typeof(secondaryText) === 'string' && secondaryText.length > 0){
+        var secondaryLabel = Ti.UI.createLabel({
+            top: '37dp',
+            bottom: '5dp',
+            left: '11dp',
+            right: '11dp',
+            width: Ti.UI.FILL,
+            text: secondaryText,
+            color: theme.secondaryTextColor,
+            font: {
+                fontSize: theme.secondaryFontSize
+            },
+            wordWrap: false,
+            ellipsize: true,
+            touchEnabled: false
+        });
+        self.add(secondaryLabel);
+        primaryLabel.top = '7dp';
+    } else {
+        primaryLabel.center.y = '50%';
+    }
     return self;
 };
 
