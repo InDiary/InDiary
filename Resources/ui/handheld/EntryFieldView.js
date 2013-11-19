@@ -53,7 +53,7 @@ function EntryFieldView(vars) {
         bottom: '5dp',
         left : '11dp',
         right: '11dp',
-        color : theme.secondaryFontColor,
+        color : theme.secondaryTextColor,
         textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
         font : {
             fontSize : theme.secondaryFontSize
