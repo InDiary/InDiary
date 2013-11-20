@@ -24,10 +24,11 @@ exports.deleteDatabase = function(){
 };
 
 exports.addRow = function(tableName, rowData) {
-	var db = Ti.Database.open(DATABASE_NAME);
     var fieldNames = [];
     var fieldValues = [];
     schema.fields[tableName].forEach(function(field) {
+        if (field.type == 'list')
+            return;
         fieldNames.push(field.name);
         var value = rowData[field.name];
         if (field.type == 'datetime'){
@@ -38,6 +39,7 @@ exports.addRow = function(tableName, rowData) {
         }       
         fieldValues.push(value);
     });
+	var db = Ti.Database.open(DATABASE_NAME);
 	db.execute('INSERT INTO ' + tableName + ' (' +
                fieldNames.join(', ') + ') VALUES (' + 
                fieldValues.join(', ') + ')');
@@ -45,9 +47,10 @@ exports.addRow = function(tableName, rowData) {
 };
 
 exports.editRow = function(tableName, rowData) {
-    var db = Ti.Database.open(DATABASE_NAME);
     var fieldNamesAndValues = [];
     schema.fields[tableName].forEach(function(field) {
+        if (field.type == 'list')
+            return;
         var value = rowData[field.name];
         if (field.type == 'datetime'){
             value = value.toISOString();
@@ -57,6 +60,7 @@ exports.editRow = function(tableName, rowData) {
         }
         fieldNamesAndValues.push(field.name + '=' + value);
     });
+    var db = Ti.Database.open(DATABASE_NAME);
     db.execute('UPDATE ' + tableName + ' SET ' +
                fieldNamesAndValues.join(', ') + ' WHERE id=?', rowData.id);
     db.close();
@@ -68,9 +72,11 @@ exports.selectRow = function(tableName, id) {
     db.close();
     if (rows.isValidRow()) {
         var rowData = {
-            id : rows.fieldByName('id')
+            id : id
         };
         schema.fields[tableName].forEach(function(field) {
+            if (field.type == 'list')
+                return;
             var value = rows.fieldByName(field.name);
             if (field.type == 'datetime') {
                 rowData[field.name] = new Date(value); 
@@ -87,7 +93,7 @@ exports.selectRow = function(tableName, id) {
 exports.selectRows = function(tableName, searchCriteria) {
     var selectRowsQueryText = function(tableName, searchCriteria, columnName){
         columnName = (typeof(columnName) === 'undefined') ?
-            '*' : columnName; 
+            '*' : columnName;
         var orderBy = (typeof(searchCriteria.orderBy) === 'undefined') ? 
             'id' : searchCriteria.orderBy;
         var ascending = (typeof(searchCriteria.ascending) === 'undefined') ? 
@@ -102,6 +108,8 @@ exports.selectRows = function(tableName, searchCriteria) {
         var inFieldsAndValues = [];
         
         schema.fields[tableName].forEach(function(field) {
+            if (field.type == 'list')
+                return;
             var value = searchCriteria[field.name];
             if (value === '')
                 delete searchCriteria[field.name];
@@ -164,6 +172,8 @@ exports.selectRows = function(tableName, searchCriteria) {
             id : rows.fieldByName('id')
 		};
         schema.fields[tableName].forEach(function(field) {
+            if (field.type == 'list')
+                return;
             var value = rows.fieldByName(field.name);
             if (field.type == 'datetime') {
                 rowData[field.name] = new Date(value); 

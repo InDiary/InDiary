@@ -4,9 +4,10 @@
 function CaseListWin() {
 	var util = require('util');
     var theme = require('ui/theme');
+    var schema = require('schema');
 	var db = require('db');
 	var MenuWin = require('MenuWin');
-	var CaseWin = require('CaseWin');
+	var DataWin = require('DataWin');
 	var ToolbarView = require('ToolbarView');
     var DualLabelRow = require('DualLabelRow');
 
@@ -47,7 +48,7 @@ function CaseListWin() {
 	});
 	
 	newButton.addEventListener('click', function() {
-        new CaseWin(-1).open();    
+        new DataWin('cases', -1).open();    
 	});
     
 	var table = Ti.UI.createTableView({
@@ -73,7 +74,11 @@ function CaseListWin() {
         var tableData = [];
         var casesData = db.selectRows('cases', table.searchCriteria);
         casesData.forEach(function(caseData) {
-            var caseRow = new DualLabelRow(caseData.name, '',
+            var primaryText = schema.metadata['cases'].
+                rowPrimaryText(caseData);
+            var secondaryText = schema.metadata['cases'].
+                rowSecondaryText(caseData);        
+            var caseRow = new DualLabelRow(primaryText, secondaryText,
                                            {caseId: caseData.id});
             tableData.push(caseRow);
         });
@@ -81,7 +86,7 @@ function CaseListWin() {
     });
 	
     table.addEventListener('click', function(e) {
-        new CaseWin(e.rowData.caseId).open();
+        new DataWin('cases', e.rowData.caseId).open();
     });
 
     self.addEventListener('focus', function(e) {

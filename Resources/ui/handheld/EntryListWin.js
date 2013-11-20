@@ -4,9 +4,10 @@
 function EntryListWin() {
 	var util = require('util');
 	var db = require('db');
+    var schema = require('schema');
     var theme = require('ui/theme');
 	var MenuWin = require('MenuWin');
-	var EntryWin = require('EntryWin');
+	var DataWin = require('DataWin');
 	var ToolbarView = require('ToolbarView');
 	var EntrySearchView = require('EntrySearchView');
     var DualLabelRow = require('DualLabelRow');
@@ -64,7 +65,7 @@ function EntryListWin() {
 	});
     
 	newButton.addEventListener('click', function() {
-		new EntryWin(-1).open();
+		new DataWin('entries', -1).open();
 	});
 
 	searchButton.addEventListener('click', function() {
@@ -84,9 +85,11 @@ function EntryListWin() {
         var tableData = [];
         var entriesData = db.selectRows('entries', table.searchCriteria);
         entriesData.forEach(function(entryData) {
-            var metadataText = util.entryDatetimeFormat(entryData.datetime) +
-                               ', ' + entryData.location;
-            var entryRow = new DualLabelRow(entryData.text, metadataText,
+            var primaryText = schema.metadata['entries'].
+                    rowPrimaryText(entryData);
+            var secondaryText = schema.metadata['entries'].
+                    rowSecondaryText(entryData);
+            var entryRow = new DualLabelRow(primaryText, secondaryText,
                                             {entryId: entryData.id});
             tableData.push(entryRow);
         });
@@ -94,7 +97,7 @@ function EntryListWin() {
     });
 	
     table.addEventListener('click', function(e) {
-        new EntryWin(e.rowData.entryId).open();
+        new DataWin('entries', e.rowData.entryId).open();
     });
 
     self.addEventListener('focus', function(e) {

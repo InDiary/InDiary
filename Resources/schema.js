@@ -1,3 +1,5 @@
+var util = require('util');
+
 exports.fields = {};
 
 exports.fields['entries'] = [];
@@ -32,7 +34,8 @@ var entryTextField = {
     type : 'areaString',
     displayName : L('entryText'),
     hintText : L('entryTextDefault'),
-    showInToolbar : true
+    showInToolbar : true,
+    toolbarHintText : L('newEntry')
 };
 exports.fields['entries'].push(entryTextField);
 
@@ -43,7 +46,8 @@ var caseNameField = {
     type : 'string',
     displayName : L('caseName'),
     hintText : L('caseNameDefault'),
-    showInToolbar : true
+    showInToolbar : true,
+    toolbarHintText : L('newCase')
 };
 exports.fields['cases'].push(caseNameField);
 
@@ -72,5 +76,26 @@ var caseEntriesField = {
     displayName : L('caseEntries')
 };
 exports.fields['cases'].push(caseEntriesField);
+
+exports.metadata = {}
+
+exports.metadata['entries'] = {
+    rowPrimaryText : function(data){
+        return data.text;
+    },
+    rowSecondaryText : function(data){
+        return util.datetimeFormat(data.datetime) +
+                                       ', ' + data.location
+    }
+}
+
+exports.metadata['cases'] = {
+    rowPrimaryText : function(data){
+        return data.name;
+    },
+    rowSecondaryText : function(data){
+        return data.summary;
+    }
+}
 
 exports.maxRecentFieldEntries = 5;

@@ -4,7 +4,7 @@ var CasesDialogView = function(value, hintText, recentPropName){
     var theme = require('ui/theme');
     var ToolbarView = require('ToolbarView');
     var DynamicTableView = require('DynamicTableView');
-    var CaseWin = require('CaseWin');
+    var DataWin = require('DataWin');
     
     var dialogView = Ti.UI.createView({
         height : Ti.UI.SIZE,
@@ -28,7 +28,8 @@ var CasesDialogView = function(value, hintText, recentPropName){
     var newButton = toolbarView.addButton('/images/new.png');
 	    
     newButton.addEventListener('click', function() {
-        new CaseWin(-1, searchBar.value, dialogView).open();    
+        new DataWin('cases', -1, 
+                    {name : searchBar.value}, dialogView).open();    
 	});
     
     var borderView = Ti.UI.createView({

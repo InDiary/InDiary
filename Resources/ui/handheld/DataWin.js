@@ -1,38 +1,41 @@
 /**
- * Window for adding a new case or editing an existing one.
- * @param {Number} caseId Id of case to be edited. -1 corresponds to a new case.
+ * Window for adding a new data entry or editing an existing one.
+ * @param {Number} id Id of row to be edited. -1 corresponds to a new row.
  */
-function CaseWin(caseId, caseName, parent) {
+function DataWin(tableName, id, data, parent) {
     var util = require('util');
     var schema = require('schema');
     var db = require('db');
     var theme = require('ui/theme');
-	var EntryWin = require('EntryWin');
     var ToolbarView = require('ToolbarView');
     var FieldView = require('FieldView');
     var DualLabelRow = require('DualLabelRow');
 
-    var caseData = {};
-    if (caseId == -1) {
-        schema.fields['cases'].forEach(function(field) {
-            if (util.inArray(field.type, ['string', 'areaString'])){
-                caseData[field.name] = '';
+    if (typeof(data) === 'undefined'){
+        data = {};
+    }
+    if (id == -1) {
+        schema.fields[tableName].forEach(function(field) {
+            if (typeof(data[field.name]) != 'undefined'){
+                return;
+            } else if (util.inArray(field.type, ['string', 'areaString'])){
+                data[field.name] = '';
             } else if (field.type == 'datetime'){
-                caseData[field.name] = new Date();
-            } else if (field.type = 'list'){
+                data[field.name] = new Date();
+            } else if (field.type == 'list'){
                 return;
             } else {
-                var recentPropName = util.makeRecentPropName('cases',
+                var recentPropName = util.makeRecentPropName(tableName,
                                                              field.name);
                 var recentList =
                     Ti.App.Properties.getList(recentPropName, ['']);
-                caseData[field.name] = recentList.slice(-1)[0];
+                data[field.name] = recentList.slice(-1)[0];
             }
         });
     } else {
-        caseData = db.selectRow('cases', caseId);
+        data = db.selectRow(tableName, id);
     }
-
+    
     var self = Ti.UI.createWindow({
         navBarHidden: true,
         backgroundColor : theme.backgroundColor,
@@ -42,41 +45,47 @@ function CaseWin(caseId, caseName, parent) {
     var toolbarView = new ToolbarView();
     self.add(toolbarView);
 
+    var labelField = '';
+    var labelHintText = '';
+    schema.fields[tableName].forEach(function(field) {
+        if (field.showInToolbar){
+            labelField = field.name;
+            labelHintText = field.toolbarHintText;
+        }
+    });
+    
     var barIcon = toolbarView.addBarIcon('/images/appicon.png', 
                                          '/images/up.png');    
-	var nameLabel = toolbarView.addLabel(caseData.name, L('newCase'));
+	var nameLabel = toolbarView.addLabel(data[labelField], labelHintText);
 	var saveButton = toolbarView.addButton('/images/save.png');
 
     barIcon.addEventListener('click', function(e) {
         self.close();
     });
-
-    if (typeof(caseName) == 'string' && caseId == -1)
-        caseData['name'] = caseName;
     
     saveButton.addEventListener('click', function(e) {
-        if (caseId == -1) {
-            db.addRow('cases', caseData);
+        if (id == -1) {
+            db.addRow(tableName, data);
         } else {
-            db.editRow('cases', caseData);
+            db.editRow(tableName, data);
         }
         if (typeof(parent) === 'object'){
-            parent.fireEvent('update', {value: caseData});
+            parent.fireEvent('update', {value: data});
         }
-        schema.fields['cases'].forEach(function(field) {
+        schema.fields[tableName].forEach(function(field) {
             if (util.inArray(field.type, ['string', 'areaString',
                                           'datetime', 'list']))
                 return;
-            if (caseData[field.name] === '')
+            if (data[field.name] === '')
                 return;
-            var recentPropName = util.makeRecentPropName('cases', field.name);
+            var recentPropName = util.makeRecentPropName(tableName, field.name);
             var recentList = Ti.App.Properties.getList(recentPropName, []);
-            if (recentList.indexOf(entryData[field.name]) != - 1){
+            if (recentList.indexOf(data[field.name]) != - 1){
                 recentList = recentList.filter(function(element, index, array) {
-                    return (element != caseData[field.name]);
+                    return (element != data[field.name]);
                 });
             }
-            recentList.push(caseData[field.name]);
+            recentList.push(data[field.name]);
             if (recentList.length > schema.maxRecentFieldEntries){
                 recentList = recentList.slice(-schema.maxRecentFieldEntries);
             }
@@ -100,21 +109,21 @@ function CaseWin(caseId, caseName, parent) {
     });
     self.add(scrollView);
 
-    schema.fields['cases'].forEach(function(field) {
+    schema.fields[tableName].forEach(function(field) {
         if (field.type == 'areaString'){
             var textArea = Ti.UI.createTextArea({
-                top: '3dp',
+                top : '3dp',
                 width : Ti.UI.FILL,
                 height : Ti.UI.SIZE,
                 borderWidth : 0,
                 color : theme.primaryTextColor,
                 backgroundColor : theme.backgroundColor,
                 hintText: field.hintText,
-                value : caseData[field.name]
+                value : data[field.name]
             });
             scrollView.add(textArea);
             textArea.addEventListener('change', function(e) {
-                caseData[field.name] = e.value;
+                data[field.name] = e.value;
                 if (field.showInToolbar){
                     nameLabel.text = e.value;
                     nameLabel.fireEvent('change', {value: e.value});
@@ -136,7 +145,7 @@ function CaseWin(caseId, caseName, parent) {
                 orderBy: field.orderBy,
                 ascending: false
             };
-            table.searchCriteria[field.idField] = caseId;
+            table.searchCriteria[field.idField] = id;
             scrollView.add(table);
             
             scrollView.add(Ti.UI.createView({
@@ -150,9 +159,11 @@ function CaseWin(caseId, caseName, parent) {
                 var rowsData = db.selectRows(field.tableName,
                                              table.searchCriteria);
                 rowsData.forEach(function(rowData) {
-                    var metadataText = util.entryDatetimeFormat(rowData.datetime) +
-                                       ', ' + rowData.location;
-                    var tableRow = new DualLabelRow(rowData.text, metadataText,
+                    var primaryText = schema.metadata[field.tableName].
+                        rowPrimaryText(rowData);
+                    var secondaryText = schema.metadata[field.tableName].
+                        rowSecondaryText(rowData);
+                    var tableRow = new DualLabelRow(primaryText, secondaryText,
                                                     {rowId: rowData.id});
                     tableData.push(tableRow);
                 });
@@ -163,7 +174,7 @@ function CaseWin(caseId, caseName, parent) {
             });
             
             table.addEventListener('click', function(e) {
-                new EntryWin(e.rowData.rowId).open();
+                new DataWin(field.tableName, e.rowData.rowId).open();
             });
 
             self.addEventListener('focus', function(e) {
@@ -173,35 +184,41 @@ function CaseWin(caseId, caseName, parent) {
         }
         var textFormatter = function(arg){return arg};
         var dialogViewConstructor;
-        switch (field.name){
-            default:
-                switch (field.type){
-                    case 'datetime':
-                        textFormatter = util.entryDatetimeFormat;
-                        dialogViewConstructor = require('DatetimeDialogView');
-                        break;
-                    case 'location':
-                        dialogViewConstructor = require('LocationDialogView');
-                        break;
-                    case 'string':
-                        dialogViewConstructor = require('StringDialogView');
+        switch (field.type){
+            case 'datetime':
+                textFormatter = util.datetimeFormat;
+                dialogViewConstructor = require('DatetimeDialogView');
+                break;
+            case 'location':
+                dialogViewConstructor = require('LocationDialogView');
+                break;
+            case 'string':
+                dialogViewConstructor = require('StringDialogView');
+                break;
+            case 'id':
+                textFormatter = function(id){
+                    return schema.metadata[field.tableName]
+                        .rowPrimaryText(db.selectRow(field.tableName, id));
+                };
+                switch (field.tableName){
+                    case 'cases':
+                        dialogViewConstructor = require('CasesDialogView');
                         break;
                 }
                 break;
         }
-        
         var fieldView = new FieldView({
             name : field.displayName,
-            value : caseData[field.name],
+            value : data[field.name],
             hintText : field.hintText,
             textFormatter : textFormatter,
             dialogTitle : field.displayName,
             dialogViewConstructor : dialogViewConstructor,
-            recentPropName : util.makeRecentPropName('cases', field.name)
+            recentPropName : util.makeRecentPropName(tableName, field.name)
         });
         scrollView.add(fieldView);
         fieldView.addEventListener('change', function(e) {
-            caseData[field.name] = e.value;
+            data[field.name] = e.value;
             if (field.showInToolbar){
                 nameLabel.text = e.value;
                 nameLabel.fireEvent('change', {value : e.value});
@@ -221,4 +238,4 @@ function CaseWin(caseId, caseName, parent) {
     return self;
 };
 
-module.exports = CaseWin;
+module.exports = DataWin;

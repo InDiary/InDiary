@@ -41,7 +41,7 @@ exports.makeRecentPropName = function(tableName, name){
  * @param {Date} datetime
  * @returs {String} Formatted date and time.
  */
-exports.entryDatetimeFormat = function(datetime) {
+exports.datetimeFormat = function(datetime) {
     datetime = moment(datetime.toString());
     var formattedTime = datetime.format('HHmm');
     formattedTime += 'hrs';

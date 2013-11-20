@@ -22,7 +22,7 @@ function DatetimeRangeView(vars) {
     var fromFieldView = new FieldView({
         name : L('start') + ' ' + vars.name,
         value : self.value[0],
-        textFormatter : util.entryDatetimeFormat,
+        textFormatter : util.datetimeFormat,
         dialogTitle : vars.name,
         dialogViewConstructor : DatetimeDialogView
     });
@@ -47,7 +47,7 @@ function DatetimeRangeView(vars) {
         type : 'datetime',
         name : L('end') + ' ' + vars.name,
         value : self.value[1],
-        textFormatter : util.entryDatetimeFormat,
+        textFormatter : util.datetimeFormat,
         dialogTitle : vars.name,
         dialogViewConstructor : DatetimeDialogView
     });
