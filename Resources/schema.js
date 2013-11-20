@@ -25,7 +25,7 @@ var entryCaseIdField = {
     type : 'id',
     tableName: 'cases',
     displayName : L('caseId'),
-    hintText : L('caseIdDefault')
+    hintText : L('caseIdDefault'),
 };
 exports.fields['entries'].push(entryCaseIdField);
 
@@ -95,6 +95,11 @@ exports.metadata['cases'] = {
     },
     rowSecondaryText : function(data){
         return data.summary;
+    },
+    defaultData : {
+        name : L('misc'),
+        datetime : new Date(),
+        summary : L('miscSummary')
     }
 }
 

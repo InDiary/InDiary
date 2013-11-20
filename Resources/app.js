@@ -1,5 +1,5 @@
-if (Ti.version < 1.8 ) {
-	alert('Titanium Mobile SDK 1.8 or later required');
+if (Ti.version < 3.0 ) {
+	alert('Titanium Mobile SDK 3.0 or later required');
 }
 
 (function() {

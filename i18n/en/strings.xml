@@ -37,4 +37,6 @@
     <string name="search">Search</string>
     <string name="start">Start</string>
     <string name="end">End</string>
+    <string name="misc">Miscellaneous</string>
+    <string name="miscSummary">Uncategorized entries</string>    
 </resources>

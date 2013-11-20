@@ -30,6 +30,9 @@ function DataWin(tableName, id, data, parent) {
                 var recentList =
                     Ti.App.Properties.getList(recentPropName, ['']);
                 data[field.name] = recentList.slice(-1)[0];
+                if (field.type == 'id' && typeof(data[field.name]) != 'number'){
+                    data[field.name] = 1;
+                }
             }
         });
     } else {

@@ -14,6 +14,14 @@ exports.createDatabase = function(){
                    '(id INTEGER PRIMARY KEY, ' + 
                    fieldNameAndTypes.join(', ') + ')');
     });
+    ['entries', 'cases'].forEach(function(tableName) {
+        schema.fields[tableName].forEach(function(field){
+            if (field.type == 'id'){
+                exports.addRow(field.tableName,
+                               schema.metadata[field.tableName].defaultData);
+            }
+        });
+    });
 	db.close();
 };
 
