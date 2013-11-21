@@ -17,6 +17,10 @@ exports.createDatabase = function(){
     ['entries', 'cases'].forEach(function(tableName) {
         schema.fields[tableName].forEach(function(field){
             if (field.type == 'id'){
+                var numRows = db.execute('SELECT COUNT(*) FROM ' + 
+                                         field.tableName).field(0);
+                if (numRows > 0)
+                    return;
                 exports.addRow(field.tableName,
                                schema.metadata[field.tableName].defaultData);
             }

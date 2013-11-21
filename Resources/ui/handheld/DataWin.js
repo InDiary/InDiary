@@ -115,12 +115,15 @@ function DataWin(tableName, id, data, parent) {
     schema.fields[tableName].forEach(function(field) {
         if (field.type == 'areaString'){
             var textArea = Ti.UI.createTextArea({
-                top : '3dp',
+                top : '0dp',
                 width : Ti.UI.FILL,
                 height : Ti.UI.SIZE,
                 borderWidth : 0,
                 color : theme.primaryTextColor,
-                backgroundColor : theme.backgroundColor,
+                font : {
+                    fontSize : theme.primaryFontSize
+                },
+                backgroundColor : 'transparent',
                 hintText: field.hintText,
                 value : data[field.name]
             });
@@ -132,7 +135,23 @@ function DataWin(tableName, id, data, parent) {
                     nameLabel.fireEvent('change', {value: e.value});
                 }
             });
+            var textAreaLabel = Ti.UI.createLabel({
+                top : '-8dp',
+                left : '11dp',
+                right: '11dp',
+                color : theme.secondaryTextColor,
+                textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
+                font : {
+                    fontSize : theme.secondaryFontSize
+                },
+                text : field.displayName,
+                wordWrap: false,
+                touchEnabled: false,
+                ellipsize : true
+            });
+            scrollView.add(textAreaLabel);
             scrollView.add(Ti.UI.createView({
+                top : '5dp',
                 width : Ti.UI.FILL,
                 height : 1,
                 backgroundColor : theme.borderColor
@@ -151,11 +170,12 @@ function DataWin(tableName, id, data, parent) {
             table.searchCriteria[field.idField] = id;
             scrollView.add(table);
             
-            scrollView.add(Ti.UI.createView({
+            var tableBorderView = Ti.UI.createView({
                 width : Ti.UI.FILL,
                 height : 1,
                 backgroundColor : theme.borderColor
-            }));
+            });
+            scrollView.add(tableBorderView);
 
             table.addEventListener('update', function(e) {
                 var tableData = [];
@@ -174,6 +194,13 @@ function DataWin(tableName, id, data, parent) {
                 var tableRowHeight = (new DualLabelRow('', '').height).
                                         slice(0, -2);
                 table.height = Number(tableRowHeight) * tableData.length + 'dp';
+                if (tableData.length == 0){
+                    table.visible = false;
+                    tableBorderView.visible = false;
+                } else {
+                    table.visible = true;
+                    tableBorderView.visible = true;                
+                }
             });
             
             table.addEventListener('click', function(e) {
