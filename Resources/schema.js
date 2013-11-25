@@ -35,7 +35,8 @@ var entryTextField = {
     displayName : L('entryText'),
     hintText : L('entryTextDefault'),
     showInToolbar : true,
-    toolbarHintText : L('newEntry')
+    toolbarHintText : L('newEntry'),
+    searchHintText : L('searchEntries')
 };
 exports.fields['entries'].push(entryTextField);
 

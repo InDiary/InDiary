@@ -9,7 +9,7 @@ function EntryListWin() {
 	var MenuWin = require('MenuWin');
 	var DataWin = require('DataWin');
 	var ToolbarView = require('ToolbarView');
-	var EntrySearchView = require('EntrySearchView');
+	var DataSearchView = require('DataSearchView');
     var DualLabelRow = require('DualLabelRow');
 
 	var self = Ti.UI.createWindow({
@@ -54,8 +54,8 @@ function EntryListWin() {
     };
 	mainView.add(table);
 
-	var entrySearchView = new EntrySearchView(table);
-	self.add(entrySearchView);
+	var dataSearchView = new DataSearchView('entries', table);
+	self.add(dataSearchView);
 
 	barIcon.addEventListener('click', function() {
         new MenuWin().open({
@@ -69,7 +69,7 @@ function EntryListWin() {
 	});
 
 	searchButton.addEventListener('click', function() {
-		entrySearchView.fireEvent('open');
+		dataSearchView.fireEvent('open');
     });
     
     var searchTimer = 0;
