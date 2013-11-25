@@ -27,7 +27,8 @@
 	<string name="caseDatetime">Date &amp; Time Commenced</string>
 	<string name="caseDatetimeDefault">Enter date &amp; time</string>
 	<string name="caseSummary">Case Summary</string>
-	<string name="caseSummaryDefault">Enter case summary here</string>    
+	<string name="caseSummaryDefault">Enter case summary here</string>
+	<string name="caseEntries">Entries</string> 
     <string name="locationDisabled">Location services not enabled.</string>
     <string name="locationError">Location(s) not available</string>
     <string name="recent">Recent</string>

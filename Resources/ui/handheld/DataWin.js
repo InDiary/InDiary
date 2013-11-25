@@ -113,6 +113,13 @@ function DataWin(tableName, id, data, parent) {
     self.add(scrollView);
 
     schema.fields[tableName].forEach(function(field) {
+        var containerView = Ti.UI.createView({
+            left : '7.5dp',
+            right : '7.5dp',
+            height : Ti.UI.SIZE,
+            layout : 'vertical'
+        });
+        scrollView.add(containerView);
         if (field.type == 'areaString'){
             var textArea = Ti.UI.createTextArea({
                 top : '0dp',
@@ -127,7 +134,7 @@ function DataWin(tableName, id, data, parent) {
                 hintText: field.hintText,
                 value : data[field.name]
             });
-            scrollView.add(textArea);
+            containerView.add(textArea);
             textArea.addEventListener('change', function(e) {
                 data[field.name] = e.value;
                 if (field.showInToolbar){
@@ -149,8 +156,8 @@ function DataWin(tableName, id, data, parent) {
                 touchEnabled: false,
                 ellipsize : true
             });
-            scrollView.add(textAreaLabel);
-            scrollView.add(Ti.UI.createView({
+            containerView.add(textAreaLabel);
+            containerView.add(Ti.UI.createView({
                 top : '5dp',
                 width : Ti.UI.FILL,
                 height : 1,
@@ -159,6 +166,30 @@ function DataWin(tableName, id, data, parent) {
             return;
         }
         if (field.type == 'list'){
+            var tableLabel = Ti.UI.createLabel({
+                text : field.displayName.toUpperCase(),
+                color : theme.secondaryTextColor,
+                backgroundColor: theme.backgroundColor,
+                backgroundSelectedColor: theme.backgroundColor,
+                width : Ti.UI.FILL,
+                left :'11dp',
+                height : '28dp',
+                textAlign : Ti.UI.TEXT_ALIGNMENT_LEFT,
+                font : {
+                    fontSize : theme.secondaryFontSize,
+                    fontWeight : 'bold'
+                },
+                wordWrap: false,
+                touchEnabled: false,
+                ellipsize : true
+            });
+            containerView.add(tableLabel);
+            containerView.add(Ti.UI.createView({
+                width : Ti.UI.FILL,
+                height : 1,
+                backgroundColor : theme.borderColor
+            }));
+
             var table = Ti.UI.createTableView({
                 width : Ti.UI.FILL,
                 separatorColor : theme.borderColor
@@ -168,14 +199,13 @@ function DataWin(tableName, id, data, parent) {
                 ascending: false
             };
             table.searchCriteria[field.idField] = id;
-            scrollView.add(table);
+            containerView.add(table);
             
-            var tableBorderView = Ti.UI.createView({
+            containerView.add(Ti.UI.createView({
                 width : Ti.UI.FILL,
                 height : 1,
                 backgroundColor : theme.borderColor
-            });
-            scrollView.add(tableBorderView);
+            }));
 
             table.addEventListener('update', function(e) {
                 var tableData = [];
@@ -194,13 +224,7 @@ function DataWin(tableName, id, data, parent) {
                 var tableRowHeight = (new DualLabelRow('', '').height).
                                         slice(0, -2);
                 table.height = Number(tableRowHeight) * tableData.length + 'dp';
-                if (tableData.length == 0){
-                    table.visible = false;
-                    tableBorderView.visible = false;
-                } else {
-                    table.visible = true;
-                    tableBorderView.visible = true;                
-                }
+                containerView.visible = (tableData.length > 0);
             });
             
             table.addEventListener('click', function(e) {
@@ -246,7 +270,7 @@ function DataWin(tableName, id, data, parent) {
             dialogViewConstructor : dialogViewConstructor,
             recentPropName : util.makeRecentPropName(tableName, field.name)
         });
-        scrollView.add(fieldView);
+        containerView.add(fieldView);
         fieldView.addEventListener('change', function(e) {
             data[field.name] = e.value;
             if (field.showInToolbar){
@@ -254,7 +278,7 @@ function DataWin(tableName, id, data, parent) {
                 nameLabel.fireEvent('change', {value : e.value});
             }
         });
-        scrollView.add(Ti.UI.createView({
+        containerView.add(Ti.UI.createView({
             width : Ti.UI.FILL,
             height : 1,
             backgroundColor : theme.borderColor
