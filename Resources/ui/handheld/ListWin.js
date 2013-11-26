@@ -5,6 +5,7 @@ function ListWin(tableName) {
 	var util = require('util');
 	var db = require('db');
     var schema = require('schema');
+    var json2csv = require('json2csv');
     var theme = require('ui/theme');
 	var MenuWin = require('MenuWin');
 	var DataWin = require('DataWin');
@@ -42,6 +43,7 @@ function ListWin(tableName) {
 	var titleLabel = toolbarView.addLabel(schema.metadata[tableName].
                                           displayName);
 	var newButton = toolbarView.addButton('/images/new.png');
+	var exportButton = toolbarView.addButton('/images/export.png');
 	var searchButton = toolbarView.addButton('/images/search.png');
 
     var scrollView = Ti.UI.createScrollView({
@@ -66,6 +68,24 @@ function ListWin(tableName) {
 		new DataWin(tableName, -1).open();
 	});
 
+	exportButton.addEventListener('click', function() {
+        var outputDir = (Ti.Filesystem.isExternalStoragePresent()) ?
+            Ti.Filesystem.externalStorageDirectory :
+            Ti.Filesystem.applicationDataDirectory;
+        var csvFile = Ti.Filesystem.getFile(outputDir, 'InDiary.csv');
+        var rowsData = db.selectRows(tableName, table.searchCriteria);
+        var fieldNames = []
+        schema.fields[tableName].forEach(function(field) {
+            fieldNames.push(field.name);
+        });
+		json2csv(
+            {data: rowsData, fields: fieldNames, del: '\t'},
+            function(err, csv) {
+                if (err) alert(err);
+                csvFile.write(csv);
+            });
+	});    
+    
 	searchButton.addEventListener('click', function() {
 		dataSearchView.fireEvent('open');
     });
