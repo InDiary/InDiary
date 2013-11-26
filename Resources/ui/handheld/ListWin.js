@@ -1,7 +1,7 @@
 /**
- * Window displaying list of entries.
+ * Window displaying list of data.
  */
-function EntryListWin() {
+function ListWin(tableName) {
 	var util = require('util');
 	var db = require('db');
     var schema = require('schema');
@@ -13,7 +13,6 @@ function EntryListWin() {
     var DualLabelRow = require('DualLabelRow');
 
 	var self = Ti.UI.createWindow({
-		title:L('entries'),
 		backgroundColor: theme.backgroundColor,
 		navBarHidden: true,
 		exitOnClose: true
@@ -40,21 +39,23 @@ function EntryListWin() {
 
     var barIcon = toolbarView.addBarIcon('/images/appicon.png', 
                                          '/images/drawer.png');
-	var titleLabel = toolbarView.addLabel(L('entries'));
+	var titleLabel = toolbarView.addLabel(schema.metadata[tableName].
+                                          displayName);
 	var newButton = toolbarView.addButton('/images/new.png');
 	var searchButton = toolbarView.addButton('/images/search.png');
 	    
     var table = Ti.UI.createTableView({
+        left : '7.5dp',
+        right : '7.5dp',    
         separatorColor : theme.borderColor
     });
     table.searchCriteria = {
-        orderBy: 'datetime',
+        orderBy: schema.metadata[tableName].orderBy,
         ascending: false,
-        text: ''
     };
 	mainView.add(table);
 
-	var dataSearchView = new DataSearchView('entries', table);
+	var dataSearchView = new DataSearchView(tableName, table);
 	self.add(dataSearchView);
 
 	barIcon.addEventListener('click', function() {
@@ -65,7 +66,7 @@ function EntryListWin() {
 	});
     
 	newButton.addEventListener('click', function() {
-		new DataWin('entries', -1).open();
+		new DataWin(tableName, -1).open();
 	});
 
 	searchButton.addEventListener('click', function() {
@@ -83,21 +84,21 @@ function EntryListWin() {
     
     table.addEventListener('update', function(e) {
         var tableData = [];
-        var entriesData = db.selectRows('entries', table.searchCriteria);
-        entriesData.forEach(function(entryData) {
-            var primaryText = schema.metadata['entries'].
-                    rowPrimaryText(entryData);
-            var secondaryText = schema.metadata['entries'].
-                    rowSecondaryText(entryData);
-            var entryRow = new DualLabelRow(primaryText, secondaryText,
-                                            {entryId: entryData.id});
-            tableData.push(entryRow);
+        var rowsData = db.selectRows(tableName, table.searchCriteria);
+        rowsData.forEach(function(rowData) {
+            var primaryText = schema.metadata[tableName].
+                    rowPrimaryText(rowData);
+            var secondaryText = schema.metadata[tableName].
+                    rowSecondaryText(rowData);
+            var row = new DualLabelRow(primaryText, secondaryText,
+                                       {rowId: rowData.id});
+            tableData.push(row);
         });
         table.setData(tableData);
     });
 	
     table.addEventListener('click', function(e) {
-        new DataWin('entries', e.rowData.entryId).open();
+        new DataWin(tableName, e.rowData.rowId).open();
     });
 
     self.addEventListener('focus', function(e) {
@@ -107,4 +108,4 @@ function EntryListWin() {
 	return self;
 };
 
-module.exports = EntryListWin;
+module.exports = ListWin;

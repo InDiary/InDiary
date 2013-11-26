@@ -105,7 +105,8 @@ function DataWin(tableName, id, data, parent) {
     self.add(borderView);
 
     var scrollView = Ti.UI.createScrollView({
-        width : Ti.UI.FILL,
+        left : '7.5dp',
+        right : '7.5dp',
         height : Ti.UI.FILL,
         contentHeight : Ti.UI.SIZE,
         layout : 'vertical'
@@ -114,8 +115,7 @@ function DataWin(tableName, id, data, parent) {
 
     schema.fields[tableName].forEach(function(field) {
         var containerView = Ti.UI.createView({
-            left : '7.5dp',
-            right : '7.5dp',
+            width : Ti.UI.FILL,
             height : Ti.UI.SIZE,
             layout : 'vertical'
         });
@@ -195,7 +195,7 @@ function DataWin(tableName, id, data, parent) {
                 separatorColor : theme.borderColor
             });
             table.searchCriteria = {
-                orderBy: field.orderBy,
+                orderBy: schema.metadata[field.tableName].orderBy,
                 ascending: false
             };
             table.searchCriteria[field.idField] = id;

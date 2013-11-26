@@ -7,8 +7,7 @@ function MenuWin() {
     var theme = require('ui/theme');
     var ToolbarView = require('ToolbarView');
     var DualLabelRow = require('DualLabelRow');
-    var EntryListWin = require('EntryListWin');
-    var CaseListWin = require('CaseListWin');
+    var ListWin = require('ListWin');
     
     var self = Ti.UI.createWindow({
         navBarHidden: true,
@@ -39,11 +38,15 @@ function MenuWin() {
 	});
     self.add(table);
     
-    table.setData([new DualLabelRow(L('entries'), '', {win: EntryListWin}),
-                   new DualLabelRow(L('cases'), '', {win: CaseListWin})]);
+    table.setData([new DualLabelRow(L('entries'), '', {tableName: 'entries'}),
+                   new DualLabelRow(L('cases'), '', {tableName: 'cases'})]);
     
     table.addEventListener('click', function(e) {
-        new e.rowData.win().open(winOpenCloseArgs);
+        if (typeof(e.rowData.win) != 'undefined'){
+            new e.rowData.win().open(winOpenCloseArgs);
+        } else {
+            new ListWin(e.rowData.tableName).open(winOpenCloseArgs);
+        }
         self.close(winOpenCloseArgs);
     });
 

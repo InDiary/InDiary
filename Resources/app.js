@@ -15,6 +15,6 @@ if (Ti.version < 3.0 ) {
     
 	db.createDatabase();
     
-	var EntryListWin = require('ui/handheld/EntryListWin');
-	new EntryListWin().open();
+	var ListWin = require('ui/handheld/ListWin');
+	new ListWin('entries').open();
 })();

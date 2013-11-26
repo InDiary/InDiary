@@ -1,7 +1,7 @@
 /**
  * View that overlays EntryListWin with search bar and advanced search options.
  */
-function EntrySearchView(obj) {
+function DataSearchView(tableName, obj) {
 	var util = require('util');
     var schema = require('schema');
     var theme = require('ui/theme');
@@ -10,7 +10,7 @@ function EntrySearchView(obj) {
 	var SearchFieldView = require('SearchFieldView');
     
     var searchCriteria = {
-        orderBy: 'datetime',
+        orderBy: schema.metadata[tableName].orderBy,
         ascending: false,
         text: ''
     };
@@ -29,10 +29,19 @@ function EntrySearchView(obj) {
     var toolbarView = new ToolbarView();
     self.add(toolbarView);
 
-    var searchBar = toolbarView.addTextField('', L('searchEntries'));
+    var searchBarField = '';
+    var searchHintText = '';
+    schema.fields[tableName].forEach(function(field) {
+        if (field.showInToolbar){
+            searchBarField = field.name;
+            searchHintText = field.searchHintText;
+        }
+    });    
+    
+    var searchBar = toolbarView.addTextField('', searchHintText);
 	searchBar.softKeyboardOnFocus = Ti.UI.Android.SOFT_KEYBOARD_SHOW_ON_FOCUS;
 	searchBar.addEventListener('change', function(e) {
-		searchCriteria['text'] = e.value;
+		searchCriteria[searchBarField] = e.value;
 		self.fireEvent('change');
 	});
 
@@ -57,18 +66,21 @@ function EntrySearchView(obj) {
 	});
 	self.add(borderView);
 
-    var moreView = Ti.UI.createView({
-		layout: 'vertical',
-        backgroundColor : theme.backgroundColor,
-        height: Ti.UI.SIZE,
-        width : Ti.UI.FILL,
-        visible: false
+    var moreView = Ti.UI.createScrollView({
+        left : '7.5dp',
+        right : '7.5dp',
+        height : Ti.UI.FILL,
+        contentHeight : Ti.UI.SIZE,
+        layout : 'vertical',
+        visible : false
     });
     self.add(moreView);
 	
 	var addSearchViewCallback = function(field) {
         var searchCriteria = this;
-        if (field.name == 'text')
+        if (field.showInToolbar)
+            return;
+        if (field.type == 'list')
             return;
         if (field.type == 'id'){
             searchCriteria[field.name + 'Criteria'] = {};
@@ -110,7 +122,7 @@ function EntrySearchView(obj) {
         }));
     };
 	
-    schema.fields['entries'].forEach(addSearchViewCallback, searchCriteria);
+    schema.fields[tableName].forEach(addSearchViewCallback, searchCriteria);
 
 	self.addEventListener('open', function(e){
 		self.visible = true;
@@ -125,4 +137,4 @@ function EntrySearchView(obj) {
 	return self;
 };
 
-module.exports = EntrySearchView;
+module.exports = DataSearchView;

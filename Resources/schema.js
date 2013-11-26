@@ -48,7 +48,8 @@ var caseNameField = {
     displayName : L('caseName'),
     hintText : L('caseNameDefault'),
     showInToolbar : true,
-    toolbarHintText : L('newCase')
+    toolbarHintText : L('newCase'),
+    searchHintText : L('searchCases')
 };
 exports.fields['cases'].push(caseNameField);
 
@@ -73,7 +74,6 @@ var caseEntriesField = {
     type : 'list',
     tableName : 'entries',
     idField : 'caseId',
-    orderBy : 'datetime',
     displayName : L('caseEntries')
 };
 exports.fields['cases'].push(caseEntriesField);
@@ -81,6 +81,8 @@ exports.fields['cases'].push(caseEntriesField);
 exports.metadata = {}
 
 exports.metadata['entries'] = {
+    displayName : L('entries'),
+    orderBy : 'datetime',
     rowPrimaryText : function(data){
         return data.text;
     },
@@ -91,6 +93,8 @@ exports.metadata['entries'] = {
 }
 
 exports.metadata['cases'] = {
+    displayName : L('cases'),
+    orderBy : 'id',
     rowPrimaryText : function(data){
         return data.name;
     },
