@@ -1,6 +1,5 @@
 /**
- * Window for adding a new entry or editing an existing one.
- * @param {Number} entryId Id of entry to be edited. -1 corresponds to a new entry.
+ * Window for navigating amongst other windows and functions of the app.
  */
 function MenuWin() {
     var util = require('util');

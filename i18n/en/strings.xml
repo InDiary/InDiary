@@ -41,4 +41,6 @@
     <string name="end">End</string>
     <string name="misc">Miscellaneous</string>
     <string name="miscSummary">Uncategorized entries</string>    
+    <string name="noDataPrimary">You have no data!</string>
+    <string name="noDataSecondary">Click to add new data</string>
 </resources>

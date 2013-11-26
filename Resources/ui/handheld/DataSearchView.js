@@ -67,8 +67,7 @@ function DataSearchView(tableName, obj) {
 	self.add(borderView);
 
     var moreView = Ti.UI.createScrollView({
-        left : '7.5dp',
-        right : '7.5dp',
+        width : Ti.UI.FILL,
         height : Ti.UI.FILL,
         contentHeight : Ti.UI.SIZE,
         layout : 'vertical',
@@ -89,6 +88,13 @@ function DataSearchView(tableName, obj) {
                         searchCriteria[field.name + 'Criteria']);
             return;
         }
+        var containerView = Ti.UI.createView({
+            left : '7.5dp',
+            right : '7.5dp',
+            height : Ti.UI.SIZE,
+            layout : 'vertical'
+        });
+        moreView.add(containerView);
         var searchFieldView;
         if (field.type == 'datetime'){
             var startDate = new Date();
@@ -114,8 +120,8 @@ function DataSearchView(tableName, obj) {
             }
             self.fireEvent('change');
         });
-        moreView.add(searchFieldView);
-        moreView.add(Ti.UI.createView({
+        containerView.add(searchFieldView);
+        containerView.add(Ti.UI.createView({
             width : Ti.UI.FILL,
             height : 1,
             backgroundColor : theme.borderColor

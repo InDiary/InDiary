@@ -43,17 +43,14 @@ function ListWin(tableName) {
                                           displayName);
 	var newButton = toolbarView.addButton('/images/new.png');
 	var searchButton = toolbarView.addButton('/images/search.png');
-	    
-    var table = Ti.UI.createTableView({
-        left : '7.5dp',
-        right : '7.5dp',    
-        separatorColor : theme.borderColor
+
+    var scrollView = Ti.UI.createScrollView({
+        width : Ti.UI.FILL,
+        height : Ti.UI.FILL,
+        contentHeight : Ti.UI.SIZE,
+        layout : 'vertical'
     });
-    table.searchCriteria = {
-        orderBy: schema.metadata[tableName].orderBy,
-        ascending: false,
-    };
-	mainView.add(table);
+    mainView.add(scrollView);
 
 	var dataSearchView = new DataSearchView(tableName, table);
 	self.add(dataSearchView);
@@ -72,7 +69,25 @@ function ListWin(tableName) {
 	searchButton.addEventListener('click', function() {
 		dataSearchView.fireEvent('open');
     });
-    
+
+    var table = Ti.UI.createTableView({
+        left : '7.5dp',
+        right : '7.5dp',
+        separatorColor : theme.borderColor
+    });
+    table.searchCriteria = {
+        orderBy: schema.metadata[tableName].orderBy,
+        ascending: false,
+    };
+	scrollView.add(table);
+
+    scrollView.add(Ti.UI.createView({
+        left : '7.5dp',
+        right : '7.5dp',
+        height : 1,
+        backgroundColor : theme.borderColor
+    }));    
+
     var searchTimer = 0;
     table.addEventListener('search', function(e) {
         clearTimeout(searchTimer);
@@ -94,7 +109,15 @@ function ListWin(tableName) {
                                        {rowId: rowData.id});
             tableData.push(row);
         });
+        if (tableData.length == 0){
+            tableData.push(new DualLabelRow(L('noDataPrimary'),
+                                            L('noDataSecondary'),
+                                            {rowId: -1}));
+        }
         table.setData(tableData);
+        var tableRowHeight = (new DualLabelRow('', '').height).
+                              slice(0, -2);
+        table.height = Number(tableRowHeight) * tableData.length + 'dp';
     });
 	
     table.addEventListener('click', function(e) {
