@@ -22,7 +22,7 @@ function ToolbarView() {
 			right : 56 * self.numButtons + 'dp',
 			width : '56dp',
 			height : '48dp',
-			backgroundColor : theme.toolbarBackgroundColor,
+			backgroundColor : 'transparent',
 			backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
 		});
 		self.add(button);
@@ -55,7 +55,7 @@ function ToolbarView() {
             left : '0dp',
             width : '48dp',
             height : '48dp',
-            backgroundColor : theme.toolbarBackgroundColor,
+            backgroundColor : 'transparent',
             backgroundSelectedColor : theme.toolbarBackgroundSelectedColor
         });
         self.add(containerView);

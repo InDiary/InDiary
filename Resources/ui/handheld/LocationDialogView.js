@@ -12,6 +12,7 @@ var LocationDialogView = function(value, hintText, recentPropName){
     });
     
     var toolbarView = new ToolbarView();
+    toolbarView.backgroundColor = theme.backgroundColor;
     dialogView.add(toolbarView);
 
     var searchBar = toolbarView.addTextField('', hintText, true);

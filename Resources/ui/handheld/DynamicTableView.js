@@ -28,7 +28,7 @@ function DynamicTableView(vars) {
     self.rowTemplate.selectable = true; 
     if (typeof(self.headerRowTemplate) === 'undefined'){
         self.headerRowTemplate = {
-            color : theme.borderColor,
+            color : theme.secondaryTextColor,
             backgroundColor: theme.backgroundColor,
             backgroundSelectedColor: theme.backgroundColor,
             height : '22dp',

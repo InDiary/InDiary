@@ -1,12 +1,12 @@
 exports.primaryTextColor = 'white';
 exports.secondaryTextColor = 'gray';
-exports.backgroundColor = 'black';
+exports.backgroundColor = '#202121';
 exports.backgroundSelectedColor = '#BBBBBB';
 exports.primaryToolbarTextColor = 'white';
 exports.secondaryToolbarTextColor = 'gray';
-exports.toolbarBackgroundColor = 'black';
+exports.toolbarBackgroundColor = '#1B1D1F';
 exports.toolbarBackgroundSelectedColor = '#BBBBBB';
-exports.borderColor = '#444444';
+exports.borderColor = '#353638';
 exports.toolbarFontSize = '18dp';
 exports.primaryFontSize = '22dp';
 exports.secondaryFontSize = '14dp';

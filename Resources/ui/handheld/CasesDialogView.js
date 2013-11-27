@@ -16,6 +16,7 @@ var CasesDialogView = function(value, hintText, recentPropName){
     var validCaseId = typeof(value) == 'number' && value > 0;
 
     var toolbarView = new ToolbarView();
+    toolbarView.backgroundColor = theme.backgroundColor;
     dialogView.add(toolbarView);
 
     var searchBar = toolbarView.addTextField('', hintText, true);

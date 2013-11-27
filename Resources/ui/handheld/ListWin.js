@@ -54,6 +54,12 @@ function ListWin(tableName) {
     });
     mainView.add(scrollView);
 
+    var table = Ti.UI.createTableView({
+        left : '7.5dp',
+        right : '7.5dp',
+        separatorColor : theme.borderColor
+    });
+
 	var dataSearchView = new DataSearchView(tableName, table);
 	self.add(dataSearchView);
 
@@ -90,11 +96,6 @@ function ListWin(tableName) {
 		dataSearchView.fireEvent('open');
     });
 
-    var table = Ti.UI.createTableView({
-        left : '7.5dp',
-        right : '7.5dp',
-        separatorColor : theme.borderColor
-    });
     table.searchCriteria = {
         orderBy: schema.metadata[tableName].orderBy,
         ascending: false,
