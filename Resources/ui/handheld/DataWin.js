@@ -221,9 +221,9 @@ function DataWin(tableName, id, data, parent) {
                     tableData.push(tableRow);
                 });
                 table.setData(tableData);
-                var tableRowHeight = (new DualLabelRow('', '').height).
-                                        slice(0, -2);
-                table.height = Number(tableRowHeight) * tableData.length + 'dp';
+                var tableRowHeight = Number((new DualLabelRow('', '').height).
+                    slice(0, -2))*Ti.Platform.displayCaps.logicalDensityFactor;
+                table.height = (tableRowHeight + 1) * tableData.length - 1;
                 containerView.visible = (tableData.length > 0);
             });
             
